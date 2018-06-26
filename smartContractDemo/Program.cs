@@ -44,28 +44,33 @@ namespace smartContractDemo
 
             RegTest(new Height());
 
-            RegTest(new SCDemo1());
-            RegTest(new SCDemo2());
-            RegTest(new SCDemo3());
-            RegTest(new PubScDemo());
-            RegTest(new Nep55());
-            RegTest(new Nep55_1());
-            RegTest(new Nep55_2());
-            RegTest(new Nep55_3());
-            RegTest(new Nep55_4());
-            RegTest(new nnc_1());
-            RegTest(new nnc_2());
-            RegTest(new nnc_3());
-            RegTest(new nnc_4());
-            RegTest(new Tran_1());
-            RegTest(new Tran_2());
-            RegTest(new SGAS());
-            RegTest(new nns_admin());
-            RegTest(new nns_user());
-            RegTest(new nns_sell());
-            RegTest(new MultiSign());
-            RegTest(new nnc());
-            RegTest(new MigrateScDemo());
+            //RegTest(new SCDemo1());
+            //RegTest(new SCDemo2());
+            //RegTest(new SCDemo3());
+            //RegTest(new PubScDemo());
+            //RegTest(new Nep55());
+            //RegTest(new Nep55_1());
+            //RegTest(new Nep55_2());
+            //RegTest(new Nep55_3());
+            //RegTest(new Nep55_4());
+            //RegTest(new nnc_1());
+            //RegTest(new nnc_2());
+            //RegTest(new nnc_3());
+            //RegTest(new nnc_4());
+            //RegTest(new Tran_1());
+            //RegTest(new Tran_2());
+            //RegTest(new SGAS());
+            //RegTest(new nns_admin());
+            //RegTest(new nns_user());
+            //RegTest(new nns_sell());
+            //RegTest(new MultiSign());
+            //RegTest(new nnc());
+            //RegTest(new MigrateScDemo());
+            RegTest(new sdusdTest());
+            RegTest(new wneoTest());
+            RegTest(new penoTest());
+            RegTest(new sdtTest());
+            RegTest(new sdusd2Test());
 
         }
         static void ShowMenu()
