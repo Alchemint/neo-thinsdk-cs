@@ -2,6 +2,7 @@
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
+using smartContractDemo.tests;
 
 namespace smartContractDemo
 {
@@ -16,7 +17,7 @@ namespace smartContractDemo
         async public Task Demo()
         {
 
-            var url = Helper.MakeRpcUrl(api, "getblockcount");
+            var url = Helper.MakeRpcUrl(Config.api, "getblockcount");
             string result = await Helper.HttpGet(url);
             var json = MyJson.Parse(result).AsDict();
             if (json.ContainsKey("result"))

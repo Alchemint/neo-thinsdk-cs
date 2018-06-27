@@ -44,24 +44,24 @@ namespace smartContractDemo
             infos["openCdp"] = test_openCdp;
             infos["lock"] = test_lock;
             infos["draw"] = test_draw;
-            infos["free"] = test_free;
-            infos["wipe"] = test_wipe;
+            //infos["free"] = test_free;
+            //infos["wipe"] = test_wipe;
             infos["shut"] = test_shut;
-            infos["bite"] = test_bite;
+            //infos["bite"] = test_bite;
             //infos["balanceOfRedeem"] = test_balanceOfRedeem;
             //infos["redeem"] = test_redeem;
             //infos["give"] = test_give;
             infos["getTXInfo"] = test_getTXInfo;
             infos["getCdp"] = test_getCdp;
             infos["getCdpTxInfo"] = test_getCdpTxInfo;
+            infos["setAccount"] = test_setAccount;
             infos["setConfig"] = test_setConfig;
             infos["getConfig"] = test_getConfig;
-            infos["totalGenerate"] = test_totalGenerate;
-            infos["setCallScript"] = test_setCallScript;
-            infos["mintSDT"] = test_mintSDT;
-            infos["transferSDT"] = test_transferSDT;
-            infos["transferFromSDT"] = test_transferFromSDT;
-            infos["setAccount"] = test_setAccount;
+            //infos["totalGenerate"] = test_totalGenerate;
+            //infos["setCallScript"] = test_setCallScript;
+            //infos["mintSDT"] = test_mintSDT;
+            //infos["transferSDT"] = test_transferSDT;
+            //infos["transferFromSDT"] = test_transferFromSDT;
 
 
             this.submenu = new List<string>(infos.Keys).ToArray();
@@ -462,8 +462,10 @@ namespace smartContractDemo
 
         async Task test_setAccount()
         {
-            Console.WriteLine("Input config addr:");
-            string addr = Console.ReadLine();
+            //Console.WriteLine("Input config addr:");
+            //string addr = Console.ReadLine();
+            var addr = ThinNeo.Helper.GetAddressFromScriptHash(sdusd_common2.sc_sdusd);
+            Console.WriteLine("address:" + addr);
 
             var result = await sdusd_common2.api_SendTransaction(prikey, sdusd_common2.sc_sdusd, "setAccount", "(addr)" + addr);
             subPrintLine(result);

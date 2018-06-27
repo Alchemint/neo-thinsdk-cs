@@ -70,6 +70,7 @@ namespace smartContractDemo
             RegTest(new wneoTest());
             RegTest(new penoTest());
             RegTest(new sdtTest());
+            RegTest(new callTest());
             RegTest(new sdusd2Test());
 
         }

@@ -10,13 +10,9 @@ namespace smartContractDemo
     public class call_common
     {
 
-        public static readonly Hash160 main = new Hash160("0x4613efff94a4f272f35dcb5339424bbb6939fd11");//neo 合约地址
+        public static readonly Hash160 main = new Hash160("0x95e6b39d3557f5ba5ba59fab178f6de3c24e3d04");//neo 合约地址
 
-        public static string call_sc = "0x4613efff94a4f272f35dcb5339424bbb6939fd11";
-
-        //public static readonly Hash160 call_01 = new Hash160("0x9b3bf3e6fde1ff5a9122b327d69e583544b76eb1");//call01 合约地址
-
-        //public static readonly Hash160 call_02 = new Hash160("0x9128bdd27ab9344f404a7255f8b319b1e01375cc");//call02 合约地址
+        public static string call_sc = "0x95e6b39d3557f5ba5ba59fab178f6de3c24e3d04";
 
 
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();

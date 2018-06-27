@@ -41,7 +41,7 @@ namespace smartContractDemo
             infos["decimals"] = test_decimals;
             infos["balanceOf"] = test_BalanceOf;
             infos["transfer"] = test_Transfer;
-            infos["openCdp"] = test_openCdp;
+            infos["openSAR"] = test_openSAR;
             infos["lock"] = test_lock;
             infos["draw"] = test_draw;
             infos["free"] = test_free;
@@ -52,8 +52,8 @@ namespace smartContractDemo
             infos["redeem"] = test_redeem;
             infos["give"] = test_give;
             infos["getTXInfo"] = test_getTXInfo;
-            infos["getCdp"] = test_getCdp;
-            infos["getCdpTxInfo"] = test_getCdpTxInfo;
+            infos["getSAR"] = test_getSAR;
+            infos["getSARTxInfo"] = test_getSARTxInfo;
             infos["setConfig"] = test_setConfig;
             infos["getConfig"] = test_getConfig;
             infos["totalGenerate"] = test_totalGenerate;
@@ -240,9 +240,9 @@ namespace smartContractDemo
         }
 
         //创建CDP在仓
-        async Task test_openCdp()
+        async Task test_openSAR()
         {
-            var result = await sdusd_common.api_SendTransaction(prikey, sdusd_common.sc_sdusd, "openCdp", "(addr)" + this.address);
+            var result = await sdusd_common.api_SendTransaction(prikey, sdusd_common.sc_sdusd, "openSAR", "(addr)" + this.address);
             subPrintLine(result);
         }
 
@@ -361,11 +361,11 @@ namespace smartContractDemo
         }
 
         //查询CDP交易信息
-        async Task test_getCdp()
+        async Task test_getSAR()
         {
             Console.WriteLine("Input address:");
             string address = Console.ReadLine();
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "getCdp", "(addr)" + address);
+            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "getSAR", "(addr)" + address);
             sdusd_common.ResultItem item = result.value;
             sdusd_common.ResultItem[] items = item.subItem[0].subItem;
 
@@ -382,11 +382,11 @@ namespace smartContractDemo
         }
 
         //查询CDP详细交易信息
-        async Task test_getCdpTxInfo()
+        async Task test_getSARTxInfo()
         {
             Console.WriteLine("Input txid:");
             string txid = Console.ReadLine();
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "getCdpTxInfo", "(hex256)" + txid);
+            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "getSARTxInfo", "(hex256)" + txid);
             sdusd_common.ResultItem item = result.value;
             sdusd_common.ResultItem[] items = item.subItem[0].subItem;
 

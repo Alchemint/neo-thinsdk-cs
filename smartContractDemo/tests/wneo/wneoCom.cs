@@ -11,9 +11,9 @@ namespace smartContractDemo
     public class wneo_common
     {
 
-        public static readonly Hash160 sc_wneo = new Hash160("0x989fbfb94ae207d20896a083fa6ee172ac5236e8");//wneo 合约地址
+        public static readonly Hash160 sc_wneo = new Hash160("0xe493995106205e522749840142cbf9d1eb1d4b8b");//wneo 合约地址
 
-        public static readonly string sc = "0x989fbfb94ae207d20896a083fa6ee172ac5236e8";
+        public static readonly string sc = "0xe493995106205e522749840142cbf9d1eb1d4b8b";
 
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 

@@ -51,7 +51,7 @@ namespace smartContractDemo
             infos["transferFrom"] = test_transferFrom;
             infos["getTXInfo"] = test_getTXInfo;
             infos["mintTokensNEO"] = test_mintTokensNEO;
-            infos["mintTokensGAS"] = test_mintTokensGAS;
+            //infos["mintTokensGAS"] = test_mintTokensGAS;
             infos["refund"] = test_refund;
             infos["getRefund"] = test_getRefund;
             infos["totalDestory"] = test_totalDestory;

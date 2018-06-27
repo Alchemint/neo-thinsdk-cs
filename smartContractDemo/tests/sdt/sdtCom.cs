@@ -10,9 +10,9 @@ namespace smartContractDemo
 {
     public class sdt_common
     {
-        public static readonly Hash160 sc_sdt = new Hash160("0xb0a90b73c6804cbb2d94e4802e084c076bc099e6");//sdt 合约地址
+        public static readonly Hash160 sc_sdt = new Hash160("0x59aae873270b0dcddae10d9e3701028a31d82433");//sdt 合约地址
 
-        public static readonly string sc = "0xb0a90b73c6804cbb2d94e4802e084c076bc099e6";
+        public static readonly string sc = "0x59aae873270b0dcddae10d9e3701028a31d82433";
 
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 

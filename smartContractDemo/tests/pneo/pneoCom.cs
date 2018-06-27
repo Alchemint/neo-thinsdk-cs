@@ -10,9 +10,9 @@ namespace smartContractDemo
     public class pneo_common
     {
 
-        public static readonly Hash160 sc_pneo = new Hash160("0x2573228c75413fbbb322888286e9654b7c9bb4bc");//pneo 合约地址
+        public static readonly Hash160 sc_pneo = new Hash160("0x1bc590ab8c866284e16e4b5aee222450cfd7027d");//pneo 合约地址
 
-        public static readonly string sc = "0x2573228c75413fbbb322888286e9654b7c9bb4bc";
+        public static readonly string sc = "0x1bc590ab8c866284e16e4b5aee222450cfd7027d";
 
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 
