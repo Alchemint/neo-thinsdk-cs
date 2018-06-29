@@ -72,6 +72,8 @@ namespace smartContractDemo
             RegTest(new sdtTest());
             RegTest(new callTest());
             RegTest(new sdusd2Test());
+            RegTest(new businessTest());
+            RegTest(new tokenTest());
 
         }
         static void ShowMenu()
