@@ -152,9 +152,6 @@ namespace smartContractDemo
             Console.WriteLine("Input target asset:");
             string name = Console.ReadLine();
 
-            Console.WriteLine("Input address:");
-            string address = Console.ReadLine();
-
             var result = await business_common.api_InvokeScript(business_common.sc_wneo, "getSAR4B", "(str)" + name);
             business_common.ResultItem item = result.value;
             business_common.ResultItem[] items = item.subItem[0].subItem;
