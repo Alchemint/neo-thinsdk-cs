@@ -37,7 +37,7 @@ namespace smartContractDemo.tests
         //wallet3 KxkmnsoANJT8ygPaiYTe9houe4XD6bNzu1yHBYs5NUr9WL6Mufyg
         //gxl KxtvHw6fBeEj1TQEd7revdhyETPC8w8jEVE3yVthhLyWQnxMm6tr
         //wallet1 test L5a9Hihm4Lu46deJ6mfBRAvPPitJTyWK6g8yRP1iFPpGMBzecQcS
-        public const string testwif = "KxwkPdCtioE8vKfLETqK2UfMWX4XaooP8rP85wRrAiFzDa3Ydkt3";
+        public const string testwif = "KzprnMDQHhK7jnJ3dNNq5C2AfJdy58oGyphnZtc6t78NE26nhq7S";
 
         public const string id_NEO = "0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
 
