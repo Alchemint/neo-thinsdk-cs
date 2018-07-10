@@ -44,11 +44,13 @@ namespace smartContractDemo
             infos["expande"] = test_expande;
             infos["contract"] = test_contract;
             infos["withdraw"] = test_withdraw;
+            infos["redeem"] = test_redeem;
             infos["setConfig1"] = test_setConfig1;
             infos["setConfig2"] = test_setConfig2;
             infos["setAccount"] = test_setAccount;
             infos["setUpgrade"] = test_setUpgrade;
             infos["getConfig"] = test_getConfig;
+            infos["settingSAR"] = test_settingSAR;
 
             this.submenu = new List<string>(infos.Keys).ToArray();
         }
@@ -240,6 +242,19 @@ namespace smartContractDemo
             subPrintLine(result);
         }
 
+
+        async Task test_redeem()
+        {
+            Console.WriteLine("Input target asset:");
+            string name = Console.ReadLine();
+
+            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "redeem",
+              "(str)" + name,
+              "(addr)" + this.address);
+            subPrintLine(result);
+        }
+
+
         //授权转账操作
         async Task test_setCallScript()
         {
@@ -291,6 +306,17 @@ namespace smartContractDemo
             Console.WriteLine(item.subItem[0].AsInteger());
         }
 
+        async Task test_settingSAR()
+        {
+            Console.WriteLine("Input target asset:");
+            string name = Console.ReadLine();
+
+            Console.WriteLine("Input address:");
+            string addr = Console.ReadLine();
+            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "settingSAR", "(str)"+name, "(addr)"+ addr);
+            subPrintLine(result);
+        }
+
         //升级合约
         async Task test_setUpgrade()
         {
@@ -301,7 +327,7 @@ namespace smartContractDemo
             Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(Config.api, address);
 
             //从文件中读取合约脚本
-            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0xf25ae4bd413f3922eae83c7f334feec77952a229.avm"); //这里填你的合约所在地址
+            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0x486527d55f9fb8e1a8848a5457671a5729fac27f.avm"); //这里填你的合约所在地址
             string str_script = ThinNeo.Helper.Bytes2HexString(script);
             byte[] aa = ThinNeo.Helper.HexString2Bytes(str_script);
             using (ThinNeo.ScriptBuilder sb = new ThinNeo.ScriptBuilder())
