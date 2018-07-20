@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Threading;
+using System.Numerics;
 using ThinNeo;
 using smartContractDemo.tests;
+
 
 namespace smartContractDemo
 {
@@ -43,18 +47,19 @@ namespace smartContractDemo
             infos["decimals"] = test_decimals;
             infos["balanceOf"] = test_BalanceOf;
             infos["transfer"] = test_Transfer;
+            infos["batchTransfer"] = test_batchTransfer;
             infos["transferApp"] = test_TransferApp;
             infos["getTXInfo"] = test_getTXInfo;
             infos["approve"] = test_approve;
-            infos["cancelApprove"] = test_cancelApprove;
+            //infos["cancelApprove"] = test_cancelApprove;
             infos["allowance"] = test_allowance;
             infos["transferFrom"] = test_transferFrom;
-            infos["setBlackHole"] = test_setBlackHoleAccount;
-            infos["setConfigScript"] = test_setConfigScript;
-            infos["setHoleTypeScript"] = test_setHoleTypeScript;
-            infos["setMintTypeScript"] = test_setMintTypeScript;
-            infos["burn"] = test_burn;
-            infos["mint"] = test_mint;
+            //infos["setBlackHole"] = test_setBlackHoleAccount;
+            //infos["setConfigScript"] = test_setConfigScript;
+            //infos["setHoleTypeScript"] = test_setHoleTypeScript;
+            //infos["setMintTypeScript"] = test_setMintTypeScript;
+            //infos["burn"] = test_burn;
+            //infos["mint"] = test_mint;
             infos["getstorage"] = test_getstorage;
             infos["toByte"] = test_toByte;
 
@@ -268,6 +273,46 @@ namespace smartContractDemo
               "(int)" + amount
               );
             subPrintLine(result);
+        }
+
+        //批量转账
+        async Task test_batchTransfer()
+        {
+            string path = "D:\\address\\2.csv";
+
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+            StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);
+
+            string str = "";
+            while (str != null)
+            {
+                str = sr.ReadLine();
+                string[] xu = new String[2];
+                xu = str.Split(',');
+                //转账地址
+                string addressto = xu[0];
+                //转账金额
+                string m = xu[1];
+
+
+                decimal dmount = decimal.Parse(m);
+
+                decimal mount =  dmount * 100000000;
+                string  mstr =  Math.Round(mount, 0).ToString();
+                Console.WriteLine("address:" + addressto + " mount:" + mstr);
+
+                var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "transfer",
+                "(addr)" + this.address,
+                "(addr)" + addressto,
+                "(int)" + mstr
+                );
+                subPrintLine(result);
+                //等待时间
+                Thread.Sleep(40000);
+
+            }
+            sr.Close();
+
         }
 
         //转账

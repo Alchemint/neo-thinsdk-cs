@@ -40,6 +40,7 @@ namespace smartContractDemo
             infos = new Dictionary<string, testAction>();
             infos["openSAR4B"] = test_openSAR4B;
             infos["getSAR4B"] = test_getSAR4B;
+            infos["initToken"] = test_initToken;
             infos["reserve"] = test_reserve;
             infos["expande"] = test_expande;
             infos["contract"] = test_contract;
@@ -47,6 +48,7 @@ namespace smartContractDemo
             infos["redeem"] = test_redeem;
             infos["setConfig1"] = test_setConfig1;
             infos["setConfig2"] = test_setConfig2;
+            infos["setConfig3"] = test_setConfig3;
             infos["setAccount"] = test_setAccount;
             infos["setUpgrade"] = test_setUpgrade;
             infos["getConfig"] = test_getConfig;
@@ -153,10 +155,10 @@ namespace smartContractDemo
 
         async Task test_getSAR4B()
         {
-            Console.WriteLine("Input target asset:");
-            string name = Console.ReadLine();
+            //Console.WriteLine("Input target asset:");
+            //string name = Console.ReadLine();
 
-            var result = await business_common.api_InvokeScript(business_common.sc_wneo, "getSAR4B", "(str)" + name);
+            var result = await business_common.api_InvokeScript(business_common.sc_wneo, "getSAR4B", "(addr)" + this.address);
             business_common.ResultItem item = result.value;
             business_common.ResultItem[] items = item.subItem[0].subItem;
 
@@ -191,6 +193,13 @@ namespace smartContractDemo
               "(str)" + name,
               "(addr)" + this.address, 
               "(int)" + amount);
+            subPrintLine(result);
+        }
+
+        async Task test_initToken()
+        {
+            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "initToken",
+             "(addr)" + this.address);
             subPrintLine(result);
         }
 
@@ -294,6 +303,13 @@ namespace smartContractDemo
 
         }
 
+        async Task test_setConfig3()
+        {
+            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "setConfig", "(str)service_fee", "(int)1000000000");
+            subPrintLine(result);
+
+        }
+
         //查询配置信息
         async Task test_getConfig()
         {
@@ -327,7 +343,7 @@ namespace smartContractDemo
             Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(Config.api, address);
 
             //从文件中读取合约脚本
-            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0x486527d55f9fb8e1a8848a5457671a5729fac27f.avm"); //这里填你的合约所在地址
+            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0x6c858db56fe1f0447b14678ef0eb021c501b27f2.avm"); //这里填你的合约所在地址
             string str_script = ThinNeo.Helper.Bytes2HexString(script);
             byte[] aa = ThinNeo.Helper.HexString2Bytes(str_script);
             using (ThinNeo.ScriptBuilder sb = new ThinNeo.ScriptBuilder())
