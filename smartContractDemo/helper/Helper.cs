@@ -45,7 +45,6 @@ namespace smartContractDemo
             var array = new MyJson.JsonNode_Array();
             for (var i = 0; i < _params.Length; i++)
             {
-
                 array.Add(_params[i]);
             }
             json["params"] = array;

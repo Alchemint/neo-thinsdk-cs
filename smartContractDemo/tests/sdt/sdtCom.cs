@@ -11,11 +11,13 @@ namespace smartContractDemo
     public class sdt_common
     {
         //Main SDT:0xa4f408df2a1ec2a950ec5fd06d7b9dc5f83b9e73
+        //test:0x1d90f116d3273fab16a44f26ccb7a846a5987377
         //old:0x59aae873270b0dcddae10d9e3701028a31d82433
         //new:0x3a89f31bfbeccef3f8b114b6da06021adb5b5da7
-        public static readonly Hash160 sc_sdt = new Hash160("0x3a89f31bfbeccef3f8b114b6da06021adb5b5da7");//sdt 合约地址
 
-        public static readonly string sc = "0x3a89f31bfbeccef3f8b114b6da06021adb5b5da7";
+        public static readonly Hash160 sc_sdt = new Hash160("0x59aae873270b0dcddae10d9e3701028a31d82433");//sdt 合约地址
+
+        public static readonly string sc = "0x59aae873270b0dcddae10d9e3701028a31d82433";
 
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 
@@ -150,6 +152,42 @@ namespace smartContractDemo
             {
 
                 var result = json["result"].AsList()[0].AsDict()["stack"].AsList();
+                rest.value = ResultItem.FromJson("Array", result);
+            }
+            return rest;// subPrintLine("得到的结果是：" + result);
+        }
+
+        public static async Task<Result> api_InvokeScriptByRPC(Hash160 scripthash, string methodname, params string[] subparam)
+        {
+            byte[] data = null;
+            using (ScriptBuilder sb = new ScriptBuilder())
+            {
+                MyJson.JsonNode_Array array = new MyJson.JsonNode_Array();
+                if (subparam != null && subparam.Length > 0)
+                {
+                    for (var i = 0; i < subparam.Length; i++)
+                    {
+                        array.AddArrayValue(subparam[i]);
+                    }
+                }
+                sb.EmitParamJson(array);
+                sb.EmitPushString(methodname);
+                sb.EmitAppCall(scripthash);
+                data = sb.ToArray();
+            }
+            string script = ThinNeo.Helper.Bytes2HexString(data);
+
+            byte[] postdata;
+            var url = Helper.MakeRpcUrlPost("http://127.0.0.1:10332", "invokescript", out postdata, new MyJson.JsonNode_ValueString(script));
+            var text = await Helper.HttpPost(url, postdata);
+            MyJson.JsonNode_Object json = MyJson.Parse(text) as MyJson.JsonNode_Object;
+
+            Result rest = new Result();
+            rest.textInfo = text;
+            if (json.ContainsKey("result"))
+            {
+
+                var result = json["result"].AsDict()["stack"].AsList();
                 rest.value = ResultItem.FromJson("Array", result);
             }
             return rest;// subPrintLine("得到的结果是：" + result);

@@ -7,8 +7,10 @@ using System.Threading;
 using System.Numerics;
 using ThinNeo;
 using smartContractDemo.tests;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+//using Newtonsoft.Json;
+//using Newtonsoft.Json.Linq;
+using static MyJson;
+using System.Linq;
 
 namespace smartContractDemo
 {
@@ -52,10 +54,6 @@ namespace smartContractDemo
             infos["batchTransfer"] = test_batchTransfer;
             infos["transferApp"] = test_TransferApp;
             infos["getTXInfo"] = test_getTXInfo;
-            infos["approve"] = test_approve;
-            //infos["cancelApprove"] = test_cancelApprove;
-            infos["allowance"] = test_allowance;
-            infos["transferFrom"] = test_transferFrom;
             //infos["setBlackHole"] = test_setBlackHoleAccount;
             //infos["setConfigScript"] = test_setConfigScript;
             //infos["setHoleTypeScript"] = test_setHoleTypeScript;
@@ -65,6 +63,7 @@ namespace smartContractDemo
             infos["getstorage"] = test_getstorage;
             infos["toByte"] = test_toByte;
             infos["cal"] = test_cal;
+            infos["queryAddress"] = test_queryAllAddress;
 
 
             this.submenu = new List<string>(infos.Keys).ToArray();
@@ -471,73 +470,62 @@ namespace smartContractDemo
             Console.WriteLine("value:" + items[2].AsInteger());
         }
 
-        //授权操作
-        async Task test_approve()
+
+        //查询所有地址
+        async Task test_queryAllAddress()
         {
-            Console.WriteLine("Input spender address:");
-            string spender = Console.ReadLine();
+            DateTime dt = DateTime.Now;
+            Console.WriteLine("Start time:"+dt);
+            byte[] postdata;
+            var url = Helper.MakeRpcUrlPost(Config.api, "getnep5transfersbyasset", out postdata,
+                new JsonNode_ValueString(sdt_common.sc),
+                new JsonNode_ValueNumber(10000),
+                new JsonNode_ValueNumber(1));
+            var result = await Helper.HttpPost(url, postdata);
+            //System.IO.File.WriteAllText(@"D:\address\addssssss.json", result, Encoding.UTF8);
 
-            Console.WriteLine("Input amount:");
-            string amount = Console.ReadLine();
+            List<string> list = new List<string>();
+            MyJson.JsonNode_Object json = MyJson.Parse(result) as MyJson.JsonNode_Object;
+            JsonNode_Array arrs = json["result"].AsList();
 
-            var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "approve",
-               "(addr)" + this.address,
-              "(addr)" + spender,
-              "(int)" + amount);
-            subPrintLine(result);
+            foreach (JsonNode_Object ob in arrs)
+            {
+                string from = ob["from"].AsString();
+                string to = ob["to"].AsString();
+                if (!string.IsNullOrEmpty(from))
+                {
+                    list.Add(from);
+                    if (from == to) {
+                        Console.WriteLine("from:" + from+"/to:"+to);
+                    }
+                }
+                if (!string.IsNullOrEmpty(to))
+                {
+                    list.Add(to);
+                }
+            }
+            BigInteger sum = 0;
+            List<string> adds = list.Distinct().ToList();
+
+            Console.WriteLine("total address:" + adds.Count);
+
+            foreach (string s in adds)
+            {
+                //Console.WriteLine("address:" + s);
+                var re = await sdt_common.api_InvokeScriptByRPC(sdt_common.sc_sdt, "balanceOf",
+                "(addr)" + s);
+                sdt_common.ResultItem item = re.value;
+
+                BigInteger mount = item.subItem[0].AsInteger();
+                sum = sum + mount;
+                //Thread.Sleep(5);
+            }
+
+            Console.WriteLine("sum:" + sum);
+            DateTime end = DateTime.Now;
+            Console.WriteLine("End time:" + end);
         }
 
-        //取消授权操作
-        async Task test_cancelApprove()
-        {
-            Console.WriteLine("Input spender address:");
-            string spender = Console.ReadLine();
-
-            Console.WriteLine("Input amount:");
-            string amount = Console.ReadLine();
-
-            var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "cancelApprove",
-               "(addr)" + this.address,
-              "(addr)" + spender);
-            subPrintLine(result);
-        }
-
-        //查询授权金额
-        async Task test_allowance()
-        {
-            Console.WriteLine("Input owner address:");
-            string owner = Console.ReadLine();
-
-            Console.WriteLine("Input spender address:");
-            string spender = Console.ReadLine();
-
-            var result = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "allowance", 
-              "(addr)" + owner,
-              "(addr)" + spender);
-
-            sdt_common.ResultItem item = result.value;
-            Console.WriteLine(item.subItem[0].AsInteger());
-        }
-
-        //授权转账操作
-        async Task test_transferFrom()
-        {
-            Console.WriteLine("Input owner address:");
-            string owner = Console.ReadLine();
-
-            Console.WriteLine("Input target address:");
-            string addressto = Console.ReadLine();
-            Console.WriteLine("Input amount:");
-            string amount = Console.ReadLine();
-
-            var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "transferFrom",
-               "(addr)" + owner,
-               "(addr)" + this.address,
-              "(addr)" + addressto,
-              "(int)" + amount
-              );
-            subPrintLine(result);
-        }
 
     }
 
