@@ -10,9 +10,12 @@ namespace smartContractDemo
 {
     public class sdt_common
     {
-        public static readonly Hash160 sc_sdt = new Hash160("0x59aae873270b0dcddae10d9e3701028a31d82433");//sdt 合约地址
+        //Main SDT:0xa4f408df2a1ec2a950ec5fd06d7b9dc5f83b9e73
+        //old:0x59aae873270b0dcddae10d9e3701028a31d82433
+        //new:0x3a89f31bfbeccef3f8b114b6da06021adb5b5da7
+        public static readonly Hash160 sc_sdt = new Hash160("0x3a89f31bfbeccef3f8b114b6da06021adb5b5da7");//sdt 合约地址
 
-        public static readonly string sc = "0x59aae873270b0dcddae10d9e3701028a31d82433";
+        public static readonly string sc = "0x3a89f31bfbeccef3f8b114b6da06021adb5b5da7";
 
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 
@@ -204,6 +207,53 @@ namespace smartContractDemo
             return result;
         }
         #endregion
+
+        public static async Task<string> api_SendbatchTransfer(byte[] prikey, Hash160 schash, string methodname, params string[] subparam)
+        {
+            byte[] pubkey = ThinNeo.Helper.GetPublicKeyFromPrivateKey(prikey);
+            string address = ThinNeo.Helper.GetAddressFromPublicKey(pubkey);
+
+                byte[] data = null;
+                using (ScriptBuilder sb = new ScriptBuilder())
+                {
+                    MyJson.JsonNode_Array array = new MyJson.JsonNode_Array();
+                    if (subparam != null && subparam.Length > 0)
+                    {
+                        for (var i = 0; i < subparam.Length; i++)
+                        {
+                            array.AddArrayValue(subparam[i]);
+                        }
+                    }
+                    sb.EmitParamJson(array);
+                    sb.EmitPushString(methodname);
+                    sb.EmitAppCall(schash);
+                    data = sb.ToArray();
+                }
+            //MakeTran
+            ThinNeo.Transaction tran = new ThinNeo.Transaction();
+            tran.version = 0;//0 or 1
+            tran.inputs = new ThinNeo.TransactionInput[0];
+            tran.outputs = new ThinNeo.TransactionOutput[0];
+            tran.type = ThinNeo.TransactionType.InvocationTransaction;
+            tran.extdata = new ThinNeo.InvokeTransData();
+            (tran.extdata as ThinNeo.InvokeTransData).script = data;
+
+            tran.attributes = new ThinNeo.Attribute[1];
+            tran.attributes[0] = new ThinNeo.Attribute();
+            tran.attributes[0].usage = ThinNeo.TransactionAttributeUsage.Script;
+            tran.attributes[0].data = ThinNeo.Helper.GetPublicKeyHashFromAddress(address);
+
+            //sign and broadcast
+            var signdata = ThinNeo.Helper.Sign(tran.GetMessage(), prikey);
+            tran.AddWitness(signdata, pubkey, address);
+            var trandata = tran.GetRawData();
+            var strtrandata = ThinNeo.Helper.Bytes2HexString(trandata);
+            byte[] postdata;
+            var url = Helper.MakeRpcUrlPost(Config.api, "sendrawtransaction", out postdata, new MyJson.JsonNode_ValueString(strtrandata));
+            var result = await Helper.HttpPost(url, postdata);
+            return result;
+        }
+
 
     }
 }

@@ -7,7 +7,8 @@ using System.Threading;
 using System.Numerics;
 using ThinNeo;
 using smartContractDemo.tests;
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace smartContractDemo
 {
@@ -46,6 +47,7 @@ namespace smartContractDemo
             infos["symbol"] = test_symbol;
             infos["decimals"] = test_decimals;
             infos["balanceOf"] = test_BalanceOf;
+            infos["queryBalanceOf"] = test_QueryBalanceOf;
             infos["transfer"] = test_Transfer;
             infos["batchTransfer"] = test_batchTransfer;
             infos["transferApp"] = test_TransferApp;
@@ -62,6 +64,7 @@ namespace smartContractDemo
             //infos["mint"] = test_mint;
             infos["getstorage"] = test_getstorage;
             infos["toByte"] = test_toByte;
+            infos["cal"] = test_cal;
 
 
             this.submenu = new List<string>(infos.Keys).ToArray();
@@ -205,6 +208,9 @@ namespace smartContractDemo
         //查询名字
         async Task test_name()
         {
+            BigInteger sum = 9627308228749 + 2363900000000 + 99956313965785032 + 1175000000000;
+            Console.WriteLine(sum);
+
             var result = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "name", null);
             sdt_common.ResultItem item = result.value;
 
@@ -259,6 +265,57 @@ namespace smartContractDemo
             Console.WriteLine(item.subItem[0].AsInteger());
         }
 
+        async Task test_cal() {
+            string path = "D:\\balance.txt";
+
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+            StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);
+
+            string str = "";
+            double mount = 0.0;
+            while (str != null)
+            {
+                str = sr.ReadLine();
+                if (string.IsNullOrEmpty(str)) break;
+
+                Console.WriteLine("mount:" + str);
+                mount = mount + double.Parse(str);
+
+            }
+            sr.Close();
+            Console.WriteLine("total:" + mount);
+        }
+
+        async Task test_QueryBalanceOf()
+        {
+
+            string path = "D:\\addr2.txt";
+
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+            StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);
+
+            string str = "";
+            BigInteger sum = 0;
+            while (str != null)
+            {
+                str = sr.ReadLine();
+                Console.WriteLine("address:" + str);
+                var result = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "balanceOf", "(addr)" + str);
+
+                sdt_common.ResultItem item = result.value;
+
+                BigInteger mount =  item.subItem[0].AsInteger();
+                
+                // Console.WriteLine("mount:" + mount);
+
+                sum = sum + mount;
+                Thread.Sleep(50);
+                Console.WriteLine("total:" + sum);
+            }
+            sr.Close();
+            Console.WriteLine("total:" + sum);
+        }
+
         //转账
         async Task test_Transfer()
         {
@@ -278,7 +335,7 @@ namespace smartContractDemo
         //批量转账
         async Task test_batchTransfer()
         {
-            string path = "D:\\address\\2.csv";
+            string path = "D:\\address\\1234.csv";
 
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
             StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);
@@ -301,14 +358,14 @@ namespace smartContractDemo
                 string  mstr =  Math.Round(mount, 0).ToString();
                 Console.WriteLine("address:" + addressto + " mount:" + mstr);
 
-                var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "transfer",
+                var result = await sdt_common.api_SendbatchTransfer(prikey, sdt_common.sc_sdt, "transfer",
                 "(addr)" + this.address,
                 "(addr)" + addressto,
                 "(int)" + mstr
                 );
                 subPrintLine(result);
                 //等待时间
-                Thread.Sleep(40000);
+                //Thread.Sleep(50000);
 
             }
             sr.Close();

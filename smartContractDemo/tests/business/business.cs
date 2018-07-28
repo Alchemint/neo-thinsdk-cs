@@ -46,7 +46,7 @@ namespace smartContractDemo
             infos["contract"] = test_contract;
             infos["withdraw"] = test_withdraw;
             infos["redeem"] = test_redeem;
-            infos["setConfig1"] = test_setConfig1;
+            //infos["setConfig1"] = test_setConfig1;
             infos["setConfig2"] = test_setConfig2;
             infos["setConfig3"] = test_setConfig3;
             infos["setAccount"] = test_setAccount;
@@ -149,7 +149,8 @@ namespace smartContractDemo
                "(str)" + name,
                 "(str)" + symbol,
                 "(int)" + 8,
-                "(addr)" + this.address);
+                "(addr)" + this.address,
+                "(str)anchor_type_usd");
             subPrintLine(result);
         }
 
@@ -172,6 +173,7 @@ namespace smartContractDemo
                 Console.WriteLine("locked:" + items[5].AsInteger());
                 Console.WriteLine("hasDrawed:" + items[6].AsInteger());
                 Console.WriteLine("status:" + items[7].AsInteger());
+                Console.WriteLine("anchor:" + items[8].AsString());
 
             }
             else

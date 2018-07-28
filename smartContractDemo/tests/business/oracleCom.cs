@@ -8,12 +8,12 @@ using smartContractDemo.tests;
 
 namespace smartContractDemo
 {
-    public class business_common
+    public class oracle_common
     {
 
-        public static readonly Hash160 sc_wneo = new Hash160("0x70b698ed7c2674c9e972a739f2fda0a7d2d5fed6");//business 合约地址
+        public static readonly Hash160 sc_wneo = new Hash160("0x8706fee7bc1a457f2fa28c7a4966f67b8bb1ab40");//token 合约地址
 
-        public static readonly string sc = "0x70b698ed7c2674c9e972a739f2fda0a7d2d5fed6";
+        public static readonly string sc = "0x8706fee7bc1a457f2fa28c7a4966f67b8bb1ab40";
 
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 

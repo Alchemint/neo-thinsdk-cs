@@ -74,6 +74,7 @@ namespace smartContractDemo
             RegTest(new sdusd2Test());
             RegTest(new businessTest());
             RegTest(new tokenTest());
+            RegTest(new oracleTest());
 
         }
         static void ShowMenu()
