@@ -54,16 +54,11 @@ namespace smartContractDemo
             infos["batchTransfer"] = test_batchTransfer;
             infos["transferApp"] = test_TransferApp;
             infos["getTXInfo"] = test_getTXInfo;
-            //infos["setBlackHole"] = test_setBlackHoleAccount;
-            //infos["setConfigScript"] = test_setConfigScript;
-            //infos["setHoleTypeScript"] = test_setHoleTypeScript;
-            //infos["setMintTypeScript"] = test_setMintTypeScript;
-            //infos["burn"] = test_burn;
-            //infos["mint"] = test_mint;
             infos["getstorage"] = test_getstorage;
             infos["toByte"] = test_toByte;
             infos["cal"] = test_cal;
             infos["queryAddress"] = test_queryAllAddress;
+            infos["batchTransfer2"] = test_batchTransfer2;
 
 
             this.submenu = new List<string>(infos.Keys).ToArray();
@@ -350,24 +345,49 @@ namespace smartContractDemo
                 //转账金额
                 string m = xu[1];
 
-
                 decimal dmount = decimal.Parse(m);
 
                 decimal mount =  dmount * 100000000;
                 string  mstr =  Math.Round(mount, 0).ToString();
                 Console.WriteLine("address:" + addressto + " mount:" + mstr);
 
+                //var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "transfer",
+                //"(addr)" + this.address,
+                //"(addr)" + addressto,
+                //"(int)" + mstr
+                //);
                 var result = await sdt_common.api_SendbatchTransfer(prikey, sdt_common.sc_sdt, "transfer",
-                "(addr)" + this.address,
-                "(addr)" + addressto,
-                "(int)" + mstr
-                );
+                  "(addr)" + this.address,
+                  "(addr)AGa8mQumgxCfWUTWzpLVA77p1NMNw6qBwn",
+                  "(int)" + 100000000
+                  );
                 subPrintLine(result);
                 //等待时间
-                //Thread.Sleep(50000);
+                Thread.Sleep(50000);
 
             }
             sr.Close();
+
+        }
+
+
+        //批量转账
+        async Task test_batchTransfer2()
+        {
+            DateTime dt = DateTime.Now;
+            Console.WriteLine("Start time:" + dt);
+            for (int i = 0; i < 4000; i++)
+            {
+                var result = await sdt_common.api_SendbatchTransfer(prikey, sdt_common.sc_sdt, "transfer",
+                    "(addr)" + this.address,
+                    "(addr)AHgozj1reiiBRh58nhSRUc2pmgLPNTSmcZ",
+                    "(int)" + 100
+                    );
+                    //subPrintLine(result);
+            }
+            DateTime end = DateTime.Now;
+            Console.WriteLine("End time:" + end);
+            //等待时间
 
         }
 
@@ -387,74 +407,7 @@ namespace smartContractDemo
             subPrintLine(result);
         }
 
-        //设置手续费账户
-        async Task test_setBlackHoleAccount()
-        {
-            Console.WriteLine("Input target address:");
-            string addressto = Console.ReadLine();
 
-            var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "setBlackHole",
-              "(addr)" + addressto);
-            subPrintLine(result);
-        }
-
-        async Task test_mint()
-        {
-            Console.WriteLine("Input mint mount:");
-            string mount = Console.ReadLine();
-
-            var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "mint",
-              "(addr)" + this.address,"(int)"+ mount);
-            subPrintLine(result);
-        }
-
-        //设置合约调用
-        async Task test_setConfigScript()
-        {
-            Console.WriteLine("address:");
-            string addr = Console.ReadLine();
-
-            var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "setCallScript",
-                "(str)callScript1",
-              "(addr)" + addr);
-            subPrintLine(result);
-        }
-
-        //1:使用账户1  2:使用账户2
-        async Task test_setHoleTypeScript()
-        {
-            Console.WriteLine("Input holeType:");
-            string holeType = Console.ReadLine();
-
-            var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "setCallScript",
-                "(str)blackHoleType",
-              "(int)" + holeType);
-            subPrintLine(result);
-        }
-
-        //1:合约调用  2:管理员设置
-        async Task test_setMintTypeScript()
-        {
-            Console.WriteLine("Input mintType:");
-            string mintType = Console.ReadLine();
-
-            var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "setCallScript",
-                "(str)mintType",
-              "(int)" + mintType);
-            subPrintLine(result);
-        }
-
-        //转账
-        async Task test_burn()
-        {
-            Console.WriteLine("Input burn mount:");
-            string amount = Console.ReadLine();
-
-            var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "burn",
-                "(addr)" + this.address,
-              "(int)" + amount);
-            subPrintLine(result);
-        }
 
         //查询交易信息
         async Task test_getTXInfo() {
@@ -469,7 +422,6 @@ namespace smartContractDemo
             Console.WriteLine("to:" + ThinNeo.Helper.GetAddressFromScriptHash(items[1].AsHash160()));
             Console.WriteLine("value:" + items[2].AsInteger());
         }
-
 
         //查询所有地址
         async Task test_queryAllAddress()

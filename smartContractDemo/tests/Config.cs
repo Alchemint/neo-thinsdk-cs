@@ -22,11 +22,11 @@ namespace smartContractDemo.tests
 
         public readonly static string api_local = "http://localhost:20332";
 
-        public readonly static string api = "https://api.nel.group/api/testnet";
+       //public readonly static string api = "https://api.nel.group/api/testnet";
 
         //public readonly static string api = "https://api.nel.group/api/mainnet";
 
-        //public const string api = "http://192.168.0.101:59908/api/privatenet";
+        public readonly static string api = "http://192.168.0.101:59908/api/privatenet";
 
         public const string rpc = "http://192.168.0.105:10332";
 

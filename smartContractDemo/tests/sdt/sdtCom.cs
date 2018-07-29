@@ -5,13 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using ThinNeo;
 using smartContractDemo.tests;
+using System.Security.Cryptography;
+using System.Numerics;
 
 namespace smartContractDemo
 {
     public class sdt_common
     {
-        //Main SDT:0xa4f408df2a1ec2a950ec5fd06d7b9dc5f83b9e73
+        //Main:0xa4f408df2a1ec2a950ec5fd06d7b9dc5f83b9e73
         //test:0x1d90f116d3273fab16a44f26ccb7a846a5987377
+
         //old:0x59aae873270b0dcddae10d9e3701028a31d82433
         //new:0x3a89f31bfbeccef3f8b114b6da06021adb5b5da7
 
@@ -255,7 +258,15 @@ namespace smartContractDemo
                 using (ScriptBuilder sb = new ScriptBuilder())
                 {
                     MyJson.JsonNode_Array array = new MyJson.JsonNode_Array();
-                    if (subparam != null && subparam.Length > 0)
+                    byte[] randombytes = new byte[32];
+                    using (RandomNumberGenerator rng = RandomNumberGenerator.Create()) {
+                        rng.GetBytes(randombytes);
+                    }
+                    BigInteger randomNum = new BigInteger(randombytes);
+                sb.EmitPushNumber(randomNum);
+                sb.Emit(ThinNeo.VM.OpCode.DROP);
+
+                if (subparam != null && subparam.Length > 0)
                     {
                         for (var i = 0; i < subparam.Length; i++)
                         {
@@ -274,7 +285,10 @@ namespace smartContractDemo
             tran.outputs = new ThinNeo.TransactionOutput[0];
             tran.type = ThinNeo.TransactionType.InvocationTransaction;
             tran.extdata = new ThinNeo.InvokeTransData();
-            (tran.extdata as ThinNeo.InvokeTransData).script = data;
+            var idata = new ThinNeo.InvokeTransData();
+            tran.extdata = idata;
+            idata.script = data;
+            idata.gas = 0;
 
             tran.attributes = new ThinNeo.Attribute[1];
             tran.attributes[0] = new ThinNeo.Attribute();
