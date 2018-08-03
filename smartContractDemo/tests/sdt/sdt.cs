@@ -50,20 +50,19 @@ namespace smartContractDemo
             infos["decimals"] = test_decimals;
             infos["balanceOf"] = test_BalanceOf;
             infos["queryBalanceOf"] = test_QueryBalanceOf;
-            infos["transfer"] = test_Transfer;
             infos["batchTransfer"] = test_batchTransfer;
+            infos["batchTransferFor2"] = test_batchTransfer2;
+            infos["transfer"] = test_Transfer;
             infos["transferApp"] = test_TransferApp;
             infos["getTXInfo"] = test_getTXInfo;
             infos["getstorage"] = test_getstorage;
             infos["toByte"] = test_toByte;
             infos["cal"] = test_cal;
             infos["queryAddress"] = test_queryAllAddress;
-            infos["batchTransfer2"] = test_batchTransfer2;
-
-
+            infos["batchCal"] = test_batchCal;
+            infos["batchCal2"] = test_batchCal2;
             this.submenu = new List<string>(infos.Keys).ToArray();
         }
-
 
         public delegate void Method(ThinNeo.ScriptBuilder sb);//第一步：定义委托类型
 
@@ -329,7 +328,7 @@ namespace smartContractDemo
         //批量转账
         async Task test_batchTransfer()
         {
-            string path = "D:\\address\\1234.csv";
+            string path = "D:\\address\\822.csv";
 
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
             StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);
@@ -338,33 +337,42 @@ namespace smartContractDemo
             while (str != null)
             {
                 str = sr.ReadLine();
-                string[] xu = new String[2];
-                xu = str.Split(',');
-                //转账地址
-                string addressto = xu[0];
-                //转账金额
-                string m = xu[1];
+                if (!string.IsNullOrEmpty(str))
+                {
+                    string[] xu = new String[2];
+                    xu = str.Split(',');
+                    //转账地址
+                    string addressto = xu[0];
+                    //转账金额
+                    string m = xu[1];
 
-                decimal dmount = decimal.Parse(m);
+                    decimal dmount = decimal.Parse(m);
+                    decimal mount = dmount * 100000000;
+                    string mstr = Math.Round(mount, 0).ToString();
+                    string newPath = @"D:\address\balances08022_result.txt";
+                    string str2 = addressto + "," + m + "\r\n";
+                    File.AppendAllText(newPath, str2);
+                    if (m != "0")
+                    {
+                        //var re = await sdt_common.api_InvokeScriptByRPC(sdt_common.sc_sdt, "balanceOf",
+                        //        "(addr)" + addressto);
+                        //sdt_common.ResultItem item = re.value;
+                        //BigInteger mount = item.subItem[0].AsInteger();
 
-                decimal mount =  dmount * 100000000;
-                string  mstr =  Math.Round(mount, 0).ToString();
-                Console.WriteLine("address:" + addressto + " mount:" + mstr);
-
-                //var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "transfer",
-                //"(addr)" + this.address,
-                //"(addr)" + addressto,
-                //"(int)" + mstr
-                //);
-                var result = await sdt_common.api_SendbatchTransfer(prikey, sdt_common.sc_sdt, "transfer",
-                  "(addr)" + this.address,
-                  "(addr)AGa8mQumgxCfWUTWzpLVA77p1NMNw6qBwn",
-                  "(int)" + 100000000
-                  );
-                subPrintLine(result);
-                //等待时间
-                Thread.Sleep(50000);
-
+                        //if (mount == 0)
+                        //{
+                            var result = await sdt_common.api_SendbatchTransfer(prikey, sdt_common.sc_sdt, "transfer",
+                              "(addr)" + this.address,
+                              "(addr)" + addressto,
+                              "(int)" + mstr
+                              );
+                            Console.WriteLine("address:" + addressto + " mount:" + m);
+                            subPrintLine(result);
+                            File.AppendAllText(newPath, result + "\r\n");
+                            Thread.Sleep(200);
+                        //}
+                    }
+                }
             }
             sr.Close();
 
@@ -376,7 +384,7 @@ namespace smartContractDemo
         {
             DateTime dt = DateTime.Now;
             Console.WriteLine("Start time:" + dt);
-            for (int i = 0; i < 4000; i++)
+            for (int i = 0; i < 1; i++)
             {
                 var result = await sdt_common.api_SendbatchTransfer(prikey, sdt_common.sc_sdt, "transfer",
                     "(addr)" + this.address,
@@ -429,9 +437,10 @@ namespace smartContractDemo
             DateTime dt = DateTime.Now;
             Console.WriteLine("Start time:"+dt);
             byte[] postdata;
+            //查询交易，总数可能很多
             var url = Helper.MakeRpcUrlPost(Config.api, "getnep5transfersbyasset", out postdata,
                 new JsonNode_ValueString(sdt_common.sc),
-                new JsonNode_ValueNumber(10000),
+                new JsonNode_ValueNumber(15000),
                 new JsonNode_ValueNumber(1));
             var result = await Helper.HttpPost(url, postdata);
             //System.IO.File.WriteAllText(@"D:\address\addssssss.json", result, Encoding.UTF8);
@@ -460,22 +469,111 @@ namespace smartContractDemo
             List<string> adds = list.Distinct().ToList();
 
             Console.WriteLine("total address:" + adds.Count);
-
+            string[] balances = new string[] { };
             foreach (string s in adds)
             {
+                //int index = adds.IndexOf(s);
                 //Console.WriteLine("address:" + s);
+                //调用RPC
                 var re = await sdt_common.api_InvokeScriptByRPC(sdt_common.sc_sdt, "balanceOf",
                 "(addr)" + s);
+                //调用API
+                //var re = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "balanceOf",
+                //"(addr)" + s);
+
                 sdt_common.ResultItem item = re.value;
 
                 BigInteger mount = item.subItem[0].AsInteger();
                 sum = sum + mount;
-                //Thread.Sleep(5);
+                if (mount > 0)
+                {
+                    //排除掉所有switcheo地址
+                    //if (s != "AKJQMHma9MA8KK5M8iQg8ASeg3KZLsjwvB")
+                    //{
+                        string str = s + "," + mount + "\r\n";
+                        string newPath = @"D:\address\balances0801_2.txt";
+                        File.AppendAllText(newPath, str);
+                    //}
+                }
             }
 
             Console.WriteLine("sum:" + sum);
             DateTime end = DateTime.Now;
             Console.WriteLine("End time:" + end);
+        }
+
+        //批量计算
+        async Task test_batchCal()
+        {
+            string path = "D:\\address\\balances0801.txt";
+
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+            StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);
+
+            BigInteger sum = 0;
+            string str = "";
+            while (str != null)
+            {
+                str = sr.ReadLine();
+                if (!string.IsNullOrEmpty(str))
+                {
+                    string[] xu = new String[2];
+                    xu = str.Split(',');
+                    //转账地址
+                    string addressto = xu[0];
+                    //转账金额
+                    string m = xu[1];
+
+                    BigInteger dmount = BigInteger.Parse(m);
+                    sum = sum + dmount;
+                }
+            }
+            Console.WriteLine("sum:" + sum);
+            sr.Close();
+
+        }
+
+        //批量计算
+        async Task test_batchCal2()
+        {
+            string path = "D:\\address\\balances0801_01.txt";
+
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+            StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);
+
+            BigInteger sum = 0;
+            string str = "";
+            while (str != null)
+            {
+                str = sr.ReadLine();
+                if (!string.IsNullOrEmpty(str))
+                {
+                    string[] xu = new String[2];
+                    xu = str.Split(',');
+                    //转账地址
+                    string s = xu[0];
+                    //转账金额
+                    string m = xu[1];
+
+                    //decimal dmount = decimal.Parse(m);
+                    //decimal mount =  dmount * 100000000;
+                    ////导出余额
+                    //string  mstr =  Math.Round(mount, 0).ToString();
+                    BigInteger mountRe = BigInteger.Parse(m);
+
+                    var re = await sdt_common.api_InvokeScriptByRPC(sdt_common.sc_sdt, "balanceOf",
+              "(addr)" + s);
+                    sdt_common.ResultItem item = re.value;
+
+                    BigInteger mountSrc = item.subItem[0].AsInteger();
+                    //Console.WriteLine(s + ","+m);
+                    if (mountRe != mountSrc) {
+                        Console.WriteLine(s+ "/mountSrc:"+ mountSrc+ "/mountRe:"+ mountRe);
+                    }
+                }
+            }
+            sr.Close();
+
         }
 
 

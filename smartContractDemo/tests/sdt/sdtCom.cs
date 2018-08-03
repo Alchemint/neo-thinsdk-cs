@@ -12,15 +12,23 @@ namespace smartContractDemo
 {
     public class sdt_common
     {
-        //Main:0xa4f408df2a1ec2a950ec5fd06d7b9dc5f83b9e73
-        //test:0x1d90f116d3273fab16a44f26ccb7a846a5987377
+        /** MainNet
+         *  SDT:0xa4f408df2a1ec2a950ec5fd06d7b9dc5f83b9e73
+         *  SDS:0x6fad54d8cc692fc808fd97a207836a846c217705
+         */
 
-        //old:0x59aae873270b0dcddae10d9e3701028a31d82433
-        //new:0x3a89f31bfbeccef3f8b114b6da06021adb5b5da7
+        /** TestNet
+         * old:0x1d90f116d3273fab16a44f26ccb7a846a5987377
+         * new:0x4b4deb4caad37fcfbadcfefc0bebfc869ff523ea
+         */
 
-        public static readonly Hash160 sc_sdt = new Hash160("0x59aae873270b0dcddae10d9e3701028a31d82433");//sdt 合约地址
+        /** PrivateNet
+         * old:0x59aae873270b0dcddae10d9e3701028a31d82433
+         * new:0x34adf78c99308f616afa2223514ef416191a436c
+         */
+        public static readonly Hash160 sc_sdt = new Hash160("0x6fad54d8cc692fc808fd97a207836a846c217705");//sdt 合约地址
 
-        public static readonly string sc = "0x59aae873270b0dcddae10d9e3701028a31d82433";
+        public static readonly string sc = "0x6fad54d8cc692fc808fd97a207836a846c217705";
 
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 
