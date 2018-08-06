@@ -121,7 +121,7 @@ namespace smartContractDemo
         //设置账户
         async Task test_setAccount()
         {
-            var result = await oracle_common.api_SendTransaction(prikey, oracle_common.sc_wneo, "setAccount",
+            var result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setAccount",
                "(addr)" + this.address);
             subPrintLine(result);
         }
@@ -129,10 +129,10 @@ namespace smartContractDemo
         //设置价格信息
         async Task test_setPrice()
         {
-            var result = await oracle_common.api_SendTransaction(prikey, oracle_common.sc_wneo, "setPrice", 
-                "(str)sdt_price",
+            var result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice", 
+                "(str)sds_price",
                 "(addr)"+this.address,
-                "(int)8000000");
+                "(int)10000000");
             subPrintLine(result);
 
         }
@@ -140,9 +140,9 @@ namespace smartContractDemo
         //查询配置信息
         async Task test_getPrice()
         {
-            Console.WriteLine("key:sdt_price");
+            Console.WriteLine("key:sds_price");
 
-            var result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)sdt_price");
+            var result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)sds_price");
             oracle_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
@@ -163,7 +163,7 @@ namespace smartContractDemo
         //设置锚定物信息
         async Task test_setAnchorPrice()
         {
-            var result = await oracle_common.api_SendTransaction(prikey, oracle_common.sc_wneo, "setAnchorPrice", "(str)anchor_type_usd", "(int)100000000");
+            var result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setAnchorPrice", "(str)anchor_type_usd", "(int)100000000");
             subPrintLine(result);
 
         }

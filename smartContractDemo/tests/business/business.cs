@@ -47,8 +47,8 @@ namespace smartContractDemo
             infos["withdraw"] = test_withdraw;
             infos["redeem"] = test_redeem;
             //infos["setConfig1"] = test_setConfig1;
-            infos["setConfig2"] = test_setConfig2;
-            infos["setConfig3"] = test_setConfig3;
+            infos["setConfigRate"] = test_setConfigRate;
+            infos["setConfigFee"] = test_setConfigFee;
             infos["setAccount"] = test_setAccount;
             infos["setUpgrade"] = test_setUpgrade;
             infos["getConfig"] = test_getConfig;
@@ -145,12 +145,16 @@ namespace smartContractDemo
             Console.WriteLine("Input target symbol:");
             string symbol = Console.ReadLine();
 
+            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
+
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "openSAR4B",
                "(str)" + name,
                 "(str)" + symbol,
                 "(int)" + 8,
                 "(addr)" + this.address,
-                "(str)anchor_type_usd");
+                "(str)anchor_type_usd",
+                "(addr)"+ tokenAddr
+                );
             subPrintLine(result);
         }
 
@@ -191,17 +195,24 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
+            var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sdt_common.sc_sdt);
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "reserve",
               "(str)" + name,
               "(addr)" + this.address, 
-              "(int)" + amount);
+              "(int)" + amount,
+              "(addr)" + sdsAddr);
             subPrintLine(result);
         }
 
         async Task test_initToken()
         {
+            var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sdt_common.sc_sdt);
+            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
+
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "initToken",
-             "(addr)" + this.address);
+             "(addr)" + this.address,
+             "(addr)" + sdsAddr,
+             "(addr)" + tokenAddr);
             subPrintLine(result);
         }
 
@@ -214,10 +225,15 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
+            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
+            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
+
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "expande",
               "(str)" + name,
               "(addr)" + this.address,
-              "(int)" + amount);
+              "(int)" + amount,
+              "(addr)" + oracleAddr,
+              "(addr)" + tokenAddr);
             subPrintLine(result);
         }
 
@@ -229,11 +245,13 @@ namespace smartContractDemo
 
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
+            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
 
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "contract",
               "(str)" + name,
               "(addr)" + this.address,
-              "(int)" + amount);
+              "(int)" + amount,
+              "(addr)" + tokenAddr);
             subPrintLine(result);
         }
 
@@ -246,10 +264,17 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
+            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
+            var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sdt_common.sc_sdt);
+            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
+
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "withdraw",
               "(str)" + name,
               "(addr)" + this.address,
-              "(int)" + amount);
+              "(int)" + amount,
+              "(addr)" + oracleAddr,
+              "(addr)" + sdsAddr,
+              "(addr)" + tokenAddr);
             subPrintLine(result);
         }
 
@@ -259,9 +284,16 @@ namespace smartContractDemo
             Console.WriteLine("Input target asset:");
             string name = Console.ReadLine();
 
+            var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sdt_common.sc_sdt);
+            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
+            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
+
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "redeem",
               "(str)" + name,
-              "(addr)" + this.address);
+              "(addr)" + this.address,
+              "(addr)" + sdsAddr, 
+              "(addr)" + oracleAddr, 
+              "(addr)" + tokenAddr);
             subPrintLine(result);
         }
 
@@ -292,20 +324,15 @@ namespace smartContractDemo
             subPrintLine(result);
 
         }
-        async Task test_setConfig1()
+      
+        async Task test_setConfigRate()
         {
-            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "setConfig", "(str)config_sdt_price", "(int)10" );
-            subPrintLine(result);
-
-        }
-        async Task test_setConfig2()
-        {
-            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "setConfig", "(str)config_sdt_rate", "(int)50");
+            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "setConfig", "(str)config_sds_rate", "(int)50");
             subPrintLine(result);
 
         }
 
-        async Task test_setConfig3()
+        async Task test_setConfigFee()
         {
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "setConfig", "(str)service_fee", "(int)1000000000");
             subPrintLine(result);

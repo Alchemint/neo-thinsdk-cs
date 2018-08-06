@@ -26,9 +26,9 @@ namespace smartContractDemo
          * old:0x59aae873270b0dcddae10d9e3701028a31d82433
          * new:0x34adf78c99308f616afa2223514ef416191a436c
          */
-        public static readonly Hash160 sc_sdt = new Hash160("0x6fad54d8cc692fc808fd97a207836a846c217705");//sdt 合约地址
+        public static readonly Hash160 sc_sdt = new Hash160("0x34adf78c99308f616afa2223514ef416191a436c");//sdt 合约地址
 
-        public static readonly string sc = "0x6fad54d8cc692fc808fd97a207836a846c217705";
+        public static readonly string sc = "0x34adf78c99308f616afa2223514ef416191a436c";
 
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 
