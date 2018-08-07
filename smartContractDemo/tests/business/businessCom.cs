@@ -13,9 +13,9 @@ namespace smartContractDemo
     public class business_common
     {
 
-        public static readonly Hash160 sc_wneo = new Hash160("0x73f6df10338154a021f1d1e667d254ce884f6035");//business 合约地址
+        public static readonly Hash160 sc_wneo = new Hash160("0xeb5888a39c8a562e6e9dd27cc8f2c3ef10bf5fc8");//business 合约地址
 
-        public static readonly string sc = "0x73f6df10338154a021f1d1e667d254ce884f6035";
+        public static readonly string sc = "0xeb5888a39c8a562e6e9dd27cc8f2c3ef10bf5fc8";
 
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 

@@ -11,9 +11,9 @@ namespace smartContractDemo
     public class token_common
     {
 
-        public static readonly Hash160 sc_wneo = new Hash160("0x1a579a74835b39f28783625f7dbc541a0d5119f3");//token 合约地址
+        public static readonly Hash160 sc_wneo = new Hash160("0x16e587e07ecda700802ef79302df6103460ef4dc");//token 合约地址
 
-        public static readonly string sc = "0x1a579a74835b39f28783625f7dbc541a0d5119f3";
+        public static readonly string sc = "0x16e587e07ecda700802ef79302df6103460ef4dc";
 
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 

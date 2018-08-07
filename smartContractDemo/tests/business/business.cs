@@ -53,7 +53,7 @@ namespace smartContractDemo
             infos["setUpgrade"] = test_setUpgrade;
             infos["getConfig"] = test_getConfig;
             infos["settingSAR"] = test_settingSAR;
-
+            infos["test"] = test_str;
             this.submenu = new List<string>(infos.Keys).ToArray();
         }
 
@@ -297,6 +297,18 @@ namespace smartContractDemo
             subPrintLine(result);
         }
 
+        async Task test_str()
+        {
+             
+                string name = "6bb79223ec6593e908b8c4b9df1e9d0326783f78ba12fa94b095ecff44fb6187";
+                byte[] data =  ThinNeo.Helper.HexString2Bytes(name);
+
+                string str =  "0x" + ThinNeo.Helper.Bytes2HexString(data.Reverse().ToArray());
+                Console.WriteLine("txid:"+str);
+
+
+        }
+
 
         //授权转账操作
         async Task test_setCallScript()
@@ -372,7 +384,7 @@ namespace smartContractDemo
             Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(Config.api, address);
 
             //从文件中读取合约脚本
-            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0x6c858db56fe1f0447b14678ef0eb021c501b27f2.avm"); //这里填你的合约所在地址
+            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0xd6fc6a7d9c148a88f0051578d44e9422eb57ac98.avm"); //这里填你的合约所在地址
             string str_script = ThinNeo.Helper.Bytes2HexString(script);
             byte[] aa = ThinNeo.Helper.HexString2Bytes(str_script);
             using (ThinNeo.ScriptBuilder sb = new ThinNeo.ScriptBuilder())
