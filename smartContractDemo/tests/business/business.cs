@@ -13,7 +13,7 @@ namespace smartContractDemo
     {
         public string Name => "Business 合约测试";
 
-        public string ID => "business";
+        public string ID => "bu";
         byte[] prikey;
         public string address;
         byte[] scripthash;
@@ -47,9 +47,9 @@ namespace smartContractDemo
             infos["withdraw"] = test_withdraw;
             infos["redeem"] = test_redeem;
             //infos["setConfig1"] = test_setConfig1;
-            infos["setConfigRate"] = test_setConfigRate;
-            infos["setConfigFee"] = test_setConfigFee;
-            infos["setAccount"] = test_setAccount;
+            //infos["setConfigRate"] = test_setConfigRate;
+            //infos["setConfigFee"] = test_setConfigFee;
+            infos["setContractA"] = test_setAccount;
             infos["setUpgrade"] = test_setUpgrade;
             infos["getConfig"] = test_getConfig;
             infos["settingSAR"] = test_settingSAR;
@@ -145,6 +145,7 @@ namespace smartContractDemo
             Console.WriteLine("Input target symbol:");
             string symbol = Console.ReadLine();
 
+            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
             var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
 
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "openSAR4B",
@@ -153,17 +154,18 @@ namespace smartContractDemo
                 "(int)" + 8,
                 "(addr)" + this.address,
                 "(str)anchor_type_usd",
-                "(addr)"+ tokenAddr
+                "(addr)" + oracleAddr,
+                "(addr)" + tokenAddr
                 );
             subPrintLine(result);
         }
 
         async Task test_getSAR4B()
         {
-            //Console.WriteLine("Input target asset:");
-            //string name = Console.ReadLine();
+            Console.WriteLine("Input target addr:");
+            string addr = Console.ReadLine();
 
-            var result = await business_common.api_InvokeScript(business_common.sc_wneo, "getSAR4B", "(addr)" + this.address);
+            var result = await business_common.api_InvokeScript(business_common.sc_wneo, "getSAR4B", "(addr)" + addr);
             business_common.ResultItem item = result.value;
             business_common.ResultItem[] items = item.subItem[0].subItem;
 
@@ -208,9 +210,11 @@ namespace smartContractDemo
         {
             var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sdt_common.sc_sdt);
             var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
+            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
 
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "initToken",
              "(addr)" + this.address,
+             "(addr)" + oracleAddr,
              "(addr)" + sdsAddr,
              "(addr)" + tokenAddr);
             subPrintLine(result);
@@ -281,16 +285,17 @@ namespace smartContractDemo
 
         async Task test_redeem()
         {
-            Console.WriteLine("Input target asset:");
-            string name = Console.ReadLine();
+            Console.WriteLine("Input target addr:");
+            string sarAddr = Console.ReadLine();
 
             var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sdt_common.sc_sdt);
             var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
             var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
 
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "redeem",
-              "(str)" + name,
+              
               "(addr)" + this.address,
+              "(addr)" + sarAddr,
               "(addr)" + sdsAddr, 
               "(addr)" + oracleAddr, 
               "(addr)" + tokenAddr);
@@ -305,6 +310,9 @@ namespace smartContractDemo
 
                 string str =  "0x" + ThinNeo.Helper.Bytes2HexString(data.Reverse().ToArray());
                 Console.WriteLine("txid:"+str);
+
+                var ss = 1 | 1 | 4;
+                Console.WriteLine("ss:" + ss);
 
 
         }
@@ -387,6 +395,7 @@ namespace smartContractDemo
             byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0xd6fc6a7d9c148a88f0051578d44e9422eb57ac98.avm"); //这里填你的合约所在地址
             string str_script = ThinNeo.Helper.Bytes2HexString(script);
             byte[] aa = ThinNeo.Helper.HexString2Bytes(str_script);
+            var ss = 1 | 1 | 4;
             using (ThinNeo.ScriptBuilder sb = new ThinNeo.ScriptBuilder())
             {
                 //倒叙插入数据

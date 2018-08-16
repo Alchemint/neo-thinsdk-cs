@@ -13,7 +13,7 @@ namespace smartContractDemo
     {
         public string Name => "Token 合约测试";
 
-        public string ID => "token";
+        public string ID => "to";
         byte[] prikey;
         public string address;
         byte[] scripthash;
@@ -46,8 +46,8 @@ namespace smartContractDemo
             infos["balanceOf"] = test_BalanceOf;
             infos["transfer"] = test_Transfer;
             infos["getTXInfo"] = test_getTXInfo;
-            infos["setCallScript"] = test_setCallScript;
-            infos["setConfig"] = test_setConfig;
+            infos["setBuCallScript"] = test_setCallScript;
+            //infos["setConfig"] = test_setConfig;
             this.submenu = new List<string>(infos.Keys).ToArray();
         }
 

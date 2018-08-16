@@ -16,9 +16,9 @@ namespace smartContractDemo
 {
     class sdtTest : ITest
     {
-        public string Name => "SDT 合约测试";
+        public string Name => "SDS 合约测试";
 
-        public string ID => "sdt";
+        public string ID => "sds";
         byte[] prikey;
         public string address;
         byte[] scripthash;
@@ -61,6 +61,7 @@ namespace smartContractDemo
             infos["queryAddress"] = test_queryAllAddress;
             infos["batchCal"] = test_batchCal;
             infos["batchCal2"] = test_batchCal2;
+            infos["test"] = test_main;
             this.submenu = new List<string>(infos.Keys).ToArray();
         }
 
@@ -73,7 +74,7 @@ namespace smartContractDemo
             //var resultgetscript = await Helper.HttpGet(urlgetscript);
             //var _json = MyJson.Parse(resultgetscript).AsDict();
             //var _resultv = _json["result"].AsList()[0].AsDict();
-            
+
             //Console.WriteLine("reg=" + _resultv["script"].AsString());
 
             showMenu();
@@ -173,27 +174,29 @@ namespace smartContractDemo
             {
                 List<Utxo> gaslist = dir[Config.id_GAS];
                 decimal sumgas = 0;
-                for (var i=0;i< gaslist.Count;i++) {
+                for (var i = 0; i < gaslist.Count; i++)
+                {
                     sumgas = sumgas + gaslist[i].value;
                 }
-                Console.WriteLine("GAS:"+sumgas);
+                Console.WriteLine("GAS:" + sumgas);
             }
 
             if (dir.ContainsKey(Config.id_NEO))
             {
                 List<Utxo> neolist = dir[Config.id_NEO];
                 decimal sumneo = 0;
-                for (var i=0;i< neolist.Count;i++) {
+                for (var i = 0; i < neolist.Count; i++)
+                {
                     sumneo = sumneo + neolist[i].value;
                 }
-                Console.WriteLine("NEO:"+ sumneo);
+                Console.WriteLine("NEO:" + sumneo);
             }
         }
 
         //查询总量
         async Task test_totalSupply()
         {
-            var result = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "totalSupply",null);
+            var result = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "totalSupply", null);
             sdt_common.ResultItem item = result.value;
             Console.WriteLine(item.subItem[0].AsInteger());
         }
@@ -213,7 +216,7 @@ namespace smartContractDemo
         //初始操作
         async Task test_init()
         {
-            var result = await sdt_common.api_SendTransaction(prikey,sdt_common.sc_sdt,"init",null);
+            var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "init", null);
             subPrintLine(result);
         }
 
@@ -258,7 +261,8 @@ namespace smartContractDemo
             Console.WriteLine(item.subItem[0].AsInteger());
         }
 
-        async Task test_cal() {
+        async Task test_cal()
+        {
             string path = "D:\\balance.txt";
 
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
@@ -297,8 +301,8 @@ namespace smartContractDemo
 
                 sdt_common.ResultItem item = result.value;
 
-                BigInteger mount =  item.subItem[0].AsInteger();
-                
+                BigInteger mount = item.subItem[0].AsInteger();
+
                 // Console.WriteLine("mount:" + mount);
 
                 sum = sum + mount;
@@ -328,7 +332,7 @@ namespace smartContractDemo
         //批量转账
         async Task test_batchTransfer()
         {
-            string path = "D:\\address\\0807.csv";
+            string path = "D:\\address\\0908.csv";
 
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
             StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);
@@ -349,7 +353,7 @@ namespace smartContractDemo
                     decimal dmount = decimal.Parse(m);
                     decimal mount = dmount * 100000000;
                     string mstr = Math.Round(mount, 0).ToString();
-                    string newPath = @"D:\address\balances0807_result.txt";
+                    string newPath = @"D:\address\balances0810_result.txt";
                     string str2 = addressto + "," + m + "\r\n";
                     File.AppendAllText(newPath, str2);
                     if (m != "0")
@@ -361,15 +365,15 @@ namespace smartContractDemo
 
                         //if (mount == 0)
                         //{
-                            var result = await sdt_common.api_SendbatchTransfer(prikey, sdt_common.sc_sdt, "transfer",
-                              "(addr)" + this.address,
-                              "(addr)" + addressto,
-                              "(int)" + mstr
-                              );
-                            Console.WriteLine("address:" + addressto + " mount:" + m);
-                            subPrintLine(result);
-                            File.AppendAllText(newPath, result + "\r\n");
-                            Thread.Sleep(200);
+                        var result = await sdt_common.api_SendbatchTransfer(prikey, sdt_common.sc_sdt, "transfer",
+                          "(addr)" + this.address,
+                          "(addr)" + addressto,
+                          "(int)" + mstr
+                          );
+                        Console.WriteLine("address:" + addressto + " mount:" + m);
+                        subPrintLine(result);
+                        File.AppendAllText(newPath, result + "\r\n");
+                        Thread.Sleep(200);
                         //}
                     }
                 }
@@ -391,7 +395,7 @@ namespace smartContractDemo
                     "(addr)AHgozj1reiiBRh58nhSRUc2pmgLPNTSmcZ",
                     "(int)" + 100
                     );
-                    //subPrintLine(result);
+                //subPrintLine(result);
             }
             DateTime end = DateTime.Now;
             Console.WriteLine("End time:" + end);
@@ -418,7 +422,8 @@ namespace smartContractDemo
 
 
         //查询交易信息
-        async Task test_getTXInfo() {
+        async Task test_getTXInfo()
+        {
             Console.WriteLine("Input txid:");
             string txid = Console.ReadLine();
             var result = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "getTXInfo", "(hex256)" + txid);
@@ -435,12 +440,12 @@ namespace smartContractDemo
         async Task test_queryAllAddress()
         {
             DateTime dt = DateTime.Now;
-            Console.WriteLine("Start time:"+dt);
+            Console.WriteLine("Start time:" + dt);
             byte[] postdata;
             //查询交易，总数可能很多
             var url = Helper.MakeRpcUrlPost(Config.api, "getnep5transfersbyasset", out postdata,
                 new JsonNode_ValueString(sdt_common.sc),
-                new JsonNode_ValueNumber(15000),
+                new JsonNode_ValueNumber(10000),
                 new JsonNode_ValueNumber(1));
             var result = await Helper.HttpPost(url, postdata);
             //System.IO.File.WriteAllText(@"D:\address\addssssss.json", result, Encoding.UTF8);
@@ -456,8 +461,9 @@ namespace smartContractDemo
                 if (!string.IsNullOrEmpty(from))
                 {
                     list.Add(from);
-                    if (from == to) {
-                        Console.WriteLine("from:" + from+"/to:"+to);
+                    if (from == to)
+                    {
+                        Console.WriteLine("from:" + from + "/to:" + to);
                     }
                 }
                 if (!string.IsNullOrEmpty(to))
@@ -475,11 +481,11 @@ namespace smartContractDemo
                 //int index = adds.IndexOf(s);
                 //Console.WriteLine("address:" + s);
                 //调用RPC
-                var re = await sdt_common.api_InvokeScriptByRPC(sdt_common.sc_sdt, "balanceOf",
-                "(addr)" + s);
-                //调用API
-                //var re = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "balanceOf",
+                //var re = await sdt_common.api_InvokeScriptByRPC(sdt_common.sc_sdt, "balanceOf",
                 //"(addr)" + s);
+                //调用API
+                var re = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "balanceOf",
+                "(addr)" + s);
 
                 sdt_common.ResultItem item = re.value;
 
@@ -490,9 +496,9 @@ namespace smartContractDemo
                     //排除掉所有switcheo地址
                     //if (s != "AKJQMHma9MA8KK5M8iQg8ASeg3KZLsjwvB")
                     //{
-                        string str = s + "," + mount + "\r\n";
-                        string newPath = @"D:\address\balances0801_2.txt";
-                        File.AppendAllText(newPath, str);
+                    string str = s + "," + mount + "\r\n";
+                    string newPath = @"D:\address\balances0809.txt";
+                    File.AppendAllText(newPath, str);
                     //}
                 }
             }
@@ -567,8 +573,9 @@ namespace smartContractDemo
 
                     BigInteger mountSrc = item.subItem[0].AsInteger();
                     //Console.WriteLine(s + ","+m);
-                    if (mountRe != mountSrc) {
-                        Console.WriteLine(s+ "/mountSrc:"+ mountSrc+ "/mountRe:"+ mountRe);
+                    if (mountRe != mountSrc)
+                    {
+                        Console.WriteLine(s + "/mountSrc:" + mountSrc + "/mountRe:" + mountRe);
                     }
                 }
             }
@@ -576,7 +583,15 @@ namespace smartContractDemo
 
         }
 
+        //批量计算
+        async Task test_main()
+        {
+            //1|1|4
+            int num = 1 | 1 | 4;
+            Console.WriteLine("num:"+num);
+            bool need_storage = (bool)(object)num;
+            Console.WriteLine("bool:"+need_storage);
+        }
 
     }
-
 }
