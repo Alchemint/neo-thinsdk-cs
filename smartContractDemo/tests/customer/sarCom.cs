@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
+using System.Numerics;
 using ThinNeo;
 using smartContractDemo.tests;
 
 namespace smartContractDemo
 {
-    public class sdusd_common
+    public class sar_common
     {
-   
-        public static readonly Hash160 sc_sdusd = new Hash160("0xc9094196af09e4e562a86f625df2378c04d9d95b");//sdusd 合约地址
 
-        public static readonly string sc = "0xc9094196af09e4e562a86f625df2378c04d9d95b";
+        public static readonly Hash160 sc_sar = new Hash160("0x21ed9f993267ca03c9c3f4cd047ccec69826de83");//token 合约地址
 
+        public static readonly string sc = "0x21ed9f993267ca03c9c3f4cd047ccec69826de83";
+        
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 
         public static Hash256 nameHash(string domain)
@@ -152,6 +154,114 @@ namespace smartContractDemo
             }
             return rest;// subPrintLine("得到的结果是：" + result);
         }
+
+        public static async Task<Result> api_Getutxocount(Hash160 scripthash,string addr)
+        {
+            byte[] postdata;
+            var url = Helper.MakeRpcUrlPost(Config.api, "getutxocount", out postdata, new MyJson.JsonNode_ValueString(addr));
+            var text = await Helper.HttpPost(url, postdata);
+            MyJson.JsonNode_Object json = MyJson.Parse(text) as MyJson.JsonNode_Object;
+
+            Result rest = new Result();
+            rest.textInfo = text;
+            if (json.ContainsKey("result"))
+            {
+                var result = json["result"].AsList()[0].AsDict()["stack"].AsList();
+                rest.value = ResultItem.FromJson("Array", result);
+            }
+            return rest;// subPrintLine("得到的结果是：" + result);
+        }
+
+        public static async Task<Result> api_GetBalance(Hash160 scripthash, string addr)
+        {
+            byte[] postdata;
+            var url = Helper.MakeRpcUrlPost(Config.api, "getbalance", out postdata, new MyJson.JsonNode_ValueString(addr));
+            var text = await Helper.HttpPost(url, postdata);
+          
+
+            Result rest = new Result();
+            rest.textInfo = text;
+            //if (json.ContainsKey("result"))
+            //{
+            //    var result = json["result"].AsList()[0].AsDict()["stack"].AsList();
+            //    rest.value = ResultItem.FromJson("Array", result);
+            //}
+            //return rest;// subPrintLine("得到的结果是：" + result);
+
+            var json = MyJson.Parse(text).AsDict()["result"].AsList();
+            foreach (var item in json)
+            {
+                if (item.AsDict()["asset"].AsString() == Config.id_GAS)
+                {
+                    Console.WriteLine("gas=" + item.AsDict()["balance"].ToString());
+                }
+                if (item.AsDict()["asset"].AsString() == Config.id_NEO)
+                {
+                    Console.WriteLine("neo=" + item.AsDict()["balance"].ToString());
+                    rest.textInfo = item.AsDict()["balance"].ToString();
+                }
+            }
+            return rest;
+        }
+
+        public static async Task<string> api_SendbatchTransaction(byte[] prikey, Hash160 schash, string methodname, params string[] subparam)
+        {
+            byte[] pubkey = ThinNeo.Helper.GetPublicKeyFromPrivateKey(prikey);
+            string address = ThinNeo.Helper.GetAddressFromPublicKey(pubkey);
+
+            byte[] data = null;
+            using (ScriptBuilder sb = new ScriptBuilder())
+            {
+                MyJson.JsonNode_Array array = new MyJson.JsonNode_Array();
+                byte[] randombytes = new byte[32];
+                using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+                {
+                    rng.GetBytes(randombytes);
+                }
+                BigInteger randomNum = new BigInteger(randombytes);
+                sb.EmitPushNumber(randomNum);
+                sb.Emit(ThinNeo.VM.OpCode.DROP);
+
+                if (subparam != null && subparam.Length > 0)
+                {
+                    for (var i = 0; i < subparam.Length; i++)
+                    {
+                        array.AddArrayValue(subparam[i]);
+                    }
+                }
+                sb.EmitParamJson(array);
+                sb.EmitPushString(methodname);
+                sb.EmitAppCall(schash);
+                data = sb.ToArray();
+            }
+            //MakeTran
+            ThinNeo.Transaction tran = new ThinNeo.Transaction();
+            tran.version = 0;//0 or 1
+            tran.inputs = new ThinNeo.TransactionInput[0];
+            tran.outputs = new ThinNeo.TransactionOutput[0];
+            tran.type = ThinNeo.TransactionType.InvocationTransaction;
+            tran.extdata = new ThinNeo.InvokeTransData();
+            var idata = new ThinNeo.InvokeTransData();
+            tran.extdata = idata;
+            idata.script = data;
+            idata.gas = 0;
+
+            tran.attributes = new ThinNeo.Attribute[1];
+            tran.attributes[0] = new ThinNeo.Attribute();
+            tran.attributes[0].usage = ThinNeo.TransactionAttributeUsage.Script;
+            tran.attributes[0].data = ThinNeo.Helper.GetPublicKeyHashFromAddress(address);
+
+            //sign and broadcast
+            var signdata = ThinNeo.Helper.Sign(tran.GetMessage(), prikey);
+            tran.AddWitness(signdata, pubkey, address);
+            var trandata = tran.GetRawData();
+            var strtrandata = ThinNeo.Helper.Bytes2HexString(trandata);
+            byte[] postdata;
+            var url = Helper.MakeRpcUrlPost(Config.api, "sendrawtransaction", out postdata, new MyJson.JsonNode_ValueString(strtrandata));
+            var result = await Helper.HttpPost(url, postdata);
+            return result;
+        }
+
 
         public static async Task<string> api_SendTransaction(byte[] prikey, Hash160 schash, string methodname, params string[] subparam)
         {

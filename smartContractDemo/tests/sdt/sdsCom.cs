@@ -10,7 +10,7 @@ using System.Numerics;
 
 namespace smartContractDemo
 {
-    public class sdt_common
+    public class sds_common
     {
         /** MainNet
          *  SDT:0xa4f408df2a1ec2a950ec5fd06d7b9dc5f83b9e73
@@ -26,7 +26,7 @@ namespace smartContractDemo
          * old:0x59aae873270b0dcddae10d9e3701028a31d82433
          * new:0x34adf78c99308f616afa2223514ef416191a436c
          */
-        public static readonly Hash160 sc_sdt = new Hash160("0x34adf78c99308f616afa2223514ef416191a436c");//sdt 合约地址
+        public static readonly Hash160 sc_sds = new Hash160("0x34adf78c99308f616afa2223514ef416191a436c");//sdt 合约地址
 
         public static readonly string sc = "0x34adf78c99308f616afa2223514ef416191a436c";
 

@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace smartContractDemo
 {
-    class sdtTest : ITest
+    class sdsTest : ITest
     {
         public string Name => "SDS 合约测试";
 
@@ -33,7 +33,7 @@ namespace smartContractDemo
             Console.WriteLine("    " + line);
         }
 
-        public sdtTest()
+        public sdsTest()
         {
             this.initMenu();
         }
@@ -70,7 +70,7 @@ namespace smartContractDemo
         public async Task Demo()
         {
             //得到合约代码
-            //var urlgetscript = Helper.MakeRpcUrl(sdt_common.api, "getcontractstate", new MyJson.JsonNode_ValueString(sdt_common.sc));
+            //var urlgetscript = Helper.MakeRpcUrl(sds_common.api, "getcontractstate", new MyJson.JsonNode_ValueString(sds_common.sc));
             //var resultgetscript = await Helper.HttpGet(urlgetscript);
             //var _json = MyJson.Parse(resultgetscript).AsDict();
             //var _resultv = _json["result"].AsList()[0].AsDict();
@@ -160,7 +160,7 @@ namespace smartContractDemo
             //var rev = ThinNeo.Helper.HexString2Bytes(key);
             var revkey = ThinNeo.Helper.Bytes2HexString(byteArray);
 
-            var url = Helper.MakeRpcUrl(Config.api, "getstorage", new MyJson.JsonNode_ValueString(sdt_common.sc), new MyJson.JsonNode_ValueString(revkey));
+            var url = Helper.MakeRpcUrl(Config.api, "getstorage", new MyJson.JsonNode_ValueString(sds_common.sc), new MyJson.JsonNode_ValueString(revkey));
 
             string result = await Helper.HttpGet(url);
             Console.WriteLine("得到的结果是：" + result);
@@ -196,8 +196,8 @@ namespace smartContractDemo
         //查询总量
         async Task test_totalSupply()
         {
-            var result = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "totalSupply", null);
-            sdt_common.ResultItem item = result.value;
+            var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "totalSupply", null);
+            sds_common.ResultItem item = result.value;
             Console.WriteLine(item.subItem[0].AsInteger());
         }
 
@@ -207,8 +207,8 @@ namespace smartContractDemo
             BigInteger sum = 9627308228749 + 2363900000000 + 99956313965785032 + 1175000000000;
             Console.WriteLine(sum);
 
-            var result = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "name", null);
-            sdt_common.ResultItem item = result.value;
+            var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "name", null);
+            sds_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsString());
         }
@@ -216,23 +216,23 @@ namespace smartContractDemo
         //初始操作
         async Task test_init()
         {
-            var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "init", null);
+            var result = await sds_common.api_SendTransaction(prikey, sds_common.sc_sds, "init", null);
             subPrintLine(result);
         }
 
         //查询标志
         async Task test_symbol()
         {
-            var result = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "symbol", null);
-            sdt_common.ResultItem item = result.value;
+            var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "symbol", null);
+            sds_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsString());
         }
         //查询最小单位
         async Task test_decimals()
         {
-            var result = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "decimals", null);
-            sdt_common.ResultItem item = result.value;
+            var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "decimals", null);
+            sds_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
         }
@@ -254,9 +254,9 @@ namespace smartContractDemo
                 addr = this.address;
             }
 
-            var result = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "balanceOf", "(addr)" + addr);
+            var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "balanceOf", "(addr)" + addr);
 
-            sdt_common.ResultItem item = result.value;
+            sds_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
         }
@@ -297,9 +297,9 @@ namespace smartContractDemo
             {
                 str = sr.ReadLine();
                 Console.WriteLine("address:" + str);
-                var result = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "balanceOf", "(addr)" + str);
+                var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "balanceOf", "(addr)" + str);
 
-                sdt_common.ResultItem item = result.value;
+                sds_common.ResultItem item = result.value;
 
                 BigInteger mount = item.subItem[0].AsInteger();
 
@@ -321,7 +321,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "transfer",
+            var result = await sds_common.api_SendTransaction(prikey, sds_common.sc_sds, "transfer",
                "(addr)" + address,
               "(addr)" + addressto,
               "(int)" + amount
@@ -358,14 +358,14 @@ namespace smartContractDemo
                     File.AppendAllText(newPath, str2);
                     if (m != "0")
                     {
-                        //var re = await sdt_common.api_InvokeScriptByRPC(sdt_common.sc_sdt, "balanceOf",
+                        //var re = await sds_common.api_InvokeScriptByRPC(sds_common.sc_sds, "balanceOf",
                         //        "(addr)" + addressto);
-                        //sdt_common.ResultItem item = re.value;
+                        //sds_common.ResultItem item = re.value;
                         //BigInteger mount = item.subItem[0].AsInteger();
 
                         //if (mount == 0)
                         //{
-                        var result = await sdt_common.api_SendbatchTransfer(prikey, sdt_common.sc_sdt, "transfer",
+                        var result = await sds_common.api_SendbatchTransfer(prikey, sds_common.sc_sds, "transfer",
                           "(addr)" + this.address,
                           "(addr)" + addressto,
                           "(int)" + mstr
@@ -390,7 +390,7 @@ namespace smartContractDemo
             Console.WriteLine("Start time:" + dt);
             for (int i = 0; i < 1; i++)
             {
-                var result = await sdt_common.api_SendbatchTransfer(prikey, sdt_common.sc_sdt, "transfer",
+                var result = await sds_common.api_SendbatchTransfer(prikey, sds_common.sc_sds, "transfer",
                     "(addr)" + this.address,
                     "(addr)AHgozj1reiiBRh58nhSRUc2pmgLPNTSmcZ",
                     "(int)" + 100
@@ -411,7 +411,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await sdt_common.api_SendTransaction(prikey, sdt_common.sc_sdt, "transfer_contract",
+            var result = await sds_common.api_SendTransaction(prikey, sds_common.sc_sds, "transfer_contract",
                "(addr)" + address,
               "(addr)" + addressto,
               "(int)" + amount
@@ -426,9 +426,9 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input txid:");
             string txid = Console.ReadLine();
-            var result = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "getTXInfo", "(hex256)" + txid);
-            sdt_common.ResultItem item = result.value;
-            sdt_common.ResultItem[] items = item.subItem[0].subItem;
+            var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "getTXInfo", "(hex256)" + txid);
+            sds_common.ResultItem item = result.value;
+            sds_common.ResultItem[] items = item.subItem[0].subItem;
 
             //查询交易详细信息
             Console.WriteLine("from:" + ThinNeo.Helper.GetAddressFromScriptHash(items[0].AsHash160()));
@@ -444,7 +444,7 @@ namespace smartContractDemo
             byte[] postdata;
             //查询交易，总数可能很多
             var url = Helper.MakeRpcUrlPost(Config.api, "getnep5transfersbyasset", out postdata,
-                new JsonNode_ValueString(sdt_common.sc),
+                new JsonNode_ValueString(sds_common.sc),
                 new JsonNode_ValueNumber(10000),
                 new JsonNode_ValueNumber(1));
             var result = await Helper.HttpPost(url, postdata);
@@ -481,13 +481,13 @@ namespace smartContractDemo
                 //int index = adds.IndexOf(s);
                 //Console.WriteLine("address:" + s);
                 //调用RPC
-                //var re = await sdt_common.api_InvokeScriptByRPC(sdt_common.sc_sdt, "balanceOf",
+                //var re = await sds_common.api_InvokeScriptByRPC(sds_common.sc_sds, "balanceOf",
                 //"(addr)" + s);
                 //调用API
-                var re = await sdt_common.api_InvokeScript(sdt_common.sc_sdt, "balanceOf",
+                var re = await sds_common.api_InvokeScript(sds_common.sc_sds, "balanceOf",
                 "(addr)" + s);
 
-                sdt_common.ResultItem item = re.value;
+                sds_common.ResultItem item = re.value;
 
                 BigInteger mount = item.subItem[0].AsInteger();
                 sum = sum + mount;
@@ -567,9 +567,9 @@ namespace smartContractDemo
                     //string  mstr =  Math.Round(mount, 0).ToString();
                     BigInteger mountRe = BigInteger.Parse(m);
 
-                    var re = await sdt_common.api_InvokeScriptByRPC(sdt_common.sc_sdt, "balanceOf",
+                    var re = await sds_common.api_InvokeScriptByRPC(sds_common.sc_sds, "balanceOf",
               "(addr)" + s);
-                    sdt_common.ResultItem item = re.value;
+                    sds_common.ResultItem item = re.value;
 
                     BigInteger mountSrc = item.subItem[0].AsInteger();
                     //Console.WriteLine(s + ","+m);

@@ -69,12 +69,15 @@ namespace smartContractDemo
             RegTest(new sdusdTest());
             RegTest(new wneoTest());
             RegTest(new penoTest());
-            RegTest(new sdtTest());
+            RegTest(new sdsTest());
             RegTest(new callTest());
-            RegTest(new sdusd2Test());
+            //RegTest(new sdusd2Test());
             RegTest(new businessTest());
             RegTest(new tokenTest());
             RegTest(new oracleTest());
+            RegTest(new sneoTest());
+            RegTest(new sarTest());
+
 
         }
         static void ShowMenu()

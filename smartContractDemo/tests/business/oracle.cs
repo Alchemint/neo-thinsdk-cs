@@ -140,6 +140,18 @@ namespace smartContractDemo
                 "(int)10000000");
             subPrintLine(result);
 
+            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
+                "(str)neo_price",
+                "(addr)" + this.address,
+                "(int)2000000000");
+            subPrintLine(result);
+
+            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
+                "(str)gas_price",
+                "(addr)" + this.address,
+                "(int)200000000");
+            subPrintLine(result);
+
             /*  
             *  anchor_type_usd    1*100000000
             *  anchor_type_cny    6.8*100000000
@@ -149,7 +161,7 @@ namespace smartContractDemo
             *  anchor_type_gold   0.000838 * 100000000
             */
 
-             result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice", "(str)anchor_type_usd", "(addr)" + this.address, "(int)100000000");
+            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice", "(str)anchor_type_usd", "(addr)" + this.address, "(int)100000000");
             subPrintLine(result);
 
             result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice", "(str)anchor_type_eur", "(addr)" + this.address, "(int)87500000");
@@ -172,6 +184,16 @@ namespace smartContractDemo
             var result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
                 "(str)liquidate_rate_b",
                 "(int)50");
+            subPrintLine(result);
+
+            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
+                "(str)liquidate_rate_c",
+                "(int)150");
+            subPrintLine(result);
+
+            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
+                "(str)clear_rate",
+                "(int)110");
             subPrintLine(result);
 
             result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
@@ -200,6 +222,14 @@ namespace smartContractDemo
             var result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)liquidate_rate_b");
             oracle_common.ResultItem item = result.value;
             Console.WriteLine("liquidate_rate_b:" + item.subItem[0].AsInteger());
+
+            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)liquidate_rate_c");
+            item = result.value;
+            Console.WriteLine("liquidate_rate_c:" + item.subItem[0].AsInteger());
+
+            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)clear_rate");
+            item = result.value;
+            Console.WriteLine("clear_rate:" + item.subItem[0].AsInteger());
 
             result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)service_fee");
             item = result.value;
@@ -231,8 +261,15 @@ namespace smartContractDemo
         {
             var result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)sds_price");
             oracle_common.ResultItem item = result.value;
-
             Console.WriteLine("sds_price:"+item.subItem[0].AsInteger());
+
+            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)neo_price");
+            item = result.value;
+            Console.WriteLine("neo_price:" + item.subItem[0].AsInteger());
+
+            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)gas_price");
+            item = result.value;
+            Console.WriteLine("gas_price:" + item.subItem[0].AsInteger());
 
             result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)anchor_type_usd");
             item = result.value;

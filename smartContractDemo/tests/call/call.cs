@@ -142,7 +142,7 @@ namespace smartContractDemo
         //设置SD合约参数
         async Task test_settargetSDT()
         {
-            var target = new ThinNeo.Hash160(sdt_common.sc);
+            var target = new ThinNeo.Hash160(sds_common.sc);
             var result = await call_common.api_SendTransaction(this.prikey, call_common.main, "setTargetSDT", "(hex160)" + target.ToString());
             subPrintLine("result=" + result);
         }
