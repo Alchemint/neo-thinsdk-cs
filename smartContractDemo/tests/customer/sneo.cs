@@ -52,7 +52,7 @@ namespace smartContractDemo
             infos["getRefund"] = test_getRefund;
             //infos["totalDestory"] = test_totalDestory;
             infos["setAccount"] = test_setCallScript;
-            infos["setConfig"] = test_setConfig;
+            //infos["setConfig"] = test_setConfig;
             infos["claimStep1"] = test_claimStep1;
             infos["claimStep2"] = test_claimStep2;
             //infos["claimStep3"] = test_claimStep3;

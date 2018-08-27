@@ -34,8 +34,8 @@ namespace smartContractDemo
         private void initMenu()
         {
             infos = new Dictionary<string, testAction>();
-
             infos["openSAR4C"] = test_openSAR;
+            infos["getSAR4C"] = test_getSAR;
             infos["reserve"] = test_lock;
             infos["expande"] = test_draw;
             infos["withdraw"] = test_free;
@@ -45,13 +45,12 @@ namespace smartContractDemo
             infos["balanceOfRedeem"] = test_balanceOfRedeem;
             infos["redeem"] = test_redeem;
             infos["give"] = test_give;
+            infos["setAccount"] = test_setCallScript;
             infos["getTXInfo"] = test_getTXInfo;
-            infos["getSAR4C"] = test_getSAR;
             infos["getSARTxInfo"] = test_getSARTxInfo;
             //infos["setConfig"] = test_setConfig;
             //infos["getConfig"] = test_getConfig;
            
-            infos["setAccount"] = test_setCallScript;
             //infos["mintSDT"] = test_mintSDT;
 
 
@@ -185,7 +184,9 @@ namespace smartContractDemo
         //创建CDP在仓
         async Task test_openSAR()
         {
-            var result = await sar_common.api_SendTransaction(prikey, sar_common.sc_sar, "openSAR4C", "(addr)" + this.address);
+            var result = await sar_common.api_SendTransaction(prikey, sar_common.sc_sar, "openSAR4C", 
+                "(addr)" + this.address,
+                "(str)neo_price");
             subPrintLine(result);
         }
 
@@ -318,7 +319,9 @@ namespace smartContractDemo
                 Console.WriteLine("txid:" + items[1].AsHashString());
                 Console.WriteLine("locked:" + items[2].AsInteger());
                 Console.WriteLine("hasDrawed:" + items[3].AsInteger());
-                Console.WriteLine("status:" + items[4].AsInteger());
+                Console.WriteLine("assetType:" + items[4].AsString());
+                Console.WriteLine("status:" + items[5].AsInteger());
+
 
             }
             else
