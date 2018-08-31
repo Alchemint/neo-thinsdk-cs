@@ -10,11 +10,11 @@ using smartContractDemo.tests;
 
 namespace smartContractDemo
 {
-    class oracleTest : ITest
+    class datacenterTest : ITest
     {
         public string Name => "Token 合约测试";
 
-        public string ID => "or";
+        public string ID => "data";
         byte[] prikey;
         public string address;
         byte[] scripthash;
@@ -31,7 +31,7 @@ namespace smartContractDemo
             Console.WriteLine("    " + line);
         }
 
-        public oracleTest()
+        public datacenterTest()
         {
             this.initMenu();
         }
@@ -41,18 +41,20 @@ namespace smartContractDemo
             infos = new Dictionary<string, testAction>();
           
             infos["setAccount"] = test_setAccount;
-            infos["setPrice"] = test_setPrice;
+            //infos["setPrice"] = test_setPrice;
             infos["setConfig"] = test_setConfig;
             infos["setMedian"] = test_setMedian;
+            infos["setPow"] = test_setPow;
             infos["setNEOPrice"] = test_setNEOPrice;
+            infos["getNeoPrice"] = test_getNeoPrice;
 
             //infos["setAnchorPrice"] = test_setAnchorPrice;
             infos["getConfig"] = test_getConfig;
             infos["getPrice"] = test_getPrice;
             infos["getAccount"] = test_getAccount;
-            infos["getMedian"] = test_getMedian;
+            //infos["getMedian"] = test_getMedian;
             //infos["getAnchorPrice"] = test_getAnchorPrice;
-            infos["median"] = test_median;
+           
             this.submenu = new List<string>(infos.Keys).ToArray();
         }
 
@@ -61,7 +63,7 @@ namespace smartContractDemo
         public async Task Demo()
         {
             //得到合约代码
-            var urlgetscript = Helper.MakeRpcUrl(Config.api, "getcontractstate", new MyJson.JsonNode_ValueString(oracle_common.sc));
+            var urlgetscript = Helper.MakeRpcUrl(Config.api, "getcontractstate", new MyJson.JsonNode_ValueString(datacenter_common.sc));
             var resultgetscript = await Helper.HttpGet(urlgetscript);
             var _json = MyJson.Parse(resultgetscript).AsDict();
             var _resultv = _json["result"].AsList()[0].AsDict();
@@ -132,72 +134,106 @@ namespace smartContractDemo
             Console.WriteLine("addr:");
             string addr = Console.ReadLine();
 
-            var result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setAccount",
+            var result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setAccount",
                "(addr)" + addr,"(int)"+1);
             subPrintLine(result);
         }
 
-        //设置价格信息
-        async Task test_setMedian()
+
+        async Task test_getNeoPrice()
         {
-            var result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
-                "(str)neo_price_01",
-                "(addr)" + this.address,
-                "(int)10000000");
+            var result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getNeoPrice", "(int)1");
+            datacenter_common.ResultItem item = result.value;
+            Console.WriteLine("neo_price:" + item.subItem[0].AsInteger());
+
+
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getNeoPrice", "(int)2");
+             item = result.value;
+            Console.WriteLine("neo_price:" + item.subItem[0].AsInteger());
+
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getNeoPrice", "(int)3");
+            item = result.value;
+            Console.WriteLine("neo_price:" + item.subItem[0].AsInteger());
+
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getNeoPrice", "(int)4");
+            item = result.value;
+            Console.WriteLine("neo_price:" + item.subItem[0].AsInteger());
+
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getNeoPrice", "(int)5");
+             item = result.value;
+            Console.WriteLine("neo_price:" + item.subItem[0].AsInteger());
+        }
+
+
+            //设置价格信息
+         async Task test_setMedian()
+        {
+            Console.WriteLine("请输入总统计数:");
+            string num = Console.ReadLine();
+            var result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setMedian",
+                "(int)"+num);
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
-                "(str)neo_price_02",
-                "(addr)" + this.address,
-                "(int)20000000");
+        }
+
+        async Task test_setPow()
+        {
+            Console.WriteLine("请输入x:");
+            string x = Console.ReadLine();
+
+            Console.WriteLine("请输入y:");
+            string y = Console.ReadLine();
+            var result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPow",
+                "(int)" + x,
+                "(int)" + y);
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
-                "(str)neo_price_03",
-                "(addr)" + this.address,
-                "(int)30000000");
-            subPrintLine(result);
-
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
-                "(str)neo_price_04",
-                "(addr)" + this.address,
-                "(int)40000000");
-            subPrintLine(result);
-
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
-                "(str)neo_price_05",
-                "(addr)" + this.address,
-                "(int)50000000");
-            subPrintLine(result);
         }
 
         async Task test_setNEOPrice()
         {
-            Console.WriteLine("neo_price:");
-            string price = Console.ReadLine();
-            var result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
-                "(str)neo_price",
-                "(addr)" + this.address,
-                "(int)"+price);
+            var result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setNeoPrice",
+                "(int)1",
+                "(int)100");
+            subPrintLine(result);
+
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setNeoPrice",
+                "(int)2",
+                "(int)90");
+            subPrintLine(result);
+
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setNeoPrice",
+                "(int)3",
+                "(int)110");
+            subPrintLine(result);
+
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setNeoPrice",
+                "(int)4",
+                "(int)120");
+            subPrintLine(result);
+
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setNeoPrice",
+                "(int)5",
+                "(int)130");
             subPrintLine(result);
         }
 
             //设置价格信息
             async Task test_setPrice()
         {
-            var result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice", 
+            var result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", 
                 "(str)sds_price",
                 "(addr)"+this.address,
                 "(int)10000000");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice",
                 "(str)neo_price",
                 "(addr)" + this.address,
                 "(int)2000000000");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice",
                 "(str)gas_price",
                 "(addr)" + this.address,
                 "(int)200000000");
@@ -212,19 +248,19 @@ namespace smartContractDemo
             *  anchor_type_gold   0.000838 * 100000000
             */
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice", "(str)anchor_type_usd", "(addr)" + this.address, "(int)100000000");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_usd", "(addr)" + this.address, "(int)100000000");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice", "(str)anchor_type_eur", "(addr)" + this.address, "(int)87500000");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_eur", "(addr)" + this.address, "(int)87500000");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice", "(str)anchor_type_jpy", "(addr)" + this.address, "(int)1200000000");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_jpy", "(addr)" + this.address, "(int)1200000000");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice", "(str)anchor_type_gbp", "(addr)" + this.address, "(int)78130000");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_gbp", "(addr)" + this.address, "(int)78130000");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice", "(str)anchor_type_gold", "(addr)" + this.address, "(int)838000");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_gold", "(addr)" + this.address, "(int)838000");
             subPrintLine(result);
 
         }
@@ -232,124 +268,95 @@ namespace smartContractDemo
         //设置价格信息
         async Task test_setConfig()
         {
-            var result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
+            var result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setConfig",
                 "(str)liquidate_rate_b",
                 "(int)50");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setConfig",
                 "(str)liquidate_rate_c",
                 "(int)150");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setConfig",
                 "(str)clear_rate",
                 "(int)90");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setConfig",
                 "(str)resuce_rate_c",
                 "(int)160");
             subPrintLine(result);
 
             
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setConfig",
                "(str)service_fee",
                "(int)1000000000");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig", "(str)anchor_type_usd", "(int)1");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setConfig", "(str)anchor_type_usd", "(int)1");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig", "(str)anchor_type_eur", "(int)1");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setConfig", "(str)anchor_type_eur", "(int)1");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig", "(str)anchor_type_jpy", "(int)1");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setConfig", "(str)anchor_type_jpy", "(int)1");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig", "(str)anchor_type_gbp", "(int)1");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setConfig", "(str)anchor_type_gbp", "(int)1");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig", "(str)anchor_type_gold", "(int)1");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setConfig", "(str)anchor_type_gold", "(int)1");
             subPrintLine(result);
 
         }
 
         async Task test_getConfig() {
-            var result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)liquidate_rate_b");
-            oracle_common.ResultItem item = result.value;
-            Console.WriteLine("liquidate_rate_b:" + item.subItem[0].AsInteger());
+            var result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getConfig", "(str)result");
+            datacenter_common.ResultItem item = result.value;
+            Console.WriteLine("medial result:" + item.subItem[0].AsInteger());
 
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)liquidate_rate_c");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getConfig", "(str)pow");
             item = result.value;
-            Console.WriteLine("liquidate_rate_c:" + item.subItem[0].AsInteger());
+            Console.WriteLine("pow:" + item.subItem[0].AsInteger());
 
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)clear_rate");
-            item = result.value;
-            Console.WriteLine("clear_rate:" + item.subItem[0].AsInteger());
-
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)resuce_rate_c");
-            item = result.value;
-            Console.WriteLine("resuce_rate_c:" + item.subItem[0].AsInteger());
-
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)service_fee");
-            item = result.value;
-            Console.WriteLine("service_fee:" + item.subItem[0].AsInteger());
-
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)anchor_type_usd");
-            item = result.value;
-            Console.WriteLine(item.subItem[0].AsInteger());
-
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)anchor_type_eur");
-            item = result.value;
-            Console.WriteLine(item.subItem[0].AsInteger());
-
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)anchor_type_jpy");
-            item = result.value;
-            Console.WriteLine(item.subItem[0].AsInteger());
-
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)anchor_type_gbp");
-            item = result.value;
-            Console.WriteLine(item.subItem[0].AsInteger());
-
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)anchor_type_gold");
-            item = result.value;
-            Console.WriteLine(item.subItem[0].AsInteger());
         }
+
+
 
         //查询配置信息
         async Task test_getPrice()
         {
-            var result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)sds_price");
-            oracle_common.ResultItem item = result.value;
+            var result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)sds_price");
+            datacenter_common.ResultItem item = result.value;
             Console.WriteLine("sds_price:"+item.subItem[0].AsInteger());
 
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)neo_price");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)neo_price");
             item = result.value;
             Console.WriteLine("neo_price:" + item.subItem[0].AsInteger());
 
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)gas_price");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)gas_price");
             item = result.value;
             Console.WriteLine("gas_price:" + item.subItem[0].AsInteger());
 
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)anchor_type_usd");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)anchor_type_usd");
             item = result.value;
             Console.WriteLine("anchor_type_usd:" + item.subItem[0].AsInteger());
 
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)anchor_type_eur");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)anchor_type_eur");
             item = result.value;
             Console.WriteLine("anchor_type_eur:"+item.subItem[0].AsInteger());
 
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)anchor_type_jpy");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)anchor_type_jpy");
             item = result.value;
             Console.WriteLine("anchor_type_jpy:" + item.subItem[0].AsInteger());
 
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)anchor_type_gbp");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)anchor_type_gbp");
             item = result.value;
             Console.WriteLine("anchor_type_gbp:"+item.subItem[0].AsInteger());
 
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)anchor_type_gold");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)anchor_type_gold");
             item = result.value;
             Console.WriteLine("anchor_type_gold:"+item.subItem[0].AsInteger());
         }
@@ -360,23 +367,23 @@ namespace smartContractDemo
         {
             Console.WriteLine("key:anchor_type_usd");
 
-            var result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getAnchorPrice", "(str)anchor_type_usd");
-            oracle_common.ResultItem item = result.value;
+            var result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getAnchorPrice", "(str)anchor_type_usd");
+            datacenter_common.ResultItem item = result.value;
             Console.WriteLine(item.subItem[0].AsInteger());
 
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getAnchorPrice", "(str)anchor_type_eur");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getAnchorPrice", "(str)anchor_type_eur");
             item = result.value;
             Console.WriteLine(item.subItem[0].AsInteger());
 
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getAnchorPrice", "(str)anchor_type_jpy");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getAnchorPrice", "(str)anchor_type_jpy");
             item = result.value;
             Console.WriteLine(item.subItem[0].AsInteger());
 
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getAnchorPrice", "(str)anchor_type_gbp");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getAnchorPrice", "(str)anchor_type_gbp");
             item = result.value;
             Console.WriteLine(item.subItem[0].AsInteger());
 
-            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getAnchorPrice", "(str)anchor_type_gold");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getAnchorPrice", "(str)anchor_type_gold");
             item = result.value;
             Console.WriteLine(item.subItem[0].AsInteger());
         }
@@ -393,19 +400,19 @@ namespace smartContractDemo
              *  anchor_type_gold   0.000838 * 100000000
              */
 
-            var result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setAnchorPrice", "(str)anchor_type_usd", "(int)100000000");
+            var result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setAnchorPrice", "(str)anchor_type_usd", "(int)100000000");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setAnchorPrice", "(str)anchor_type_eur", "(int)87500000");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setAnchorPrice", "(str)anchor_type_eur", "(int)87500000");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setAnchorPrice", "(str)anchor_type_jpy", "(int)1200000000");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setAnchorPrice", "(str)anchor_type_jpy", "(int)1200000000");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setAnchorPrice", "(str)anchor_type_gbp", "(int)78130000");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setAnchorPrice", "(str)anchor_type_gbp", "(int)78130000");
             subPrintLine(result);
 
-            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setAnchorPrice", "(str)anchor_type_gold", "(int)838000");
+            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setAnchorPrice", "(str)anchor_type_gold", "(int)838000");
             subPrintLine(result);
 
 
@@ -414,8 +421,8 @@ namespace smartContractDemo
         //查询配置信息
         async Task test_getMedian()
         {
-            var result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getMedian", "(str)sds_price");
-            oracle_common.ResultItem item = result.value;
+            var result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getMedian", "(str)sds_price");
+            datacenter_common.ResultItem item = result.value;
             Console.WriteLine("getMedian:" + item.subItem[0].AsInteger());
 
         }
@@ -425,8 +432,8 @@ namespace smartContractDemo
             Console.WriteLine("addr:");
             string addr = Console.ReadLine();
 
-            var result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getAccount", "(addr)"+addr);
-            oracle_common.ResultItem item = result.value;
+            var result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getAccount", "(addr)"+addr);
+            datacenter_common.ResultItem item = result.value;
             Console.WriteLine("addr:" + item.subItem[0].AsInteger());
 
         }

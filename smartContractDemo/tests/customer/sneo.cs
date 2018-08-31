@@ -442,9 +442,9 @@ namespace smartContractDemo
             var url = Helper.MakeRpcUrlPost(Config.api, "sendrawtransaction", out postdata, new MyJson.JsonNode_ValueString(strtrandata));
 
             string poststr = System.Text.Encoding.UTF8.GetString(postdata);
-            Console.WriteLine("-----post info begin----");
-            Console.WriteLine(poststr);
-            Console.WriteLine("-----post info end----");
+            //Console.WriteLine("-----post info begin----");
+            //Console.WriteLine(poststr);
+            //Console.WriteLine("-----post info end----");
             var result = await Helper.HttpPost(url, postdata);
             Console.WriteLine("得到的结果是：" + result);
             var json = MyJson.Parse(result).AsDict();
@@ -561,9 +561,9 @@ namespace smartContractDemo
             var url = Helper.MakeRpcUrlPost(Config.api, "sendrawtransaction", out postdata, new MyJson.JsonNode_ValueString(strtrandata));
 
             string poststr = System.Text.Encoding.UTF8.GetString(postdata);
-            Console.WriteLine("-----post info begin----");
-            Console.WriteLine(poststr);
-            Console.WriteLine("-----post info end----");
+            //Console.WriteLine("-----post info begin----");
+            //Console.WriteLine(poststr);
+            //Console.WriteLine("-----post info end----");
 
             var result = await Helper.HttpPost(url, postdata);
             Console.WriteLine("得到的结果是：" + result);

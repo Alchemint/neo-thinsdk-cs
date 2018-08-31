@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ThinNeo;
 using smartContractDemo.tests;
+using System.Linq;
 
 namespace smartContractDemo
 {
@@ -43,7 +44,7 @@ namespace smartContractDemo
             infos["transfer"] = test_Transfer;
             infos["setAccount"] = test_setAccount;
             infos["getAccount"] = test_getAccount;
-
+            infos["getStorage"] = test_getStorage;
             //infos["openSAR"] = test_openSAR;
             //infos["lock"] = test_lock;
             //infos["draw"] = test_draw;
@@ -129,12 +130,31 @@ namespace smartContractDemo
             subPrintLine("?:show this");
         }
 
+        async Task test_getStorage()
+        {
+            //var rev = ThinNeo.Helper.HexString2Bytes(key).Reverse().ToArray();
+            var revkey = ThinNeo.Helper.GetPublicKeyHashFromAddress("AZ77FiX7i9mRUPF2RyuJD2L8kS6UDnQ9Y7");
+            string revhash =  revkey.ToString();
+
+            Console.WriteLine(revhash);
+            
+            var rev = ThinNeo.Helper.HexString2Bytes(revhash.Replace("0x","")).Reverse().ToArray();
+            var key2 = ThinNeo.Helper.Bytes2HexString(rev);
+
+            Console.WriteLine(key2);
+            //ThinNeo.Helper.Get
+            string key = "11" + key2;
+            var url = Helper.MakeRpcUrl(Config.api, "getstorage", new MyJson.JsonNode_ValueString(sds_common.sc), new MyJson.JsonNode_ValueString(key));
+            string result = await Helper.HttpGet(url);
+            Console.WriteLine("得到的结果是：" + result);
+        }
+
         async Task test_setAccount()
         {
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(sar_common.sc_sar);
             Console.WriteLine("sar address:" + addr);
 
-            var result = await sdusd_common.api_SendTransaction(prikey, sdusd_common.sc_sdusd, "setAccount",
+            var result = await sdusd_common.api_SendbatchTransaction(prikey, sdusd_common.sc_sdusd, "setAccount",
                "(addr)" + addr);
             subPrintLine(result);
         }

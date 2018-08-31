@@ -13,9 +13,9 @@ namespace smartContractDemo
     public class sar_common
     {
 
-        public static readonly Hash160 sc_sar = new Hash160("0xdad02789d599620fd62ba7da9271365709fe328d");//token 合约地址
+        public static readonly Hash160 sc_sar = new Hash160("0xb4314666302635477879a751599766fb86cbd0c1");//token 合约地址
 
-        public static readonly string sc = "0xdad02789d599620fd62ba7da9271365709fe328d";
+        public static readonly string sc = "0xb4314666302635477879a751599766fb86cbd0c1";
         
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 

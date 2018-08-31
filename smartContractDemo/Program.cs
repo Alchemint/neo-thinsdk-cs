@@ -66,8 +66,8 @@ namespace smartContractDemo
             //RegTest(new MultiSign());
             //RegTest(new nnc());
             //RegTest(new MigrateScDemo());
-            RegTest(new wneoTest());
-            RegTest(new penoTest());
+            //RegTest(new wneoTest());
+            //RegTest(new penoTest());
             RegTest(new sdsTest());
             RegTest(new callTest());
             //RegTest(new sdusd2Test());
@@ -77,7 +77,7 @@ namespace smartContractDemo
             RegTest(new sneoTest());
             RegTest(new sarTest());
             RegTest(new sdusdTest());
-
+            RegTest(new datacenterTest());
 
 
         }

@@ -13,9 +13,9 @@ namespace smartContractDemo
     public class sneo_common
     {
 
-        public static readonly Hash160 sc_sneo = new Hash160("0xdce2b9da7270ea68ecd46591419bcac0921adfe1");//token 合约地址
+        public static readonly Hash160 sc_sneo = new Hash160("0xde17892604f73b6ec9087e4332e7f1b4418da2bc");//token 合约地址
 
-        public static readonly string sc = "0xdce2b9da7270ea68ecd46591419bcac0921adfe1";
+        public static readonly string sc = "0xde17892604f73b6ec9087e4332e7f1b4418da2bc";
         
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 

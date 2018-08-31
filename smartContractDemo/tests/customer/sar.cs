@@ -41,10 +41,10 @@ namespace smartContractDemo
             infos["withdraw"] = test_free;
             infos["contract"] = test_wipe;
             infos["close"] = test_shut;
-            infos["bite"] = test_bite;
-            infos["balanceOfRedeem"] = test_balanceOfRedeem;
-            infos["redeem"] = test_redeem;
-            infos["give"] = test_give;
+            infos["rescue"] = test_bite;
+            //infos["balanceOfRedeem"] = test_balanceOfRedeem;
+            //infos["redeem"] = test_redeem;
+            //infos["give"] = test_give;
             infos["setAccount"] = test_setCallScript;
             infos["getTXInfo"] = test_getTXInfo;
             infos["getSARTxInfo"] = test_getSARTxInfo;
@@ -184,7 +184,7 @@ namespace smartContractDemo
         //创建CDP在仓
         async Task test_openSAR()
         {
-            var result = await sar_common.api_SendTransaction(prikey, sar_common.sc_sar, "openSAR4C", 
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "openSAR4C", 
                 "(addr)" + this.address,
                 "(str)neo_price");
             subPrintLine(result);
@@ -197,7 +197,7 @@ namespace smartContractDemo
             string amount = Console.ReadLine();
 
             ThinNeo.Hash160 shash = new ThinNeo.Hash160(sar_common.sc_sar);
-            var result = await sar_common.api_SendTransaction(prikey, sar_common.sc_sar, "reserve",
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "reserve",
                 "(addr)" + this.address,
                 "(int)" + amount);
             subPrintLine(result);
@@ -208,7 +208,7 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
-            var result = await sar_common.api_SendTransaction(prikey, sar_common.sc_sar, "expande",
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "expande",
                 "(addr)" + this.address,
                 "(int)" + amount);
             subPrintLine(result);
@@ -221,7 +221,7 @@ namespace smartContractDemo
             string amount = Console.ReadLine();
 
             ThinNeo.Hash160 shash = new ThinNeo.Hash160(sar_common.sc_sar);
-            var result = await sar_common.api_SendTransaction(prikey, shash, "withdraw",
+            var result = await sar_common.api_SendbatchTransaction(prikey, shash, "withdraw",
                 "(addr)" + this.address,
                 "(int)" + amount);
             subPrintLine(result);
@@ -233,7 +233,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await sar_common.api_SendTransaction(prikey, sar_common.sc_sar, "contract",
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "contract",
                 "(addr)" + this.address,
                 "(int)" + amount);
             subPrintLine(result);
@@ -245,7 +245,7 @@ namespace smartContractDemo
             Console.WriteLine("Input to Address:");
             string toAddress = Console.ReadLine();
 
-            var result = await sar_common.api_SendTransaction(prikey, sar_common.sc_sar, "give",
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "give",
                 "(addr)" + this.address,
                 "(addr)" + toAddress);
             subPrintLine(result);
@@ -254,8 +254,13 @@ namespace smartContractDemo
         //关闭在仓
         async Task test_shut()
         {
+            var sneoAddr = ThinNeo.Helper.GetAddressFromScriptHash(sneo_common.sc_sneo);
+            Console.WriteLine("sneo address:" + sneoAddr);
 
-            var result = await sar_common.api_SendTransaction(prikey, sar_common.sc_sar, "close",
+            var sdusdAddr = ThinNeo.Helper.GetAddressFromScriptHash(sdusd_common.sc_sdusd);
+            Console.WriteLine("sdusd address:" + sdusdAddr);
+
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "close",
                 "(addr)" + this.address);
             subPrintLine(result);
         }
@@ -265,16 +270,31 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input other address:");
             var otherAdd = Console.ReadLine();
-            var result = await sar_common.api_SendTransaction(prikey, sar_common.sc_sar, "bite",
+
+            Console.WriteLine("Input amount:");
+            var mount = Console.ReadLine();
+
+            var sneoAddr = ThinNeo.Helper.GetAddressFromScriptHash(sneo_common.sc_sneo);
+            Console.WriteLine("sneo address:" + sneoAddr);
+
+            var sdusdAddr = ThinNeo.Helper.GetAddressFromScriptHash(sdusd_common.sc_sdusd);
+            Console.WriteLine("sdusd address:" + sdusdAddr);
+
+            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
+            Console.WriteLine("oracle address:" + oracleAddr);
+
+
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "rescue",
                 "(addr)" + otherAdd,
-                "(addr)" + this.address);
+                "(addr)" + this.address,
+                "(int)"+ mount);
             subPrintLine(result);
         }
 
         //赎回剩余PNEO
         async Task test_redeem()
         {
-            var result = await sar_common.api_SendTransaction(prikey, sar_common.sc_sar, "redeem",
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "redeem",
                 "(addr)" + this.address);
             subPrintLine(result);
         }
@@ -366,7 +386,7 @@ namespace smartContractDemo
             string value = Console.ReadLine();
 
 
-            var result = await sar_common.api_SendTransaction(prikey, sar_common.sc_sar, "setConfig", "(str)" + key, "(int)" + value);
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "setConfig", "(str)" + key, "(int)" + value);
             subPrintLine(result);
 
         }

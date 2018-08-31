@@ -13,9 +13,9 @@ namespace smartContractDemo
     public class oracle_common
     {
 
-        public static readonly Hash160 sc_wneo = new Hash160("0xe244e47e3fb4104919ea8a308b35e6921375d0fb");//token 合约地址
+        public static readonly Hash160 sc_wneo = new Hash160("0x91c852d9589ce1dac5426bd3bc294a6a4c40ae58");//token 合约地址
 
-        public static readonly string sc = "0xe244e47e3fb4104919ea8a308b35e6921375d0fb";
+        public static readonly string sc = "0x91c852d9589ce1dac5426bd3bc294a6a4c40ae58";
         //0x2d55bcb9129c61c8f529baebec102c71228eefc3
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 
