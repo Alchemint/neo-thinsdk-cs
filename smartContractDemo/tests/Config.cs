@@ -28,7 +28,9 @@ namespace smartContractDemo.tests
 
         //public readonly static string api = "http://192.168.0.101:59908/api/privatenet";
 
-        public readonly static string api = "http://47.75.103.144:59908/api/privatenet";
+        //public readonly static string api = "http://47.52.85.247/api/privatenet";
+
+        public readonly static string api = "http://47.52.85.247/api/mainnet";
 
         public const string rpc = "http://47.52.188.214:10332";
 
@@ -41,7 +43,7 @@ namespace smartContractDemo.tests
         //gxl KxtvHw6fBeEj1TQEd7revdhyETPC8w8jEVE3yVthhLyWQnxMm6tr
         //wallet1 test L5a9Hihm4Lu46deJ6mfBRAvPPitJTyWK6g8yRP1iFPpGMBzecQcS
         //walletgxl KxtvHw6fBeEj1TQEd7revdhyETPC8w8jEVE3yVthhLyWQnxMm6tr
-        public const string testwif = "KxwkPdCtioE8vKfLETqK2UfMWX4XaooP8rP85wRrAiFzDa3Ydkt3";
+        public const string testwif = "KxtvHw6fBeEj1TQEd7revdhyETPC8w8jEVE3yVthhLyWQnxMm6tr";
 
         public const string id_NEO = "0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
 

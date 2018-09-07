@@ -232,27 +232,41 @@ namespace smartContractDemo
         //设置价格信息
         async Task test_setConfig()
         {
+            //B端抵押率
             var result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
                 "(str)liquidate_rate_b",
                 "(int)50");
             subPrintLine(result);
 
+            //C端抵押率
             result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
                 "(str)liquidate_rate_c",
                 "(int)150");
             subPrintLine(result);
 
+            //C端清算折扣
             result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
                 "(str)clear_rate",
                 "(int)90");
             subPrintLine(result);
 
+            //C端最高可清算抵押率
             result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
                 "(str)resuce_rate_c",
                 "(int)160");
             subPrintLine(result);
 
-            
+            //C端伺机者可清算抵押率
+            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
+                "(str)bond_rate_c",
+                "(int)120");
+            subPrintLine(result);
+
+            //C端发行费用
+            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
+                "(str)release_rate_c",
+                "(int)13");
+            subPrintLine(result);
 
             result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
                "(str)service_fee",
@@ -285,6 +299,8 @@ namespace smartContractDemo
             item = result.value;
             Console.WriteLine("liquidate_rate_c:" + item.subItem[0].AsInteger());
 
+
+
             result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)clear_rate");
             item = result.value;
             Console.WriteLine("clear_rate:" + item.subItem[0].AsInteger());
@@ -292,6 +308,14 @@ namespace smartContractDemo
             result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)resuce_rate_c");
             item = result.value;
             Console.WriteLine("resuce_rate_c:" + item.subItem[0].AsInteger());
+
+            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)bond_rate_c");
+            item = result.value;
+            Console.WriteLine("bond_rate_c:" + item.subItem[0].AsInteger());
+
+            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)release_rate_c");
+            item = result.value;
+            Console.WriteLine("release_rate_c:" + item.subItem[0].AsInteger());
 
             result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)service_fee");
             item = result.value;

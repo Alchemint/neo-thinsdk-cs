@@ -59,6 +59,7 @@ namespace smartContractDemo
             infos["toByte"] = test_toByte;
             infos["cal"] = test_cal;
             infos["queryAddress"] = test_queryAllAddress;
+            infos["queryAllTransfer"] = test_queryAllTransfer;
             infos["batchCal"] = test_batchCal;
             infos["batchCal2"] = test_batchCal2;
             infos["test"] = test_main;
@@ -448,7 +449,7 @@ namespace smartContractDemo
                 new JsonNode_ValueNumber(10000),
                 new JsonNode_ValueNumber(1));
             var result = await Helper.HttpPost(url, postdata);
-            //System.IO.File.WriteAllText(@"D:\address\addssssss.json", result, Encoding.UTF8);
+            System.IO.File.WriteAllText(@"D:\address\addssssss0907.json", result, Encoding.UTF8);
 
             List<string> list = new List<string>();
             MyJson.JsonNode_Object json = MyJson.Parse(result) as MyJson.JsonNode_Object;
@@ -497,13 +498,65 @@ namespace smartContractDemo
                     //if (s != "AKJQMHma9MA8KK5M8iQg8ASeg3KZLsjwvB")
                     //{
                     string str = s + "," + mount + "\r\n";
-                    string newPath = @"D:\address\balances0809.txt";
+                    string newPath = @"D:\address\balances0907.txt";
                     File.AppendAllText(newPath, str);
                     //}
                 }
             }
 
             Console.WriteLine("sum:" + sum);
+            DateTime end = DateTime.Now;
+            Console.WriteLine("End time:" + end);
+        }
+
+        //查询所有地址
+        async Task test_queryAllTransfer()
+        {
+            DateTime dt = DateTime.Now;
+            Console.WriteLine("Start time:" + dt);
+            byte[] postdata;
+            //查询交易，总数可能很多
+            var url = Helper.MakeRpcUrlPost(Config.api, "getnep5transfersbyasset", out postdata,
+                new JsonNode_ValueString(sds_common.sc),
+                new JsonNode_ValueNumber(10000),
+                new JsonNode_ValueNumber(1));
+            var result = await Helper.HttpPost(url, postdata);
+            //System.IO.File.WriteAllText(@"D:\address\addssssss0907.json", result, Encoding.UTF8);
+
+            List<string> list = new List<string>();
+            MyJson.JsonNode_Object json = MyJson.Parse(result) as MyJson.JsonNode_Object;
+            JsonNode_Array arrs = json["result"].AsList();
+
+            foreach (JsonNode_Object ob in arrs)
+            {
+                string from = ob["from"].AsString();
+                string to = ob["to"].AsString();
+                string value = ob["value"].AsString();
+                string txid = ob["txid"].AsString();
+                int index = ob["blockindex"].AsInt();
+
+                 url = Helper.MakeRpcUrlPost(Config.api, "getblocktime", out postdata,
+               new JsonNode_ValueNumber(index));
+                 result = await Helper.HttpPost(url, postdata);
+
+                json = MyJson.Parse(result) as MyJson.JsonNode_Object;
+
+                 arrs = json["result"].AsList();
+                 string time = arrs[0].AsDict()["time"].AsString();
+
+                //long unixTimeStamp = 1478162177;
+                System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)); // 当地时区
+                DateTime dt2 = startTime.AddSeconds(double.Parse(time));
+                string dt2str = dt2.ToString("yyyy/MM/dd HH:mm:ss:ffff");
+                System.Console.WriteLine();
+                //json["result"].AsDict()["time"];
+                //JsonNode_Array arrs = json["result"].AsList();
+
+
+                string str = txid+","+from+ "," + to +","+value+","+ dt2str + "\r\n";
+                string newPath = @"D:\address\transfers0907.csv";
+                File.AppendAllText(newPath, str);
+            }
             DateTime end = DateTime.Now;
             Console.WriteLine("End time:" + end);
         }

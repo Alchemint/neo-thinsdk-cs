@@ -39,13 +39,19 @@ namespace smartContractDemo
             infos["reserve"] = test_lock;
             infos["expande"] = test_draw;
             infos["withdraw"] = test_free;
+            infos["withdrawT"] = test_withdrawT;
             infos["contract"] = test_wipe;
             infos["close"] = test_shut;
             infos["rescue"] = test_bite;
+            infos["rescueT"] = test_rescueT;
+
             //infos["balanceOfRedeem"] = test_balanceOfRedeem;
             //infos["redeem"] = test_redeem;
             //infos["give"] = test_give;
             infos["setAccount"] = test_setCallScript;
+            infos["setBondAccount"] = test_setBondAccount;
+            infos["removeBondAccount"] = test_removeBondAccount;
+
             infos["getTXInfo"] = test_getTXInfo;
             infos["getSARTxInfo"] = test_getSARTxInfo;
             //infos["setConfig"] = test_setConfig;
@@ -166,6 +172,27 @@ namespace smartContractDemo
 
         }
 
+        async Task test_setBondAccount()
+        {
+            Console.WriteLine("Input address:");
+            string addr = Console.ReadLine();
+
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "setBondAccount",
+              "(addr)" + addr);
+            subPrintLine(result);
+
+        }
+
+        async Task test_removeBondAccount()
+        {
+            Console.WriteLine("Input address:");
+            string addr = Console.ReadLine();
+
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "removeBondAccount",
+              "(addr)" + addr);
+            subPrintLine(result);
+        }
+
 
         async Task test_mintSDT()
         {
@@ -222,6 +249,18 @@ namespace smartContractDemo
 
             ThinNeo.Hash160 shash = new ThinNeo.Hash160(sar_common.sc_sar);
             var result = await sar_common.api_SendbatchTransaction(prikey, shash, "withdraw",
+                "(addr)" + this.address,
+                "(int)" + amount);
+            subPrintLine(result);
+        }
+
+        async Task test_withdrawT()
+        {
+            Console.WriteLine("Input amount:");
+            string amount = Console.ReadLine();
+
+            ThinNeo.Hash160 shash = new ThinNeo.Hash160(sar_common.sc_sar);
+            var result = await sar_common.api_SendbatchTransaction(prikey, shash, "withdrawT",
                 "(addr)" + this.address,
                 "(int)" + amount);
             subPrintLine(result);
@@ -291,6 +330,31 @@ namespace smartContractDemo
             subPrintLine(result);
         }
 
+        async Task test_rescueT()
+        {
+            Console.WriteLine("Input other address:");
+            var otherAdd = Console.ReadLine();
+
+            Console.WriteLine("Input amount:");
+            var mount = Console.ReadLine();
+
+            var sneoAddr = ThinNeo.Helper.GetAddressFromScriptHash(sneo_common.sc_sneo);
+            Console.WriteLine("sneo address:" + sneoAddr);
+
+            var sdusdAddr = ThinNeo.Helper.GetAddressFromScriptHash(sdusd_common.sc_sdusd);
+            Console.WriteLine("sdusd address:" + sdusdAddr);
+
+            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
+            Console.WriteLine("oracle address:" + oracleAddr);
+
+
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "rescueT",
+                "(addr)" + otherAdd,
+                "(addr)" + this.address,
+                "(int)" + mount);
+            subPrintLine(result);
+        }
+
         //赎回剩余PNEO
         async Task test_redeem()
         {
@@ -341,7 +405,8 @@ namespace smartContractDemo
                 Console.WriteLine("hasDrawed:" + items[3].AsInteger());
                 Console.WriteLine("assetType:" + items[4].AsString());
                 Console.WriteLine("status:" + items[5].AsInteger());
-
+                Console.WriteLine("bondLocked:" + items[6].AsInteger());
+                Console.WriteLine("bondDrawed:" + items[7].AsInteger());
 
             }
             else

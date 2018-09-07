@@ -12,7 +12,8 @@ namespace smartContractDemo
 {
     public class sdusd_common
     {
-   
+
+        //0xa3de6b0a099cb57d46479a439a18c528522e399d
         public static readonly Hash160 sc_sdusd = new Hash160("0x5c0ff4c972c4c41a9bfdf9b61389afde30a6489b");//sdusd 合约地址
 
         public static readonly string sc = "0x5c0ff4c972c4c41a9bfdf9b61389afde30a6489b";

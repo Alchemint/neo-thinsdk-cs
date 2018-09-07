@@ -50,6 +50,7 @@ namespace smartContractDemo
             //infos["mintTokensGAS"] = test_mintTokensGAS;
             infos["refund"] = test_refund;
             infos["getRefund"] = test_getRefund;
+            infos["getRefundTarget"] = test_getRefundTarget;
             //infos["totalDestory"] = test_totalDestory;
             infos["setAccount"] = test_setCallScript;
             //infos["setConfig"] = test_setConfig;
@@ -70,9 +71,12 @@ namespace smartContractDemo
             var _json = MyJson.Parse(resultgetscript).AsDict();
             var _resultv = _json["result"].AsList()[0].AsDict();
 
+            //Console.WriteLine(_resultv["script"].AsString());
+
             n55contract = ThinNeo.Helper.HexString2Bytes(_resultv["script"].AsString());
 
-            //Console.WriteLine("reg=" + _resultv["script"].AsString());
+            //Console.WriteLine(n55contract.Length);
+
 
             showMenu();
 
@@ -355,6 +359,16 @@ namespace smartContractDemo
 
         }
 
+        async Task test_getRefundTarget() {
+            Console.WriteLine("Input txid:");
+            string txid = Console.ReadLine();
+            var result = await sneo_common.api_InvokeScript(sneo_common.sc_sneo, "getRefundTarget", "(hex256)" + txid);
+            sneo_common.ResultItem item = result.value;
+
+            Console.WriteLine("value:" + ThinNeo.Helper.GetAddressFromScriptHash(item.subItem[0].AsHash160()));
+
+        }
+
         //退款操作
         async Task test_refund()
         {
@@ -443,7 +457,7 @@ namespace smartContractDemo
 
             string poststr = System.Text.Encoding.UTF8.GetString(postdata);
             //Console.WriteLine("-----post info begin----");
-            //Console.WriteLine(poststr);
+            Console.WriteLine(poststr);
             //Console.WriteLine("-----post info end----");
             var result = await Helper.HttpPost(url, postdata);
             Console.WriteLine("得到的结果是：" + result);
