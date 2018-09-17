@@ -11,7 +11,7 @@ namespace smartContractDemo
     class PubScDemo:ITest
     {
 
-        string api = "https://api.nel.group/api/testnet";
+        string api = "http://47.52.85.247/api/privatenet";
 
         string id_GAS = "0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
 
@@ -34,7 +34,7 @@ namespace smartContractDemo
             Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(api,address);
 
             //从文件中读取合约脚本
-            byte[] script = System.IO.File.ReadAllBytes("Nep5.5gas_Contract.avm"); //这里填你的合约所在地址
+            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0xc074a05e9dcf0141cbe6b4b3475dd67baf4dcb60.avm"); //这里填你的合约所在地址
             Console.WriteLine("合约脚本:"+ThinNeo.Helper.Bytes2HexString(script));
             Console.WriteLine("合约脚本hash："+ThinNeo.Helper.Bytes2HexString(ThinNeo.Helper.GetScriptHashFromScript(script).data.ToArray().Reverse().ToArray()));
             byte[] parameter__list = ThinNeo.Helper.HexString2Bytes("0710");  //这里填合约入参  例：0610代表（string，[]）
@@ -42,9 +42,9 @@ namespace smartContractDemo
             int need_storage = 1;   
             int need_nep4 = 0;
             int need_canCharge = 4;
-            string name = "sgas";
+            string name = "sar";
             string version = "1.0";
-            string auther = "NEL";
+            string auther = "Steel";
             string email = "0";
             string description = "0";
             using (ThinNeo.ScriptBuilder sb = new ThinNeo.ScriptBuilder())
@@ -71,6 +71,7 @@ namespace smartContractDemo
                 //string result = http.Post(api, "invokescript", new MyJson.JsonNode_Array() { new MyJson.JsonNode_ValueString(scriptPublish) },Encoding.UTF8);
                 var consume =((( MyJson.Parse(result) as MyJson.JsonNode_Object)["result"] as MyJson.JsonNode_Array)[0] as MyJson.JsonNode_Object)["gas_consumed"].ToString();
                 decimal gas_consumed = decimal.Parse(consume);
+                Console.WriteLine(gas_consumed);
                 ThinNeo.InvokeTransData extdata = new ThinNeo.InvokeTransData();
                 extdata.script = sb.ToArray();
 

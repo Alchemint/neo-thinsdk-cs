@@ -144,7 +144,7 @@ namespace smartContractDemo
 
             result = await business_common.api_SendbatchTransaction(prikey, business_common.sc_wneo, "setAccount",
                 "(str)sds_account",
-                "(addr)" + addr);
+                "(addr)" + sdsAddr);
             subPrintLine(result);
 
             result = await business_common.api_SendbatchTransaction(prikey, business_common.sc_wneo, "setAccount",

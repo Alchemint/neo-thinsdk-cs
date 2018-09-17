@@ -54,6 +54,7 @@ namespace smartContractDemo
             infos["batchTransferFor2"] = test_batchTransfer2;
             infos["transfer"] = test_Transfer;
             infos["transferApp"] = test_TransferApp;
+            infos["transferNEO"] = test_transferNEO;
             infos["getTXInfo"] = test_getTXInfo;
             infos["getstorage"] = test_getstorage;
             infos["toByte"] = test_toByte;
@@ -418,6 +419,44 @@ namespace smartContractDemo
               "(int)" + amount
               );
             subPrintLine(result);
+        }
+
+        async Task test_transferNEO()
+        {
+            Console.WriteLine("transfer to:");
+            var to = Console.ReadLine();
+
+            Console.WriteLine("send mount:");
+            var mount = Console.ReadLine();
+
+            string nep55_address = ThinNeo.Helper.GetAddressFromScriptHash(sneo_common.sc_sneo);
+            Console.WriteLine("address=" + nep55_address);
+
+            //获取地址的资产列表
+            Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(Config.api, this.address);
+            if (dir.ContainsKey(Config.id_NEO) == false)
+            {
+                Console.WriteLine("no neo");
+                return;
+            }
+            List<Utxo> newlist = dir[Config.id_NEO];
+
+            ThinNeo.Transaction tran = Helper.makeTran(newlist, to, new ThinNeo.Hash256(Config.id_NEO), decimal.Parse(mount));
+
+            var signdata = ThinNeo.Helper.Sign(tran.GetMessage(), prikey);
+            tran.AddWitness(signdata, pubkey, address);
+
+            var trandata = tran.GetRawData();
+            var strtrandata = ThinNeo.Helper.Bytes2HexString(trandata);
+
+            byte[] postdata;
+            var url = Helper.MakeRpcUrlPost(Config.api, "sendrawtransaction", out postdata, new MyJson.JsonNode_ValueString(strtrandata));
+
+            string poststr = System.Text.Encoding.UTF8.GetString(postdata);
+         
+            var result = await Helper.HttpPost(url, postdata);
+            Console.WriteLine("得到的结果是：" + result);
+
         }
 
 

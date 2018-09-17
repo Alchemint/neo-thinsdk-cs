@@ -14,9 +14,9 @@ namespace smartContractDemo
     {
 
         //0xa3de6b0a099cb57d46479a439a18c528522e399d
-        public static readonly Hash160 sc_sdusd = new Hash160("0x5c0ff4c972c4c41a9bfdf9b61389afde30a6489b");//sdusd 合约地址
+        public static readonly Hash160 sc_sdusd = new Hash160("0xdbd6af594f2ea94e0c09e7d22f8381458b64f349");//sdusd 合约地址
 
-        public static readonly string sc = "0x5c0ff4c972c4c41a9bfdf9b61389afde30a6489b";
+        public static readonly string sc = "0xdbd6af594f2ea94e0c09e7d22f8381458b64f349";
 
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 

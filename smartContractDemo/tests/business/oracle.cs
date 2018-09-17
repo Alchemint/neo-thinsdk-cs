@@ -12,7 +12,7 @@ namespace smartContractDemo
 {
     class oracleTest : ITest
     {
-        public string Name => "Token 合约测试";
+        public string Name => "Oracle 合约测试";
 
         public string ID => "or";
         byte[] prikey;
@@ -198,7 +198,25 @@ namespace smartContractDemo
             subPrintLine(result);
 
             result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
+                "(str)cneo_price",
+                "(addr)" + this.address,
+                "(int)2000000000");
+            subPrintLine(result);
+
+            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
+                "(str)sneo_price",
+                "(addr)" + this.address,
+                "(int)2000000000");
+            subPrintLine(result);
+
+            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
                 "(str)gas_price",
+                "(addr)" + this.address,
+                "(int)200000000");
+            subPrintLine(result);
+
+            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setPrice",
+                "(str)cgas_price",
                 "(addr)" + this.address,
                 "(int)200000000");
             subPrintLine(result);
@@ -265,12 +283,17 @@ namespace smartContractDemo
             //C端发行费用
             result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
                 "(str)release_rate_c",
-                "(int)13");
+                "(int)1");
             subPrintLine(result);
 
             result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
                "(str)service_fee",
                "(int)1000000000");
+            subPrintLine(result);
+
+            result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig",
+             "(str)release_max_c",
+             "(int)1000000000000000");
             subPrintLine(result);
 
             result = await oracle_common.api_SendbatchTransaction(prikey, oracle_common.sc_wneo, "setConfig", "(str)anchor_type_usd", "(int)1");
@@ -321,6 +344,11 @@ namespace smartContractDemo
             item = result.value;
             Console.WriteLine("service_fee:" + item.subItem[0].AsInteger());
 
+            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)release_max_c");
+            item = result.value;
+            Console.WriteLine("release_max_c:" + item.subItem[0].AsInteger());
+            
+
             result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getConfig", "(str)anchor_type_usd");
             item = result.value;
             Console.WriteLine(item.subItem[0].AsInteger());
@@ -352,6 +380,14 @@ namespace smartContractDemo
             result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)neo_price");
             item = result.value;
             Console.WriteLine("neo_price:" + item.subItem[0].AsInteger());
+
+            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)sneo_price");
+            item = result.value;
+            Console.WriteLine("sneo_price:" + item.subItem[0].AsInteger());
+
+            result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)cneo_price");
+            item = result.value;
+            Console.WriteLine("cneo_price:" + item.subItem[0].AsInteger());
 
             result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getPrice", "(str)gas_price");
             item = result.value;

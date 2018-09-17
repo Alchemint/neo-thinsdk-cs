@@ -47,7 +47,7 @@ namespace smartContractDemo
             //RegTest(new SCDemo1());
             //RegTest(new SCDemo2());
             //RegTest(new SCDemo3());
-            //RegTest(new PubScDemo());
+            RegTest(new PubScDemo());
             //RegTest(new Nep55());
             //RegTest(new Nep55_1());
             //RegTest(new Nep55_2());
@@ -78,6 +78,7 @@ namespace smartContractDemo
             RegTest(new sarTest());
             RegTest(new sdusdTest());
             RegTest(new datacenterTest());
+            RegTest(new cneoTest());
 
 
         }

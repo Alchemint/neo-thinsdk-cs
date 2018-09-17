@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using ThinNeo;
+using static MyJson;
 using smartContractDemo.tests;
+using System.Numerics;
+using System.IO;
 
 namespace smartContractDemo
 {
     class sarTest : ITest
     {
-        public string Name => "SDUSD 合约测试";
+        public string Name => "SAR 合约测试";
 
         public string ID => "sar";
         byte[] prikey;
@@ -36,6 +39,8 @@ namespace smartContractDemo
             infos = new Dictionary<string, testAction>();
             infos["openSAR4C"] = test_openSAR;
             infos["getSAR4C"] = test_getSAR;
+            infos["migrateSAR4C"] = test_migrateSAR;
+            infos["getAllSAR4C"] = test_getAllSAR4C;
             infos["reserve"] = test_lock;
             infos["expande"] = test_draw;
             infos["withdraw"] = test_free;
@@ -130,10 +135,13 @@ namespace smartContractDemo
         //授权转账操作
         async Task test_setCallScript()
         {
+
+           byte[] prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
+
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(sds_common.sc_sds);
             Console.WriteLine("sds address:" + addr);
 
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "setAccount",
+            var result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
                "(str)sds_account",
                "(addr)" + addr);
             subPrintLine(result);
@@ -141,7 +149,7 @@ namespace smartContractDemo
             addr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
             Console.WriteLine("oracle address:" + addr);
 
-            result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "setAccount",
+            result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
                "(str)oracle_account",
                "(addr)" + addr);
             subPrintLine(result);
@@ -150,7 +158,7 @@ namespace smartContractDemo
             addr = ThinNeo.Helper.GetAddressFromScriptHash(sneo_common.sc_sneo);
             Console.WriteLine("sneo address:" + addr);
 
-            result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "setAccount",
+            result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
                "(str)sasset_account",
                "(addr)" + addr);
             subPrintLine(result);
@@ -158,15 +166,29 @@ namespace smartContractDemo
             addr = ThinNeo.Helper.GetAddressFromScriptHash(sdusd_common.sc_sdusd);
             Console.WriteLine("sdusd address:" + addr);
 
-            result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "setAccount",
+            result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
                "(str)sdusd_account",
                "(addr)" + addr);
             subPrintLine(result);
 
             addr = ThinNeo.Helper.GetAddressFromScriptHash(sar_common.sc_sar);
             Console.WriteLine("sar address:" + addr);
-            result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "setAccount",
+            result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
                "(str)storage_account",
+               "(addr)" + addr);
+            subPrintLine(result);
+
+            addr = ThinNeo.Helper.GetAddressFromScriptHash(cneo_common.sc_cneo);
+            Console.WriteLine("cneo address:" + addr);
+            result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
+               "(str)cneo_price",
+               "(addr)" + addr);
+            subPrintLine(result);
+
+            addr = ThinNeo.Helper.GetAddressFromScriptHash(sneo_common.sc_sneo);
+            Console.WriteLine("sneo address:" + addr);
+            result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
+               "(str)sneo_price",
                "(addr)" + addr);
             subPrintLine(result);
 
@@ -174,6 +196,8 @@ namespace smartContractDemo
 
         async Task test_setBondAccount()
         {
+            prikey = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
+
             Console.WriteLine("Input address:");
             string addr = Console.ReadLine();
 
@@ -211,9 +235,12 @@ namespace smartContractDemo
         //创建CDP在仓
         async Task test_openSAR()
         {
+            Console.WriteLine("SAR Asset type:");
+            string assetType = Console.ReadLine();
+
             var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "openSAR4C", 
                 "(addr)" + this.address,
-                "(str)neo_price");
+                "(str)"+assetType);
             subPrintLine(result);
         }
 
@@ -413,6 +440,126 @@ namespace smartContractDemo
             {
                 Console.WriteLine("no sar exists");
             }
+        }
+
+        async Task test_getAllSAR4C()
+        {
+            //查询所有状态为1的SAR
+            DateTime dt = DateTime.Now;
+            Console.WriteLine("Start time:" + dt);
+
+            byte[] postdata;
+            var url = Helper.MakeRpcUrlPost(Config.api, "getsar4CListByType", out postdata,
+                new JsonNode_ValueNumber(1),
+                new JsonNode_ValueNumber(1000),
+                new JsonNode_ValueNumber(1));
+            var result = await Helper.HttpPost(url, postdata);
+
+            List<string> list = new List<string>();
+            MyJson.JsonNode_Object json = MyJson.Parse(result) as MyJson.JsonNode_Object;
+            JsonNode_Array arrs = json["result"].AsList();
+
+            foreach (JsonNode_Object ob in arrs)
+            {
+                string addr = ob["addr"].AsString();
+
+                Console.WriteLine("addr" + addr);
+
+                //查询旧合约SAR
+                var result2 = await sar_common.api_InvokeScript(sar_common.sc_sar, "getSAR4C", "(addr)" + addr);
+                sar_common.ResultItem item = result2.value;
+                sar_common.ResultItem[] items = item.subItem[0].subItem;
+
+                if (items != null)
+                {
+                    string owner = ThinNeo.Helper.GetAddressFromScriptHash(items[0].AsHash160());
+                    string txid = items[1].AsHashString();
+                    BigInteger locked = items[2].AsInteger();
+                    BigInteger hasDrawed = items[3].AsInteger();
+                    string assetType = items[4].AsString();
+                    BigInteger status = items[5].AsInteger();
+
+                    Console.WriteLine("###############");
+                    Console.WriteLine("from:" + owner);
+                    Console.WriteLine("txid:" + txid);
+                    Console.WriteLine("locked:" + locked);
+                    Console.WriteLine("hasDrawed:" + hasDrawed);
+                    Console.WriteLine("assetType:" + assetType);
+                    Console.WriteLine("status:" + status);
+                    //Console.WriteLine("bondLocked:" + items[6].AsInteger());
+                    //Console.WriteLine("bondDrawed:" + items[7].AsInteger());
+
+
+                }
+            }
+            DateTime end = DateTime.Now;
+            Console.WriteLine("End time:" + end);
+
+        }
+
+        async Task test_migrateSAR()
+        {
+            //查询所有状态为1的SAR
+            DateTime dt = DateTime.Now;
+            Console.WriteLine("Start time:" + dt);
+
+            byte[] postdata;
+            var url = Helper.MakeRpcUrlPost(Config.api, "getsar4CListByType", out postdata,
+                new JsonNode_ValueNumber(1),
+                new JsonNode_ValueNumber(1000),
+                new JsonNode_ValueNumber(1));
+            var result = await Helper.HttpPost(url, postdata);
+
+            List<string> list = new List<string>();
+            MyJson.JsonNode_Object json = MyJson.Parse(result) as MyJson.JsonNode_Object;
+            JsonNode_Array arrs = json["result"].AsList();
+
+            foreach (JsonNode_Object ob in arrs)
+            {
+                string addr = ob["addr"].AsString();
+
+                Console.WriteLine("addr"+addr);
+
+                //查询旧合约SAR
+                var result2 = await sar_common.api_InvokeScript(sar_common.sc_sar_old, "getSAR4C", "(addr)" + addr);
+                sar_common.ResultItem item = result2.value;
+                sar_common.ResultItem[] items = item.subItem[0].subItem;
+
+                if (items != null)
+                {
+                    string owner = ThinNeo.Helper.GetAddressFromScriptHash(items[0].AsHash160());
+                    string txid = items[1].AsHashString();
+                    BigInteger locked = items[2].AsInteger();
+                    BigInteger hasDrawed = items[3].AsInteger();
+                    string assetType = items[4].AsString();
+                    BigInteger status = items[5].AsInteger();
+
+                    Console.WriteLine("from:" + owner);
+                    Console.WriteLine("txid:" + txid);
+                    Console.WriteLine("locked:" + locked);
+                    Console.WriteLine("hasDrawed:" + hasDrawed);
+                    Console.WriteLine("assetType:" + assetType);
+                    Console.WriteLine("status:" + status);
+                    //Console.WriteLine("bondLocked:" + items[6].AsInteger());
+                    //Console.WriteLine("bondDrawed:" + items[7].AsInteger());
+
+                    //存储新的合约
+                    var result3 = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "migrateSAR4C",
+                                "(addr)" + owner,
+                                "(hex256)" + txid,
+                                "(int)"+ locked,
+                                "(int)"+ hasDrawed,
+                                "(str)" + assetType,
+                                "(int)" + status,
+                                "(int)0",
+                                "(int)0");
+                    subPrintLine(result3);
+
+
+                }
+            }
+            DateTime end = DateTime.Now;
+            Console.WriteLine("End time:" + end);
         }
 
         //查询SAR详细交易信息

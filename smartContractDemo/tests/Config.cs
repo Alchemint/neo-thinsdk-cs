@@ -28,9 +28,9 @@ namespace smartContractDemo.tests
 
         //public readonly static string api = "http://192.168.0.101:59908/api/privatenet";
 
-        //public readonly static string api = "http://47.52.85.247/api/privatenet";
+        public readonly static string api = "http://47.52.85.247/api/privatenet";
 
-        public readonly static string api = "http://47.52.85.247/api/mainnet";
+        //public readonly static string api = "http://47.52.85.247/api/mainnet";
 
         public const string rpc = "http://47.52.188.214:10332";
 
@@ -43,7 +43,9 @@ namespace smartContractDemo.tests
         //gxl KxtvHw6fBeEj1TQEd7revdhyETPC8w8jEVE3yVthhLyWQnxMm6tr
         //wallet1 test L5a9Hihm4Lu46deJ6mfBRAvPPitJTyWK6g8yRP1iFPpGMBzecQcS
         //walletgxl KxtvHw6fBeEj1TQEd7revdhyETPC8w8jEVE3yVthhLyWQnxMm6tr
-        public const string testwif = "KxtvHw6fBeEj1TQEd7revdhyETPC8w8jEVE3yVthhLyWQnxMm6tr";
+        public const string testwif = "KxkmnsoANJT8ygPaiYTe9houe4XD6bNzu1yHBYs5NUr9WL6Mufyg";
+
+        public const string testwif_admin = "KzprnMDQHhK7jnJ3dNNq5C2AfJdy58oGyphnZtc6t78NE26nhq7S";
 
         public const string id_NEO = "0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
 
@@ -67,6 +69,9 @@ namespace smartContractDemo.tests
             Console.Write(content);
             Console.ForegroundColor = ConsoleColor.White;
         }
+
+
+
 
     }
 }

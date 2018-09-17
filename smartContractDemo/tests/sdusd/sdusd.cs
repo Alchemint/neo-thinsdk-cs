@@ -151,10 +151,12 @@ namespace smartContractDemo
 
         async Task test_setAccount()
         {
+            byte[] prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
+
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(sar_common.sc_sar);
             Console.WriteLine("sar address:" + addr);
 
-            var result = await sdusd_common.api_SendbatchTransaction(prikey, sdusd_common.sc_sdusd, "setAccount",
+            var result = await sdusd_common.api_SendbatchTransaction(prikey_admin, sdusd_common.sc_sdusd, "setAccount",
                "(addr)" + addr);
             subPrintLine(result);
         }
