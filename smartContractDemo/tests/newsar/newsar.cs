@@ -10,11 +10,11 @@ using System.IO;
 
 namespace smartContractDemo
 {
-    class sarTest : ITest
+    class newsarTest : ITest
     {
         public string Name => "SAR 合约测试";
 
-        public string ID => "sar";
+        public string ID => "newsar";
         byte[] prikey;
         public string address;
         byte[] scripthash;
@@ -29,7 +29,7 @@ namespace smartContractDemo
             Console.WriteLine("    " + line);
         }
 
-        public sarTest()
+        public newsarTest()
         {
             this.initMenu();
         }
@@ -39,11 +39,9 @@ namespace smartContractDemo
             infos = new Dictionary<string, testAction>();
             infos["openSAR4C"] = test_openSAR;
             infos["getSAR4C"] = test_getSAR;
-            infos["migrateSAR4C"] = test_migrateSAR;
             infos["getAllSAR4C"] = test_getAllSAR4C;
             infos["reserve"] = test_lock;
             infos["recharge"] = test_recharge;
-            infos["claimFee"] = test_claimFee;
             infos["expande"] = test_draw;
             infos["withdraw"] = test_free;
             infos["withdrawT"] = test_withdrawT;
@@ -78,7 +76,7 @@ namespace smartContractDemo
         public async Task Demo()
         {
             //得到合约代码
-            //var urlgetscript = Helper.MakeRpcUrl(sar_common.api, "getcontractstate", new MyJson.JsonNode_ValueString(sar_common.sc));
+            //var urlgetscript = Helper.MakeRpcUrl(newsar_common.api, "getcontractstate", new MyJson.JsonNode_ValueString(newsar_common.sc));
             //var resultgetscript = await Helper.HttpGet(urlgetscript);
             //var _json = MyJson.Parse(resultgetscript).AsDict();
             //var _resultv = _json["result"].AsList()[0].AsDict();
@@ -145,7 +143,7 @@ namespace smartContractDemo
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
             Console.WriteLine("oracle address:" + addr);
 
-            var result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
+            var result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
                "(str)oracle_account",
                "(addr)" + addr);
             subPrintLine(result);
@@ -160,15 +158,15 @@ namespace smartContractDemo
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(sds_common.sc_sds);
             Console.WriteLine("sds address:" + addr);
 
-            var result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
+            var result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
                "(str)sds_account",
                "(addr)" + addr);
             subPrintLine(result);
 
-            addr = ThinNeo.Helper.GetAddressFromScriptHash(datacenter_common.sc_wneo);
+            addr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
             Console.WriteLine("oracle address:" + addr);
 
-            result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
+            result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
                "(str)oracle_account",
                "(addr)" + addr);
             subPrintLine(result);
@@ -177,7 +175,7 @@ namespace smartContractDemo
             addr = ThinNeo.Helper.GetAddressFromScriptHash(sneo_common.sc_sneo);
             Console.WriteLine("sneo address:" + addr);
 
-            result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
+            result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
                "(str)sasset_account",
                "(addr)" + addr);
             subPrintLine(result);
@@ -185,42 +183,35 @@ namespace smartContractDemo
             addr = ThinNeo.Helper.GetAddressFromScriptHash(sdusd_common.sc_sdusd);
             Console.WriteLine("sdusd address:" + addr);
 
-            result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
+            result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
                "(str)sdusd_account",
                "(addr)" + addr);
             subPrintLine(result);
 
-            addr = ThinNeo.Helper.GetAddressFromScriptHash(sar_common.sc_sar);
-            Console.WriteLine("sar address:" + addr);
-            result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
-               "(str)storage_account",
-               "(addr)" + addr);
-            subPrintLine(result);
-
             addr = ThinNeo.Helper.GetAddressFromScriptHash(newsar_common.sc_sar);
-            Console.WriteLine("newsar address:" + addr);
-            result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
-               "(str)storage_account_new",
+            Console.WriteLine("sar address:" + addr);
+            result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
+               "(str)storage_account",
                "(addr)" + addr);
             subPrintLine(result);
 
             addr = ThinNeo.Helper.GetAddressFromScriptHash(cneo_common.sc_cneo);
             Console.WriteLine("cneo address:" + addr);
-            result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
+            result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
                "(str)cneo_price",
                "(addr)" + addr);
             subPrintLine(result);
 
-            //addr = ThinNeo.Helper.GetAddressFromScriptHash(cgas_common.sc_cgas);
-            //Console.WriteLine("cgas address:" + addr);
-            //result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
-            //   "(str)cgas_price",
-            //   "(addr)" + addr);
-            //subPrintLine(result);
+            addr = ThinNeo.Helper.GetAddressFromScriptHash(cgas_common.sc_cgas);
+            Console.WriteLine("cgas address:" + addr);
+            result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
+               "(str)cgas_price",
+               "(addr)" + addr);
+            subPrintLine(result);
 
             addr = ThinNeo.Helper.GetAddressFromScriptHash(sneo_common.sc_sneo);
             Console.WriteLine("sneo address:" + addr);
-            result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
+            result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
                "(str)sneo_price",
                "(addr)" + addr);
             subPrintLine(result);
@@ -234,7 +225,7 @@ namespace smartContractDemo
             Console.WriteLine("Input address:");
             string addr = Console.ReadLine();
 
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "setBondAccount",
+            var result = await newsar_common.api_SendbatchTransaction(prikey, newsar_common.sc_sar, "setBondAccount",
               "(addr)" + addr);
             subPrintLine(result);
 
@@ -245,7 +236,7 @@ namespace smartContractDemo
             Console.WriteLine("Input address:");
             string addr = Console.ReadLine();
 
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "removeBondAccount",
+            var result = await newsar_common.api_SendbatchTransaction(prikey, newsar_common.sc_sar, "removeBondAccount",
               "(addr)" + addr);
             subPrintLine(result);
         }
@@ -256,7 +247,7 @@ namespace smartContractDemo
             Console.WriteLine("SAR Asset type:");
             string assetType = Console.ReadLine();
 
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "openSAR4C", 
+            var result = await newsar_common.api_SendbatchTransaction(prikey, newsar_common.sc_sar, "openSAR4C", 
                 "(addr)" + this.address,
                 "(str)"+assetType);
             subPrintLine(result);
@@ -268,9 +259,10 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "reserve",
+            ThinNeo.Hash160 shash = new ThinNeo.Hash160(newsar_common.sc_sar);
+            var result = await newsar_common.api_SendbatchTransaction(prikey, newsar_common.sc_sar, "reserve",
                 "(addr)" + this.address,
-                "(int)" + double.Parse(amount)* ten_pow);
+                "(int)" +  int.Parse(amount)* ten_pow);
             subPrintLine(result);
         }
 
@@ -279,16 +271,10 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "recharge",
+            ThinNeo.Hash160 shash = new ThinNeo.Hash160(newsar_common.sc_sar);
+            var result = await newsar_common.api_SendbatchTransaction(prikey, newsar_common.sc_sar, "recharge",
                 "(addr)" + this.address,
-                "(int)" + double.Parse(amount) * ten_pow);
-            subPrintLine(result);
-        }
-
-        async Task test_claimFee()
-        {
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "claimFee",
-               "(addr)" + this.address);
+                "(int)" + int.Parse(amount) * ten_pow);
             subPrintLine(result);
         }
 
@@ -297,9 +283,9 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "expande",
+            var result = await newsar_common.api_SendbatchTransaction(prikey, newsar_common.sc_sar, "expande",
                 "(addr)" + this.address,
-                "(int)" + double.Parse(amount) * ten_pow);
+                "(int)" + int.Parse(amount) * ten_pow);
             subPrintLine(result);
         }
 
@@ -309,10 +295,10 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            ThinNeo.Hash160 shash = new ThinNeo.Hash160(sar_common.sc_sar);
-            var result = await sar_common.api_SendbatchTransaction(prikey, shash, "withdraw",
+            ThinNeo.Hash160 shash = new ThinNeo.Hash160(newsar_common.sc_sar);
+            var result = await newsar_common.api_SendbatchTransaction(prikey, shash, "withdraw",
                 "(addr)" + this.address,
-                "(int)" + double.Parse(amount) * ten_pow);
+                "(int)" + int.Parse(amount) * ten_pow);
             subPrintLine(result);
         }
 
@@ -321,10 +307,10 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            ThinNeo.Hash160 shash = new ThinNeo.Hash160(sar_common.sc_sar);
-            var result = await sar_common.api_SendbatchTransaction(prikey, shash, "withdrawT",
+            ThinNeo.Hash160 shash = new ThinNeo.Hash160(newsar_common.sc_sar);
+            var result = await newsar_common.api_SendbatchTransaction(prikey, shash, "withdrawT",
                 "(addr)" + this.address,
-                "(int)" + double.Parse(amount) * ten_pow);
+                "(int)" + int.Parse(amount) * ten_pow);
             subPrintLine(result);
         }
 
@@ -334,9 +320,9 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "contract",
+            var result = await newsar_common.api_SendbatchTransaction(prikey, newsar_common.sc_sar, "contract",
                 "(addr)" + this.address,
-                "(int)" + double.Parse(amount) * ten_pow);
+                "(int)" + int.Parse(amount) * ten_pow);
             subPrintLine(result);
         }
 
@@ -346,7 +332,7 @@ namespace smartContractDemo
             Console.WriteLine("Input to Address:");
             string toAddress = Console.ReadLine();
 
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "give",
+            var result = await newsar_common.api_SendbatchTransaction(prikey, newsar_common.sc_sar, "give",
                 "(addr)" + this.address,
                 "(addr)" + toAddress);
             subPrintLine(result);
@@ -361,7 +347,7 @@ namespace smartContractDemo
             var sdusdAddr = ThinNeo.Helper.GetAddressFromScriptHash(sdusd_common.sc_sdusd);
             Console.WriteLine("sdusd address:" + sdusdAddr);
 
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "close",
+            var result = await newsar_common.api_SendbatchTransaction(prikey, newsar_common.sc_sar, "close",
                 "(addr)" + this.address);
             subPrintLine(result);
         }
@@ -385,10 +371,10 @@ namespace smartContractDemo
             Console.WriteLine("oracle address:" + oracleAddr);
 
 
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "rescue",
+            var result = await newsar_common.api_SendbatchTransaction(prikey, newsar_common.sc_sar, "rescue",
                 "(addr)" + otherAdd,
                 "(addr)" + this.address,
-                "(int)"+ double.Parse(mount) * ten_pow);
+                "(int)"+ int.Parse(mount) * ten_pow);
             subPrintLine(result);
         }
 
@@ -410,10 +396,10 @@ namespace smartContractDemo
             Console.WriteLine("oracle address:" + oracleAddr);
 
 
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "rescueT",
+            var result = await newsar_common.api_SendbatchTransaction(prikey, newsar_common.sc_sar, "rescueT",
                 "(addr)" + otherAdd,
                 "(addr)" + this.address,
-                "(int)" + double.Parse(mount) * ten_pow);
+                "(int)" + int.Parse(mount) * ten_pow);
             subPrintLine(result);
         }
 
@@ -421,10 +407,28 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input asset type:");
             var assetType = Console.ReadLine();
-            var result = await sar_common.api_InvokeScript(sar_common.sc_sar, "getRescue",
+            var result = await newsar_common.api_InvokeScript(newsar_common.sc_sar, "getRescue",
                 "(str)"+ assetType,
                 "(addr)" + this.address);
-            sar_common.ResultItem item = result.value;
+            newsar_common.ResultItem item = result.value;
+
+            Console.WriteLine(item.subItem[0].AsInteger());
+        }
+
+        //赎回剩余PNEO
+        async Task test_redeem()
+        {
+            var result = await newsar_common.api_SendbatchTransaction(prikey, newsar_common.sc_sar, "redeem",
+                "(addr)" + this.address);
+            subPrintLine(result);
+        }
+
+
+        //查询需要赎回余额
+        async Task test_balanceOfRedeem()
+        {
+            var result = await newsar_common.api_InvokeScript(newsar_common.sc_sar, "balanceOfRedeem", "(addr)" + this.address);
+            newsar_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
         }
@@ -434,9 +438,9 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input txid:");
             string txid = Console.ReadLine();
-            var result = await sar_common.api_InvokeScript(sar_common.sc_sar, "getTXInfo", "(hex256)" + txid);
-            sar_common.ResultItem item = result.value;
-            sar_common.ResultItem[] items = item.subItem[0].subItem;
+            var result = await newsar_common.api_InvokeScript(newsar_common.sc_sar, "getTXInfo", "(hex256)" + txid);
+            newsar_common.ResultItem item = result.value;
+            newsar_common.ResultItem[] items = item.subItem[0].subItem;
 
             //查询交易详细信息
             Console.WriteLine("from:" + ThinNeo.Helper.GetAddressFromScriptHash(items[0].AsHash160()));
@@ -452,9 +456,9 @@ namespace smartContractDemo
             string addr = Console.ReadLine();
             if (addr == null || addr == "")
                 addr = address;
-            var result = await sar_common.api_InvokeScript(sar_common.sc_sar, "getSAR4C", "(addr)" + addr);
-            sar_common.ResultItem item = result.value;
-            sar_common.ResultItem[] items = item.subItem[0].subItem;
+            var result = await newsar_common.api_InvokeScript(newsar_common.sc_sar, "getSAR4C", "(addr)" + addr);
+            newsar_common.ResultItem item = result.value;
+            newsar_common.ResultItem[] items = item.subItem[0].subItem;
 
             if (items != null)
             {
@@ -502,9 +506,9 @@ namespace smartContractDemo
                 Console.WriteLine("addr" + addr);
 
                 //查询旧合约SAR
-                var result2 = await sar_common.api_InvokeScript(sar_common.sc_sar, "getSAR4C", "(addr)" + addr);
-                sar_common.ResultItem item = result2.value;
-                sar_common.ResultItem[] items = item.subItem[0].subItem;
+                var result2 = await newsar_common.api_InvokeScript(newsar_common.sc_sar, "getSAR4C", "(addr)" + addr);
+                newsar_common.ResultItem item = result2.value;
+                newsar_common.ResultItem[] items = item.subItem[0].subItem;
 
                 if (items != null)
                 {
@@ -533,89 +537,14 @@ namespace smartContractDemo
 
         }
 
-
-        async Task test_migrateSAR()
-        {
-            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "migrateSAR4C",
-               "(addr)" + this.address);
-            subPrintLine(result);
-
-        }
-
-
-            async Task test_batch_migrateSAR()
-        {
-            //查询所有状态为1的SAR
-            DateTime dt = DateTime.Now;
-            Console.WriteLine("Start time:" + dt);
-
-            byte[] postdata;
-            var url = Helper.MakeRpcUrlPost(Config.api, "getsar4CListByType", out postdata,
-                new JsonNode_ValueNumber(1),
-                new JsonNode_ValueNumber(1000),
-                new JsonNode_ValueNumber(1));
-            var result = await Helper.HttpPost(url, postdata);
-
-            List<string> list = new List<string>();
-            MyJson.JsonNode_Object json = MyJson.Parse(result) as MyJson.JsonNode_Object;
-            JsonNode_Array arrs = json["result"].AsList();
-
-            foreach (JsonNode_Object ob in arrs)
-            {
-                string addr = ob["addr"].AsString();
-
-                Console.WriteLine("addr"+addr);
-
-                //查询旧合约SAR
-                var result2 = await sar_common.api_InvokeScript(sar_common.sc_sar_old, "getSAR4C", "(addr)" + addr);
-                sar_common.ResultItem item = result2.value;
-                sar_common.ResultItem[] items = item.subItem[0].subItem;
-
-                if (items != null)
-                {
-                    string owner = ThinNeo.Helper.GetAddressFromScriptHash(items[0].AsHash160());
-                    string txid = items[1].AsHashString();
-                    BigInteger locked = items[2].AsInteger();
-                    BigInteger hasDrawed = items[3].AsInteger();
-                    string assetType = items[4].AsString();
-                    BigInteger status = items[5].AsInteger();
-
-                    Console.WriteLine("from:" + owner);
-                    Console.WriteLine("txid:" + txid);
-                    Console.WriteLine("locked:" + locked);
-                    Console.WriteLine("hasDrawed:" + hasDrawed);
-                    Console.WriteLine("assetType:" + assetType);
-                    Console.WriteLine("status:" + status);
-                    //Console.WriteLine("bondLocked:" + items[6].AsInteger());
-                    //Console.WriteLine("bondDrawed:" + items[7].AsInteger());
-
-                    //存储新的合约
-                    var result3 = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "migrateSAR4C",
-                                "(addr)" + owner,
-                                "(hex256)" + txid,
-                                "(int)"+ locked,
-                                "(int)"+ hasDrawed,
-                                "(str)" + assetType,
-                                "(int)" + status,
-                                "(int)0",
-                                "(int)0");
-                    subPrintLine(result3);
-
-
-                }
-            }
-            DateTime end = DateTime.Now;
-            Console.WriteLine("End time:" + end);
-        }
-
         //查询SAR详细交易信息
         async Task test_getSARTxInfo()
         {
             Console.WriteLine("Input txid:");
             string txid = Console.ReadLine();
-            var result = await sar_common.api_InvokeScript(sar_common.sc_sar, "getSARTxInfo", "(hex256)" + txid);
-            sar_common.ResultItem item = result.value;
-            sar_common.ResultItem[] items = item.subItem[0].subItem;
+            var result = await newsar_common.api_InvokeScript(newsar_common.sc_sar, "getSARTxInfo", "(hex256)" + txid);
+            newsar_common.ResultItem item = result.value;
+            newsar_common.ResultItem[] items = item.subItem[0].subItem;
 
             if (items != null)
             {
@@ -637,11 +566,14 @@ namespace smartContractDemo
         //设置配置信息
         async Task test_setConfig()
         {
-            Console.WriteLine("Input config value:");
-            string value = Console.ReadLine();
+            //Console.WriteLine("Input config key:");
+            //string key = Console.ReadLine();
+
+            //Console.WriteLine("Input config value:");
+            //string value = Console.ReadLine();
             byte[] prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
 
-            var result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setConfig", "(str)sar_state", "(int)"+value);
+            var result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setConfig", "(str)sar_state", "(int)1");
             subPrintLine(result);
 
         }
@@ -652,8 +584,8 @@ namespace smartContractDemo
             //Console.WriteLine("Input config key:");
             //string key = Console.ReadLine();
 
-            var result = await sar_common.api_InvokeScript(sar_common.sc_sar, "getConfig", "(str)sar_state");
-            sar_common.ResultItem item = result.value;
+            var result = await newsar_common.api_InvokeScript(newsar_common.sc_sar, "getConfig", "(str)sar_state");
+            newsar_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
         }
@@ -687,7 +619,7 @@ namespace smartContractDemo
                 array.AddArrayValue("(str)sssss");//desc
                 sb.EmitParamJson(array);//参数倒序入
                 sb.EmitParamJson(new MyJson.JsonNode_ValueString("(str)upgrade"));//参数倒序入
-                var shash = sar_common.sc_sar;
+                var shash = newsar_common.sc_sar;
                 sb.EmitAppCall(shash);
 
                 string scriptPublish = ThinNeo.Helper.Bytes2HexString(sb.ToArray());

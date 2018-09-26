@@ -16,6 +16,7 @@ namespace smartContractDemo
 
         public string ID => "data";
         byte[] prikey;
+        byte[] prikey_admin;
         public string address;
         byte[] scripthash;
         byte[] pubkey;
@@ -43,6 +44,7 @@ namespace smartContractDemo
             infos["setAccount"] = test_setAccount;
             //infos["setPrice"] = test_setPrice;
             infos["setConfig"] = test_setConfig;
+            infos["setStructConfig"] = test_setStructConfig;
             infos["setMedian"] = test_setMedian;
             infos["setPow"] = test_setPow;
             infos["setNEOPrice"] = test_setNEOPrice;
@@ -50,6 +52,7 @@ namespace smartContractDemo
 
             //infos["setAnchorPrice"] = test_setAnchorPrice;
             infos["getConfig"] = test_getConfig;
+            infos["getStructConfig"] = test_getStructConfig;
             infos["getPrice"] = test_getPrice;
             infos["getAccount"] = test_getAccount;
             //infos["getMedian"] = test_getMedian;
@@ -73,7 +76,7 @@ namespace smartContractDemo
             //Console.WriteLine("reg=" + _resultv["script"].AsString());
 
             showMenu();
-
+            prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
             prikey = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif);
             pubkey = ThinNeo.Helper.GetPublicKeyFromPrivateKey(prikey);
             address = ThinNeo.Helper.GetAddressFromPublicKey(pubkey);
@@ -139,6 +142,25 @@ namespace smartContractDemo
             subPrintLine(result);
         }
 
+        async Task test_getStructConfig()
+        {
+            var result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getStructConfig");
+            oracle_common.ResultItem item = result.value;
+            oracle_common.ResultItem[] items = item.subItem[0].subItem;
+
+            if (items != null)
+            {
+                Console.WriteLine("liquidate_line_rate_b:" + items[0].AsInteger());
+                Console.WriteLine("liquidate_line_rate_c:" + items[1].AsInteger());
+                Console.WriteLine("liquidate_dis_rate_c:" + items[2].AsInteger());
+                Console.WriteLine("fee_rate_c:" + items[3].AsInteger());
+                Console.WriteLine("liquidate_top_rate_c:" + items[4].AsInteger());
+                Console.WriteLine("liquidate_line_rateT_c:" + items[5].AsInteger());
+                Console.WriteLine("issuing_fee_c:" + items[6].AsInteger());
+                Console.WriteLine("issuing_fee_b:" + items[7].AsInteger());
+                Console.WriteLine("debt_top_c:" + items[8].AsInteger());
+            }
+        }
 
         async Task test_getNeoPrice()
         {
@@ -328,37 +350,51 @@ namespace smartContractDemo
         //查询配置信息
         async Task test_getPrice()
         {
-            var result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)sds_price");
+            var result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getTypeB", "(str)sds_price");
             datacenter_common.ResultItem item = result.value;
             Console.WriteLine("sds_price:"+item.subItem[0].AsInteger());
 
-            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)neo_price");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getTypeB", "(str)neo_price");
             item = result.value;
             Console.WriteLine("neo_price:" + item.subItem[0].AsInteger());
 
-            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)gas_price");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getTypeB", "(str)cneo_price");
+            item = result.value;
+            Console.WriteLine("cneo_price:" + item.subItem[0].AsInteger());
+
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getTypeB", "(str)sneo_price");
+            item = result.value;
+            Console.WriteLine("sneo_price:" + item.subItem[0].AsInteger());
+
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getTypeB", "(str)gas_price");
             item = result.value;
             Console.WriteLine("gas_price:" + item.subItem[0].AsInteger());
 
-            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)anchor_type_usd");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getTypeB", "(str)anchor_type_usd");
             item = result.value;
             Console.WriteLine("anchor_type_usd:" + item.subItem[0].AsInteger());
 
-            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)anchor_type_eur");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getTypeB", "(str)anchor_type_eur");
             item = result.value;
             Console.WriteLine("anchor_type_eur:"+item.subItem[0].AsInteger());
 
-            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)anchor_type_jpy");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getTypeB", "(str)anchor_type_jpy");
             item = result.value;
             Console.WriteLine("anchor_type_jpy:" + item.subItem[0].AsInteger());
 
-            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)anchor_type_gbp");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getTypeB", "(str)anchor_type_gbp");
             item = result.value;
             Console.WriteLine("anchor_type_gbp:"+item.subItem[0].AsInteger());
 
-            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getPrice", "(str)anchor_type_gold");
+            result = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getTypeB", "(str)anchor_type_gold");
             item = result.value;
             Console.WriteLine("anchor_type_gold:"+item.subItem[0].AsInteger());
+        }
+
+        async Task test_setStructConfig()
+        {
+            var result = await oracle_common.api_SendbatchTransaction(prikey_admin, oracle_common.sc_wneo, "setStructConfig");
+            subPrintLine(result);
         }
 
 

@@ -40,10 +40,11 @@ namespace smartContractDemo.tests
         //wallet1 KzprnMDQHhK7jnJ3dNNq5C2AfJdy58oGyphnZtc6t78NE26nhq7S
         //wallet2 KxwkPdCtioE8vKfLETqK2UfMWX4XaooP8rP85wRrAiFzDa3Ydkt3
         //wallet3 KxkmnsoANJT8ygPaiYTe9houe4XD6bNzu1yHBYs5NUr9WL6Mufyg
+        //wallet4 L42yZK68KYuxiQB99PmfHAY2LxiN46oh4etmh2EGMq9Fon6QAoKw
         //gxl KxtvHw6fBeEj1TQEd7revdhyETPC8w8jEVE3yVthhLyWQnxMm6tr
         //wallet1 test L5a9Hihm4Lu46deJ6mfBRAvPPitJTyWK6g8yRP1iFPpGMBzecQcS
         //walletgxl KxtvHw6fBeEj1TQEd7revdhyETPC8w8jEVE3yVthhLyWQnxMm6tr
-        public const string testwif = "KxkmnsoANJT8ygPaiYTe9houe4XD6bNzu1yHBYs5NUr9WL6Mufyg";
+        public const string testwif = "L42yZK68KYuxiQB99PmfHAY2LxiN46oh4etmh2EGMq9Fon6QAoKw";
 
         public const string testwif_admin = "KzprnMDQHhK7jnJ3dNNq5C2AfJdy58oGyphnZtc6t78NE26nhq7S";
 

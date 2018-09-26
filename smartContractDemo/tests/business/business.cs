@@ -51,6 +51,7 @@ namespace smartContractDemo
             //infos["setConfigRate"] = test_setConfigRate;
             //infos["setConfigFee"] = test_setConfigFee;
             infos["setContractA"] = test_setAccount;
+            infos["setAccount2"] = test_setAccount2;
             infos["setUpgrade"] = test_setUpgrade;
             infos["getConfig"] = test_getConfig;
             infos["settingSAR"] = test_settingSAR;
@@ -128,6 +129,19 @@ namespace smartContractDemo
             subPrintLine("尚未实现");
         }
 
+        async Task test_setAccount2()
+        {
+            var addr = ThinNeo.Helper.GetAddressFromScriptHash(business_common.sc_wneo);
+            Console.WriteLine("address:" + addr);
+
+            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
+
+            var result = await business_common.api_SendbatchTransaction(prikey, business_common.sc_wneo, "setAccount",
+                "(str)oracle_account",
+                "(addr)" + oracleAddr);
+            subPrintLine(result);
+        }
+
         async Task test_setAccount()
         {
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(business_common.sc_wneo);
@@ -156,8 +170,6 @@ namespace smartContractDemo
                 "(str)tokenized_account",
                 "(addr)" + tokenAddr);
             subPrintLine(result);
-
-
         }
 
         //初始化
@@ -437,7 +449,7 @@ namespace smartContractDemo
             byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0xd6fc6a7d9c148a88f0051578d44e9422eb57ac98.avm"); //这里填你的合约所在地址
             string str_script = ThinNeo.Helper.Bytes2HexString(script);
             byte[] aa = ThinNeo.Helper.HexString2Bytes(str_script);
-            var ss = 1 | 1 | 4;
+            var ss = 1 | 2 | 4;
             using (ThinNeo.ScriptBuilder sb = new ThinNeo.ScriptBuilder())
             {
                 //倒叙插入数据
@@ -445,7 +457,7 @@ namespace smartContractDemo
                 array.AddArrayValue("(bytes)" + str_script);
                 array.AddArrayValue("(bytes)0710");
                 array.AddArrayValue("(bytes)05");
-                array.AddArrayValue("(int)" + 5);
+                array.AddArrayValue("(int)" + 7);
                 array.AddArrayValue("(str)合约升级测试");//name
                 array.AddArrayValue("(str)1");//version
                 array.AddArrayValue("(str)ss");//author

@@ -13,11 +13,11 @@ namespace smartContractDemo
     public class sar_common
     {
         //0x34fe5d0ac799330151f03381cca4eb9b1f385cf2
-        public static readonly Hash160 sc_sar = new Hash160("0x556736f9d028dca9b91829a44e99adbd29e85e30");//token 合约地址
+        public static readonly Hash160 sc_sar = new Hash160("0xfba6b99bdffc9bb9e7bf16f8ebbe6386912a7cc0");//token 合约地址
         //
         public static readonly Hash160 sc_sar_old = new Hash160("0xa41afb14315dededb49d37341cc138efa092801c");//token 合约地址
 
-        public static readonly string sc = "0x556736f9d028dca9b91829a44e99adbd29e85e30";
+        //public static readonly string sc = "0x9ce3206bd3c01354e6ccfd0977bfa1b027770dda";
         
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 
@@ -144,7 +144,7 @@ namespace smartContractDemo
             byte[] postdata;
             var url = Helper.MakeRpcUrlPost(Config.api, "invokescript", out postdata, new MyJson.JsonNode_ValueString(script));
             var text = await Helper.HttpPost(url, postdata);
-            Console.WriteLine(text);
+            //Console.WriteLine(text);
             MyJson.JsonNode_Object json = MyJson.Parse(text) as MyJson.JsonNode_Object;
 
             Result rest = new Result();

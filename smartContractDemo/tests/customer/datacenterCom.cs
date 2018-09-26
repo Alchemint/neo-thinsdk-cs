@@ -13,9 +13,9 @@ namespace smartContractDemo
     public class datacenter_common
     {
 
-        public static readonly Hash160 sc_wneo = new Hash160("0x087f964680b823a73224a9f1b4557643626da93b");//token 合约地址
+        public static readonly Hash160 sc_wneo = new Hash160("0x411499182c8fc29157ae29c8fc9fa1d7b10d77e2");//token 合约地址
 
-        public static readonly string sc = "0x087f964680b823a73224a9f1b4557643626da93b";
+        public static readonly string sc = "0x411499182c8fc29157ae29c8fc9fa1d7b10d77e2";
         //0x2d55bcb9129c61c8f529baebec102c71228eefc3
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 

@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 using System.Numerics;
 using ThinNeo;
 using smartContractDemo.tests;
-using System.Security.Cryptography;
 
 namespace smartContractDemo
 {
-    public class sdusd_common
+    public class newsar_common
     {
+        //0x34fe5d0ac799330151f03381cca4eb9b1f385cf2
+        public static readonly Hash160 sc_sar = new Hash160("0x168e46a46afb25fc0b0b366b5eabaaf7df1b10e4");//token 合约地址
+        //
 
-        //0xa3de6b0a099cb57d46479a439a18c528522e399d
-        public static readonly Hash160 sc_sdusd = new Hash160("0xb739fd47f42eb4e320fc16a3555765f05a64d432");//sdusd 合约地址
-
-        public static readonly string sc = "0xb739fd47f42eb4e320fc16a3555765f05a64d432";
-
+        //public static readonly string sc = "0x9ce3206bd3c01354e6ccfd0977bfa1b027770dda";
+        
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 
         public static Hash256 nameHash(string domain)
@@ -143,6 +143,7 @@ namespace smartContractDemo
             byte[] postdata;
             var url = Helper.MakeRpcUrlPost(Config.api, "invokescript", out postdata, new MyJson.JsonNode_ValueString(script));
             var text = await Helper.HttpPost(url, postdata);
+            //Console.WriteLine(text);
             MyJson.JsonNode_Object json = MyJson.Parse(text) as MyJson.JsonNode_Object;
 
             Result rest = new Result();
@@ -154,6 +155,55 @@ namespace smartContractDemo
                 rest.value = ResultItem.FromJson("Array", result);
             }
             return rest;// subPrintLine("得到的结果是：" + result);
+        }
+
+        public static async Task<Result> api_Getutxocount(Hash160 scripthash,string addr)
+        {
+            byte[] postdata;
+            var url = Helper.MakeRpcUrlPost(Config.api, "getutxocount", out postdata, new MyJson.JsonNode_ValueString(addr));
+            var text = await Helper.HttpPost(url, postdata);
+            MyJson.JsonNode_Object json = MyJson.Parse(text) as MyJson.JsonNode_Object;
+
+            Result rest = new Result();
+            rest.textInfo = text;
+            if (json.ContainsKey("result"))
+            {
+                var result = json["result"].AsList()[0].AsDict()["stack"].AsList();
+                rest.value = ResultItem.FromJson("Array", result);
+            }
+            return rest;// subPrintLine("得到的结果是：" + result);
+        }
+
+        public static async Task<Result> api_GetBalance(Hash160 scripthash, string addr)
+        {
+            byte[] postdata;
+            var url = Helper.MakeRpcUrlPost(Config.api, "getbalance", out postdata, new MyJson.JsonNode_ValueString(addr));
+            var text = await Helper.HttpPost(url, postdata);
+          
+
+            Result rest = new Result();
+            rest.textInfo = text;
+            //if (json.ContainsKey("result"))
+            //{
+            //    var result = json["result"].AsList()[0].AsDict()["stack"].AsList();
+            //    rest.value = ResultItem.FromJson("Array", result);
+            //}
+            //return rest;// subPrintLine("得到的结果是：" + result);
+
+            var json = MyJson.Parse(text).AsDict()["result"].AsList();
+            foreach (var item in json)
+            {
+                if (item.AsDict()["asset"].AsString() == Config.id_GAS)
+                {
+                    Console.WriteLine("gas=" + item.AsDict()["balance"].ToString());
+                }
+                if (item.AsDict()["asset"].AsString() == Config.id_NEO)
+                {
+                    Console.WriteLine("neo=" + item.AsDict()["balance"].ToString());
+                    rest.textInfo = item.AsDict()["balance"].ToString();
+                }
+            }
+            return rest;
         }
 
         public static async Task<string> api_SendbatchTransaction(byte[] prikey, Hash160 schash, string methodname, params string[] subparam)

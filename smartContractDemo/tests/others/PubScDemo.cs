@@ -25,7 +25,7 @@ namespace smartContractDemo
             string  wif = Console.ReadLine();
             if (string.IsNullOrEmpty(wif))
             {
-                wif = "";  //这里填你用于支付发布合约消耗的私钥
+                wif = "KzprnMDQHhK7jnJ3dNNq5C2AfJdy58oGyphnZtc6t78NE26nhq7S";  //这里填你用于支付发布合约消耗的私钥
             }
             byte[] prikey = ThinNeo.Helper.GetPrivateKeyFromWIF(wif);
             byte[] pubkey = ThinNeo.Helper.GetPublicKeyFromPrivateKey(prikey);
@@ -34,14 +34,14 @@ namespace smartContractDemo
             Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(api,address);
 
             //从文件中读取合约脚本
-            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0xc074a05e9dcf0141cbe6b4b3475dd67baf4dcb60.avm"); //这里填你的合约所在地址
+            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0xfba6b99bdffc9bb9e7bf16f8ebbe6386912a7cc0.avm"); //这里填你的合约所在地址
             Console.WriteLine("合约脚本:"+ThinNeo.Helper.Bytes2HexString(script));
             Console.WriteLine("合约脚本hash："+ThinNeo.Helper.Bytes2HexString(ThinNeo.Helper.GetScriptHashFromScript(script).data.ToArray().Reverse().ToArray()));
             byte[] parameter__list = ThinNeo.Helper.HexString2Bytes("0710");  //这里填合约入参  例：0610代表（string，[]）
             byte[] return_type = ThinNeo.Helper.HexString2Bytes("05");  //这里填合约的出参
-            int need_storage = 1;   
-            int need_nep4 = 0;
-            int need_canCharge = 4;
+            int need_storage = 1;   //需要存储   400gas
+            int need_nep4 = 2;      //支持NEP-4  500gas
+            int need_canCharge = 4;  //支持合约地址存钱
             string name = "sar";
             string version = "1.0";
             string auther = "Steel";

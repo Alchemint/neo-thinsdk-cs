@@ -334,7 +334,7 @@ namespace smartContractDemo
         //批量转账
         async Task test_batchTransfer()
         {
-            string path = "D:\\address\\0908.csv";
+            string path = "D:\\address\\0921.csv";
 
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
             StreamReader sr = new StreamReader(fs, System.Text.Encoding.UTF8);
@@ -355,7 +355,7 @@ namespace smartContractDemo
                     decimal dmount = decimal.Parse(m);
                     decimal mount = dmount * 100000000;
                     string mstr = Math.Round(mount, 0).ToString();
-                    string newPath = @"D:\address\balances0810_result.txt";
+                    string newPath = @"D:\address\balances0921_result.txt";
                     string str2 = addressto + "," + m + "\r\n";
                     File.AppendAllText(newPath, str2);
                     if (m != "0")
@@ -375,7 +375,7 @@ namespace smartContractDemo
                         Console.WriteLine("address:" + addressto + " mount:" + m);
                         subPrintLine(result);
                         File.AppendAllText(newPath, result + "\r\n");
-                        Thread.Sleep(200);
+                        Thread.Sleep(10);
                         //}
                     }
                 }
