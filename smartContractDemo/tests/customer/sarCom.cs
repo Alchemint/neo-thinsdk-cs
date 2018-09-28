@@ -13,7 +13,7 @@ namespace smartContractDemo
     public class sar_common
     {
         //0x34fe5d0ac799330151f03381cca4eb9b1f385cf2
-        public static readonly Hash160 sc_sar = new Hash160("0xfba6b99bdffc9bb9e7bf16f8ebbe6386912a7cc0");//token 合约地址
+        public static readonly Hash160 sc_sar = new Hash160("0x2e4b766abc8beed471be9d7dcd305d55aecc4a95");//token 合约地址
         //
         public static readonly Hash160 sc_sar_old = new Hash160("0xa41afb14315dededb49d37341cc138efa092801c");//token 合约地址
 

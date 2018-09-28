@@ -15,6 +15,7 @@ namespace smartContractDemo
 
         public string ID => "bu";
         byte[] prikey;
+        byte[] prikey_admin;
         public string address;
         byte[] scripthash;
         byte[] pubkey;
@@ -75,6 +76,7 @@ namespace smartContractDemo
 
             showMenu();
 
+            prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
             prikey = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif);
             pubkey = ThinNeo.Helper.GetPublicKeyFromPrivateKey(prikey);
             address = ThinNeo.Helper.GetAddressFromPublicKey(pubkey);
@@ -134,9 +136,9 @@ namespace smartContractDemo
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(business_common.sc_wneo);
             Console.WriteLine("address:" + addr);
 
-            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
+            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(datacenter_common.sc_wneo);
 
-            var result = await business_common.api_SendbatchTransaction(prikey, business_common.sc_wneo, "setAccount",
+            var result = await business_common.api_SendbatchTransaction(prikey_admin, business_common.sc_wneo, "setAccount",
                 "(str)oracle_account",
                 "(addr)" + oracleAddr);
             subPrintLine(result);
@@ -147,26 +149,26 @@ namespace smartContractDemo
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(business_common.sc_wneo);
             Console.WriteLine("address:" + addr);
 
-            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
+            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(datacenter_common.sc_wneo);
             var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
             var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sds_common.sc_sds);
 
-            var result = await business_common.api_SendbatchTransaction(prikey, business_common.sc_wneo, "setAccount",
+            var result = await business_common.api_SendbatchTransaction(prikey_admin, business_common.sc_wneo, "setAccount",
                 "(str)storage_account",
                 "(addr)" + addr);
             subPrintLine(result);
 
-            result = await business_common.api_SendbatchTransaction(prikey, business_common.sc_wneo, "setAccount",
+            result = await business_common.api_SendbatchTransaction(prikey_admin, business_common.sc_wneo, "setAccount",
                 "(str)sds_account",
                 "(addr)" + sdsAddr);
             subPrintLine(result);
 
-            result = await business_common.api_SendbatchTransaction(prikey, business_common.sc_wneo, "setAccount",
+            result = await business_common.api_SendbatchTransaction(prikey_admin, business_common.sc_wneo, "setAccount",
                 "(str)oracle_account",
                 "(addr)" + oracleAddr);
             subPrintLine(result);
 
-            result = await business_common.api_SendbatchTransaction(prikey, business_common.sc_wneo, "setAccount",
+            result = await business_common.api_SendbatchTransaction(prikey_admin, business_common.sc_wneo, "setAccount",
                 "(str)tokenized_account",
                 "(addr)" + tokenAddr);
             subPrintLine(result);
@@ -181,17 +183,12 @@ namespace smartContractDemo
             Console.WriteLine("Input target symbol:");
             string symbol = Console.ReadLine();
 
-            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
-            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
-
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "openSAR4B",
                "(str)" + name,
                 "(str)" + symbol,
                 "(int)" + 8,
                 "(addr)" + this.address,
-                "(str)anchor_type_usd",
-                "(addr)" + oracleAddr,
-                "(addr)" + tokenAddr
+                "(str)anchor_type_usd"
                 );
             subPrintLine(result);
         }
@@ -233,26 +230,18 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sds_common.sc_sds);
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "reserve",
               "(str)" + name,
               "(addr)" + this.address, 
-              "(int)" + amount,
-              "(addr)" + sdsAddr);
+              "(int)" + amount);
             subPrintLine(result);
         }
 
         async Task test_initToken()
         {
-            var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sds_common.sc_sds);
-            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
-            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
 
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "initToken",
-             "(addr)" + this.address,
-             "(addr)" + oracleAddr,
-             "(addr)" + sdsAddr,
-             "(addr)" + tokenAddr);
+             "(addr)" + this.address);
             subPrintLine(result);
         }
 
@@ -265,15 +254,10 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
-            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
-
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "expande",
               "(str)" + name,
               "(addr)" + this.address,
-              "(int)" + amount,
-              "(addr)" + oracleAddr,
-              "(addr)" + tokenAddr);
+              "(int)" + amount);
             subPrintLine(result);
         }
 
@@ -285,13 +269,11 @@ namespace smartContractDemo
 
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
-            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
 
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "contract",
               "(str)" + name,
               "(addr)" + this.address,
-              "(int)" + amount,
-              "(addr)" + tokenAddr);
+              "(int)" + amount);
             subPrintLine(result);
         }
 
@@ -304,17 +286,10 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
-            var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sds_common.sc_sds);
-            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
-
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "withdraw",
               "(str)" + name,
               "(addr)" + this.address,
-              "(int)" + amount,
-              "(addr)" + oracleAddr,
-              "(addr)" + sdsAddr,
-              "(addr)" + tokenAddr);
+              "(int)" + amount);
             subPrintLine(result);
         }
 
@@ -324,17 +299,9 @@ namespace smartContractDemo
             Console.WriteLine("Input target addr:");
             string sarAddr = Console.ReadLine();
 
-            var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sds_common.sc_sds);
-            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
-            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
-
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "redeem",
               
-              "(addr)" + this.address,
-              "(addr)" + sarAddr,
-              "(addr)" + sdsAddr, 
-              "(addr)" + oracleAddr, 
-              "(addr)" + tokenAddr);
+              "(addr)" + this.address);
             subPrintLine(result);
         }
 
@@ -351,19 +318,6 @@ namespace smartContractDemo
                 Console.WriteLine("ss:" + ss);
 
 
-        }
-
-
-        //授权转账操作
-        async Task test_setCallScript()
-        {
-            var addr = ThinNeo.Helper.GetAddressFromScriptHash(call_common.main);
-            Console.WriteLine("address:" + addr);
-
-            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "setCallScript",
-               "(addr)" + addr
-              );
-            subPrintLine(result);
         }
 
         //设置配置信息
@@ -423,16 +377,9 @@ namespace smartContractDemo
             Console.WriteLine("Input target asset:");
             string name = Console.ReadLine();
 
-            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
-            var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sds_common.sc_sds);
-            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
-
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "destory",
               "(str)" + name,
-              "(addr)" + this.address,
-              "(addr)" + oracleAddr,
-              "(addr)" + sdsAddr,
-              "(addr)" + tokenAddr);
+              "(addr)" + this.address);
             subPrintLine(result);
         }
 

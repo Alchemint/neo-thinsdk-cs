@@ -42,12 +42,12 @@ namespace smartContractDemo
             infos = new Dictionary<string, testAction>();
           
             infos["setAccount"] = test_setAccount;
-            //infos["setPrice"] = test_setPrice;
+            infos["setPrice"] = test_setPrice;
             infos["setConfig"] = test_setConfig;
             infos["setStructConfig"] = test_setStructConfig;
             infos["setMedian"] = test_setMedian;
-            infos["setPow"] = test_setPow;
-            infos["setNEOPrice"] = test_setNEOPrice;
+            //infos["setPow"] = test_setPow;
+            //infos["setNEOPrice"] = test_setNEOPrice;
             infos["getNeoPrice"] = test_getNeoPrice;
 
             //infos["setAnchorPrice"] = test_setAnchorPrice;
@@ -76,8 +76,8 @@ namespace smartContractDemo
             //Console.WriteLine("reg=" + _resultv["script"].AsString());
 
             showMenu();
-            prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
-            prikey = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif);
+            //prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
+            prikey = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
             pubkey = ThinNeo.Helper.GetPublicKeyFromPrivateKey(prikey);
             address = ThinNeo.Helper.GetAddressFromPublicKey(pubkey);
             scripthash = ThinNeo.Helper.GetPublicKeyHashFromAddress(address);
@@ -243,23 +243,26 @@ namespace smartContractDemo
             //设置价格信息
             async Task test_setPrice()
         {
-            var result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", 
-                "(str)sds_price",
-                "(addr)"+this.address,
-                "(int)10000000");
+            Console.WriteLine("请输入:");
+            string x = Console.ReadLine();
+
+            var result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setTypeB",
+                "(str)cneo_price",
+                "(addr)" + this.address,
+                "(int)"+double.Parse(x)*100000000);
             subPrintLine(result);
 
-            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice",
-                "(str)neo_price",
-                "(addr)" + this.address,
-                "(int)2000000000");
-            subPrintLine(result);
+            //result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice",
+            //    "(str)neo_price",
+            //    "(addr)" + this.address,
+            //    "(int)2000000000");
+            //subPrintLine(result);
 
-            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice",
-                "(str)gas_price",
-                "(addr)" + this.address,
-                "(int)200000000");
-            subPrintLine(result);
+            //result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice",
+            //    "(str)gas_price",
+            //    "(addr)" + this.address,
+            //    "(int)200000000");
+            //subPrintLine(result);
 
             /*  
             *  anchor_type_usd    1*100000000
@@ -270,20 +273,20 @@ namespace smartContractDemo
             *  anchor_type_gold   0.000838 * 100000000
             */
 
-            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_usd", "(addr)" + this.address, "(int)100000000");
-            subPrintLine(result);
+            //result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_usd", "(addr)" + this.address, "(int)100000000");
+            //subPrintLine(result);
 
-            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_eur", "(addr)" + this.address, "(int)87500000");
-            subPrintLine(result);
+            //result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_eur", "(addr)" + this.address, "(int)87500000");
+            //subPrintLine(result);
 
-            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_jpy", "(addr)" + this.address, "(int)1200000000");
-            subPrintLine(result);
+            //result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_jpy", "(addr)" + this.address, "(int)1200000000");
+            //subPrintLine(result);
 
-            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_gbp", "(addr)" + this.address, "(int)78130000");
-            subPrintLine(result);
+            //result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_gbp", "(addr)" + this.address, "(int)78130000");
+            //subPrintLine(result);
 
-            result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_gold", "(addr)" + this.address, "(int)838000");
-            subPrintLine(result);
+            //result = await datacenter_common.api_SendbatchTransaction(prikey, datacenter_common.sc_wneo, "setPrice", "(str)anchor_type_gold", "(addr)" + this.address, "(int)838000");
+            //subPrintLine(result);
 
         }
 
