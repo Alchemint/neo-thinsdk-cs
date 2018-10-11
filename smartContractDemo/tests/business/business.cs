@@ -25,6 +25,7 @@ namespace smartContractDemo
         string[] submenu;
         byte[] n55contract;
         public static ThinNeo.Hash256 lasttxid;
+        public int ten_pow = 100000000;
 
         void subPrintLine(string line)
         {
@@ -197,7 +198,9 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input target addr:");
             string addr = Console.ReadLine();
-
+            if (addr.Length == 0) {
+                addr = this.address;
+            }
             var result = await business_common.api_InvokeScript(business_common.sc_wneo, "getSAR4B", "(addr)" + addr);
             business_common.ResultItem item = result.value;
             business_common.ResultItem[] items = item.subItem[0].subItem;
@@ -233,7 +236,7 @@ namespace smartContractDemo
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "reserve",
               "(str)" + name,
               "(addr)" + this.address, 
-              "(int)" + amount);
+              "(int)" + double.Parse(amount) * ten_pow);
             subPrintLine(result);
         }
 
@@ -257,7 +260,7 @@ namespace smartContractDemo
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "expande",
               "(str)" + name,
               "(addr)" + this.address,
-              "(int)" + amount);
+              "(int)" + double.Parse(amount) * ten_pow);
             subPrintLine(result);
         }
 
@@ -273,7 +276,7 @@ namespace smartContractDemo
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "contract",
               "(str)" + name,
               "(addr)" + this.address,
-              "(int)" + amount);
+              "(int)" + double.Parse(amount) * ten_pow);
             subPrintLine(result);
         }
 
@@ -289,7 +292,7 @@ namespace smartContractDemo
             var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "withdraw",
               "(str)" + name,
               "(addr)" + this.address,
-              "(int)" + amount);
+              "(int)" + double.Parse(amount) * ten_pow);
             subPrintLine(result);
         }
 
@@ -420,10 +423,10 @@ namespace smartContractDemo
                 var url = Helper.MakeRpcUrlPost(Config.api, "invokescript", out postdata, new MyJson.JsonNode_ValueString(scriptPublish));
                 var result = await Helper.HttpPost(url, postdata);
                 //string result = http.Post(api, "invokescript", new MyJson.JsonNode_Array() { new MyJson.JsonNode_ValueString(scriptPublish) },Encoding.UTF8);
-                var consume = (((MyJson.Parse(result) as MyJson.JsonNode_Object)["result"] as MyJson.JsonNode_Array)[0] as MyJson.JsonNode_Object)["gas_consumed"].ToString();
-                decimal gas_consumed = decimal.Parse(consume);
+                //var consume = (((MyJson.Parse(result) as MyJson.JsonNode_Object)["result"] as MyJson.JsonNode_Array)[0] as MyJson.JsonNode_Object)["gas_consumed"].ToString();
+                //decimal gas_consumed = decimal.Parse(consume);
                 ThinNeo.InvokeTransData extdata = new ThinNeo.InvokeTransData();
-                extdata.gas = 500;// Math.Ceiling(gas_consumed - 10);
+                extdata.gas = 1010;// Math.Ceiling(gas_consumed - 10);
                 extdata.script = sb.ToArray();
 
                 //拼装交易体

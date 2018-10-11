@@ -45,6 +45,7 @@ namespace smartContractDemo
             infos["reserve"] = test_lock;
             infos["recharge"] = test_recharge;
             infos["claimFee"] = test_claimFee;
+            infos["claimAllFee"] = test_claimAllFee;
             infos["expande"] = test_draw;
             infos["withdraw"] = test_free;
             infos["withdrawT"] = test_withdrawT;
@@ -54,9 +55,6 @@ namespace smartContractDemo
             infos["rescueT"] = test_rescueT;
             infos["getRescue"] = test_getRescue;
 
-            //infos["balanceOfRedeem"] = test_balanceOfRedeem;
-            //infos["redeem"] = test_redeem;
-            //infos["give"] = test_give;
             infos["setAccount"] = test_setCallScript;
             infos["setOracleAccount"] = test_setCallScript2;
             infos["setBondAccount"] = test_setBondAccount;
@@ -68,9 +66,6 @@ namespace smartContractDemo
             infos["setConfig"] = test_setConfig;
             infos["getConfig"] = test_getConfig;
             infos["setUpgrade"] = test_setUpgrade;
-
-            //infos["mintSDT"] = test_mintSDT;
-
 
             this.submenu = new List<string>(infos.Keys).ToArray();
         }
@@ -281,10 +276,21 @@ namespace smartContractDemo
             subPrintLine(result);
         }
 
+        async Task test_claimAllFee()
+        {
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "claimAllFee",
+               "(addr)" + this.address);
+            subPrintLine(result);
+        }
+
         async Task test_claimFee()
         {
+            Console.WriteLine("Input amount:");
+            string amount = Console.ReadLine();
+
             var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "claimFee",
-               "(addr)" + this.address);
+               "(addr)" + this.address,
+               "(int)" + double.Parse(amount) * ten_pow);
             subPrintLine(result);
         }
 
@@ -464,6 +470,10 @@ namespace smartContractDemo
 
             if (items != null)
             {
+                var result2 = await datacenter_common.api_InvokeScript(datacenter_common.sc_wneo, "getTypeB", "(str)cneo_price");
+                datacenter_common.ResultItem item2 = result2.value;
+                Console.WriteLine("cneo_price:" + item2.subItem[0].AsInteger());
+
                 Console.WriteLine("from:" + ThinNeo.Helper.GetAddressFromScriptHash(items[0].AsHash160()));
                 Console.WriteLine("txid:" + items[1].AsHashString());
                 Console.WriteLine("locked:" + items[2].AsInteger());
@@ -476,7 +486,7 @@ namespace smartContractDemo
                 Console.WriteLine("fee:" + items[9].AsInteger());
                 Console.WriteLine("sdsFee:" + items[10].AsInteger());
 
-
+               
             }
             else
             {

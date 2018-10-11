@@ -144,7 +144,7 @@ namespace smartContractDemo
 
         async Task test_getStructConfig()
         {
-            var result = await oracle_common.api_InvokeScript(oracle_common.sc_wneo, "getStructConfig");
+            var result = await oracle_common.api_InvokeScript(datacenter_common.sc_wneo, "getStructConfig");
             oracle_common.ResultItem item = result.value;
             oracle_common.ResultItem[] items = item.subItem[0].subItem;
 

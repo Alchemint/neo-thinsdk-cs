@@ -15,6 +15,7 @@ namespace smartContractDemo
 
         public string ID => "to";
         byte[] prikey;
+        byte[] prikey_admin;
         public string address;
         byte[] scripthash;
         byte[] pubkey;
@@ -66,7 +67,7 @@ namespace smartContractDemo
             //Console.WriteLine("reg=" + _resultv["script"].AsString());
 
             showMenu();
-
+            prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
             prikey = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif);
             pubkey = ThinNeo.Helper.GetPublicKeyFromPrivateKey(prikey);
             address = ThinNeo.Helper.GetAddressFromPublicKey(pubkey);
@@ -253,7 +254,7 @@ namespace smartContractDemo
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(business_common.sc_wneo);
             Console.WriteLine("address:" + addr);
 
-            var result = await token_common.api_SendTransaction(prikey, token_common.sc_wneo, "setCallScript",
+            var result = await token_common.api_SendTransaction(prikey_admin, token_common.sc_wneo, "setCallScript",
                "(addr)" + addr
               );
             subPrintLine(result);

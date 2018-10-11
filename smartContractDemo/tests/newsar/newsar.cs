@@ -155,43 +155,43 @@ namespace smartContractDemo
 
            byte[] prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
 
-            var addr = ThinNeo.Helper.GetAddressFromScriptHash(sds_common.sc_sds);
-            Console.WriteLine("sds address:" + addr);
+            //var addr = ThinNeo.Helper.GetAddressFromScriptHash(sds_common.sc_sds);
+            //Console.WriteLine("sds address:" + addr);
 
-            var result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
-               "(str)sds_account",
-               "(addr)" + addr);
-            subPrintLine(result);
+            //var result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
+            //   "(str)sds_account",
+            //   "(addr)" + addr);
+            //subPrintLine(result);
 
-            addr = ThinNeo.Helper.GetAddressFromScriptHash(datacenter_common.sc_wneo);
-            Console.WriteLine("oracle address:" + addr);
+            //addr = ThinNeo.Helper.GetAddressFromScriptHash(datacenter_common.sc_wneo);
+            //Console.WriteLine("oracle address:" + addr);
 
-            result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
-               "(str)oracle_account",
-               "(addr)" + addr);
-            subPrintLine(result);
+            //result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
+            //   "(str)oracle_account",
+            //   "(addr)" + addr);
+            //subPrintLine(result);
 
-            addr = ThinNeo.Helper.GetAddressFromScriptHash(sdusd_common.sc_sdusd);
-            Console.WriteLine("sdusd address:" + addr);
+            //addr = ThinNeo.Helper.GetAddressFromScriptHash(sdusd_common.sc_sdusd);
+            //Console.WriteLine("sdusd address:" + addr);
 
-            result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
-               "(str)sdusd_account",
-               "(addr)" + addr);
-            subPrintLine(result);
+            //result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
+            //   "(str)sdusd_account",
+            //   "(addr)" + addr);
+            //subPrintLine(result);
 
-            addr = ThinNeo.Helper.GetAddressFromScriptHash(newsar_common.sc_sar);
+           var addr = ThinNeo.Helper.GetAddressFromScriptHash(sar_common.sc_sar);
             Console.WriteLine("sar address:" + addr);
-            result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
+           var result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
                "(str)storage_account",
                "(addr)" + addr);
             subPrintLine(result);
 
-            addr = ThinNeo.Helper.GetAddressFromScriptHash(cneo_common.sc_cneo);
-            Console.WriteLine("cneo address:" + addr);
-            result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
-               "(str)cneo_price",
-               "(addr)" + addr);
-            subPrintLine(result);
+            //addr = ThinNeo.Helper.GetAddressFromScriptHash(cneo_common.sc_cneo);
+            //Console.WriteLine("cneo address:" + addr);
+            //result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
+            //   "(str)cneo_price",
+            //   "(addr)" + addr);
+            //subPrintLine(result);
 
             //addr = ThinNeo.Helper.GetAddressFromScriptHash(sneo_common.sc_sneo);
             //Console.WriteLine("sneo address:" + addr);

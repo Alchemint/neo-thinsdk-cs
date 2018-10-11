@@ -13,7 +13,7 @@ namespace smartContractDemo
     public class newsar_common
     {
         //0x34fe5d0ac799330151f03381cca4eb9b1f385cf2
-        public static readonly Hash160 sc_sar = new Hash160("0x89151760dba47464bbed6600b651e210996a318b");//token 合约地址
+        public static readonly Hash160 sc_sar = new Hash160("0x35f891491c17487ee40e2aa52e5d94117d3af5bf");//token 合约地址
         //
 
         //public static readonly string sc = "0x9ce3206bd3c01354e6ccfd0977bfa1b027770dda";

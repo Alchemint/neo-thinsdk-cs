@@ -51,9 +51,9 @@ namespace smartContractDemo
             infos["refund"] = test_refund;
             infos["getRefund"] = test_getRefund;
             infos["getRefundTarget"] = test_getRefundTarget;
-            infos["claimStep1"] = test_claimStep1;
-            infos["claimStep2"] = test_claimStep2;
-            //infos["claimStep3"] = test_claimStep3;
+            //infos["claimStep1"] = test_claimStep1;
+            //infos["claimStep2"] = test_claimStep2;
+            infos["claimStep3"] = test_claimStep3;
 
             this.submenu = new List<string>(infos.Keys).ToArray();
         }
@@ -661,18 +661,20 @@ namespace smartContractDemo
 
         async Task test_claimStep3()
         {
+            var addr = ThinNeo.Helper.GetAddressFromScriptHash(cneo_common.sc_cneo);
+
             byte[] postdata;
 
-            var url = Helper.MakeRpcUrlPost(Config.api, "getclaimgas", out postdata, new MyJson.JsonNode_ValueString(this.address));
+            var url = Helper.MakeRpcUrlPost(Config.api, "getclaimgas", out postdata, new MyJson.JsonNode_ValueString(addr));
             var result = await Helper.HttpPost(url, postdata);
-            Console.WriteLine("得到的结果是：" + result);
+            //Console.WriteLine("得到的结果是：" + result);
 
             var json = MyJson.Parse(result).AsDict();
 
             if (json.ContainsKey("result"))
             {
                 //gas总量
-                var gas = json["result"].AsList()[0].AsDict()["gas"].AsString();
+                var gas = json["result"].AsList()[0].AsDict()["gas"].AsDouble();
                 Console.WriteLine("gas:" + gas);
 
                 var claims = json["result"].AsList()[0].AsDict()["claims"].AsList();
@@ -695,7 +697,7 @@ namespace smartContractDemo
                 {
                     assetId = assetID,
                     toAddress = ThinNeo.Helper.GetPublicKeyHashFromAddress(this.address),
-                    value = Decimal.Parse(gas)
+                    value = Decimal.Parse(gas+"")
                 };
 
                 List<ThinNeo.TransactionInput> claimVins = new List<ThinNeo.TransactionInput>();
@@ -711,10 +713,20 @@ namespace smartContractDemo
                 (claimTran.extdata as ThinNeo.ClaimTransData).claims = claimVins.ToArray();
 
 
-                byte[] msg = claimTran.GetMessage();
-                byte[] signdata = ThinNeo.Helper.Sign(msg, this.prikey);
+                //byte[] msg = claimTran.GetMessage();
+                //byte[] signdata = ThinNeo.Helper.Sign(msg, this.prikey);
 
-                claimTran.AddWitness(signdata, pubkey, this.address);
+                //claimTran.AddWitness(signdata, pubkey, this.address);
+                //做智能合约的签名
+                    byte[] iscript = null;
+                    using (var sb = new ThinNeo.ScriptBuilder())
+                    {
+                        sb.EmitPushString("whatever");
+                        sb.EmitPushNumber(250);
+                        iscript = sb.ToArray();
+                    }
+                
+                claimTran.AddWitnessScript(n55contract, iscript);
 
                 var trandata = claimTran.GetRawData();
                 var strtrandata = ThinNeo.Helper.Bytes2HexString(trandata);
