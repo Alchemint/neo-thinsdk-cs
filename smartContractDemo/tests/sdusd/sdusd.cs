@@ -43,26 +43,9 @@ namespace smartContractDemo
             infos["balanceOf"] = test_BalanceOf;
             infos["transfer"] = test_Transfer;
             infos["setAccount"] = test_setAccount;
-            infos["getAccount"] = test_getAccount;
+            infos["setCallAccount"] = test_setCallAccount;
+            infos["getCallAccount"] = test_getCallAccount;
             infos["getStorage"] = test_getStorage;
-            //infos["openSAR"] = test_openSAR;
-            //infos["lock"] = test_lock;
-            //infos["draw"] = test_draw;
-            //infos["free"] = test_free;
-            //infos["wipe"] = test_wipe;
-            //infos["shut"] = test_shut;
-            //infos["bite"] = test_bite;
-            //infos["balanceOfRedeem"] = test_balanceOfRedeem;
-            //infos["redeem"] = test_redeem;
-            //infos["give"] = test_give;
-            //infos["getTXInfo"] = test_getTXInfo;
-            //infos["getSAR"] = test_getSAR;
-            //infos["getSARTxInfo"] = test_getSARTxInfo;
-            //infos["setConfig"] = test_setConfig;
-            //infos["getConfig"] = test_getConfig;
-            //infos["totalGenerate"] = test_totalGenerate;
-            //infos["mintSDT"] = test_mintSDT;
-
 
             this.submenu = new List<string>(infos.Keys).ToArray();
         }
@@ -149,24 +132,34 @@ namespace smartContractDemo
             Console.WriteLine("得到的结果是：" + result);
         }
 
-        async Task test_setAccount()
+        async Task test_setCallAccount()
         {
             byte[] prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
 
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(sar_common.sc_sar);
             Console.WriteLine("sar address:" + addr);
 
-            var result = await sdusd_common.api_SendbatchTransaction(prikey_admin, sdusd_common.sc_sdusd, "setAccount",
+            var result = await sdusd_common.api_SendbatchTransaction(this.prikey, sdusd_common.sc_sdusd, "setCallAccount",
                "(addr)" + addr);
             subPrintLine(result);
         }
 
-        async Task test_getAccount()
+        async Task test_setAccount()
+        {
+            byte[] prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
+
+            var result = await sdusd_common.api_SendbatchTransaction(prikey_admin, sdusd_common.sc_sdusd, "setAccount",
+                "(str)admin_account",
+               "(addr)" + this.address);
+            subPrintLine(result);
+        }
+
+        async Task test_getCallAccount()
         {
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(sar_common.sc_sar);
             Console.WriteLine("sar address:" + addr);
 
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "getAccount",
+            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "getCallAccount",
                "(addr)" + addr);
 
             sdusd_common.ResultItem item = result.value;

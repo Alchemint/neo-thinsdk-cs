@@ -9,11 +9,11 @@ using smartContractDemo.tests;
 
 namespace smartContractDemo
 {
-    class businessTest : ITest
+    class newbusinessTest : ITest
     {
         public string Name => "Business 合约测试";
 
-        public string ID => "bu";
+        public string ID => "newbu";
         byte[] prikey;
         byte[] prikey_admin;
         public string address;
@@ -32,7 +32,7 @@ namespace smartContractDemo
             Console.WriteLine("    " + line);
         }
 
-        public businessTest()
+        public newbusinessTest()
         {
             this.initMenu();
         }
@@ -49,15 +49,14 @@ namespace smartContractDemo
             infos["withdraw"] = test_withdraw;
             infos["redeem"] = test_redeem;
             infos["destory"] = test_destory;
-            infos["setConfig"] = test_setConfig;
-            infos["migrateSAR4B"] = test_migrateSAR4B;
+            infos["setConfig1"] = test_setConfig;
+
             infos["setContractA"] = test_setAccount;
-            //infos["setAccount2"] = test_setAccount2;
+            infos["setAccount2"] = test_setAccount2;
             infos["setUpgrade"] = test_setUpgrade;
             infos["getConfig"] = test_getConfig;
-            infos["getRedeem"] = test_getRedeem;
             infos["settingSAR"] = test_settingSAR;
-            //infos["test"] = test_str;
+            infos["test"] = test_str;
             this.submenu = new List<string>(infos.Keys).ToArray();
         }
 
@@ -66,7 +65,7 @@ namespace smartContractDemo
         public async Task Demo()
         {
             //得到合约代码
-            var urlgetscript = Helper.MakeRpcUrl(Config.api, "getcontractstate", new MyJson.JsonNode_ValueString(business_common.sc));
+            var urlgetscript = Helper.MakeRpcUrl(Config.api, "getcontractstate", new MyJson.JsonNode_ValueString(newbusiness_common.sc));
             var resultgetscript = await Helper.HttpGet(urlgetscript);
             var _json = MyJson.Parse(resultgetscript).AsDict();
             var _resultv = _json["result"].AsList()[0].AsDict();
@@ -134,12 +133,12 @@ namespace smartContractDemo
 
         async Task test_setAccount2()
         {
-            var addr = ThinNeo.Helper.GetAddressFromScriptHash(business_common.sc_wneo);
+            var addr = ThinNeo.Helper.GetAddressFromScriptHash(newbusiness_common.sc_wneo);
             Console.WriteLine("address:" + addr);
 
             var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(datacenter_common.sc_wneo);
 
-            var result = await business_common.api_SendbatchTransaction(prikey_admin, business_common.sc_wneo, "setAccount",
+            var result = await newbusiness_common.api_SendbatchTransaction(prikey_admin, newbusiness_common.sc_wneo, "setAccount",
                 "(str)oracle_account",
                 "(addr)" + oracleAddr);
             subPrintLine(result);
@@ -147,35 +146,29 @@ namespace smartContractDemo
 
         async Task test_setAccount()
         {
-            var addr = ThinNeo.Helper.GetAddressFromScriptHash(business_common.sc_wneo);
+            var addr = ThinNeo.Helper.GetAddressFromScriptHash(newbusiness_common.sc_wneo);
             Console.WriteLine("address:" + addr);
 
             var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(datacenter_common.sc_wneo);
             var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
             var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sds_common.sc_sds);
-            var newAddr = ThinNeo.Helper.GetAddressFromScriptHash(newbusiness_common.sc_wneo);
 
-            var result = await business_common.api_SendbatchTransaction(prikey_admin, business_common.sc_wneo, "setAccount",
+            var result = await newbusiness_common.api_SendbatchTransaction(prikey_admin, newbusiness_common.sc_wneo, "setAccount",
                 "(str)storage_account",
                 "(addr)" + addr);
             subPrintLine(result);
 
-            result = await business_common.api_SendbatchTransaction(prikey_admin, business_common.sc_wneo, "setAccount",
-                "(str)storage_account_new",
-                "(addr)" + newAddr);
-            subPrintLine(result);
-
-            result = await business_common.api_SendbatchTransaction(prikey_admin, business_common.sc_wneo, "setAccount",
+            result = await newbusiness_common.api_SendbatchTransaction(prikey_admin, newbusiness_common.sc_wneo, "setAccount",
                 "(str)sds_account",
                 "(addr)" + sdsAddr);
             subPrintLine(result);
 
-            result = await business_common.api_SendbatchTransaction(prikey_admin, business_common.sc_wneo, "setAccount",
+            result = await newbusiness_common.api_SendbatchTransaction(prikey_admin, newbusiness_common.sc_wneo, "setAccount",
                 "(str)oracle_account",
                 "(addr)" + oracleAddr);
             subPrintLine(result);
 
-            result = await business_common.api_SendbatchTransaction(prikey_admin, business_common.sc_wneo, "setAccount",
+            result = await newbusiness_common.api_SendbatchTransaction(prikey_admin, newbusiness_common.sc_wneo, "setAccount",
                 "(str)tokenized_account",
                 "(addr)" + tokenAddr);
             subPrintLine(result);
@@ -190,7 +183,7 @@ namespace smartContractDemo
             Console.WriteLine("Input target symbol:");
             string symbol = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "openSAR4B",
+            var result = await newbusiness_common.api_SendTransaction(prikey, newbusiness_common.sc_wneo, "openSAR4B",
                "(str)" + name,
                 "(str)" + symbol,
                 "(int)" + 8,
@@ -207,9 +200,9 @@ namespace smartContractDemo
             if (addr.Length == 0) {
                 addr = this.address;
             }
-            var result = await business_common.api_InvokeScript(business_common.sc_wneo, "getSAR4B", "(addr)" + addr);
-            business_common.ResultItem item = result.value;
-            business_common.ResultItem[] items = item.subItem[0].subItem;
+            var result = await newbusiness_common.api_InvokeScript(newbusiness_common.sc_wneo, "getSAR4B", "(addr)" + addr);
+            newbusiness_common.ResultItem item = result.value;
+            newbusiness_common.ResultItem[] items = item.subItem[0].subItem;
 
             if (items != null)
             {
@@ -230,13 +223,6 @@ namespace smartContractDemo
             }
         }
 
-        async Task test_migrateSAR4B()
-        {
-            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "migrateSAR4B",
-               "(addr)" + this.address);
-            subPrintLine(result);
-        }
-
         //锁仓
         async Task test_reserve()
         {
@@ -246,7 +232,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "reserve",
+            var result = await newbusiness_common.api_SendTransaction(prikey, newbusiness_common.sc_wneo, "reserve",
               "(str)" + name,
               "(addr)" + this.address, 
               "(int)" + double.Parse(amount) * ten_pow);
@@ -256,7 +242,7 @@ namespace smartContractDemo
         async Task test_initToken()
         {
 
-            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "initToken",
+            var result = await newbusiness_common.api_SendTransaction(prikey, newbusiness_common.sc_wneo, "initToken",
              "(addr)" + this.address);
             subPrintLine(result);
         }
@@ -270,7 +256,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "expande",
+            var result = await newbusiness_common.api_SendTransaction(prikey, newbusiness_common.sc_wneo, "expande",
               "(str)" + name,
               "(addr)" + this.address,
               "(int)" + double.Parse(amount) * ten_pow);
@@ -286,7 +272,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "contract",
+            var result = await newbusiness_common.api_SendTransaction(prikey, newbusiness_common.sc_wneo, "contract",
               "(str)" + name,
               "(addr)" + this.address,
               "(int)" + double.Parse(amount) * ten_pow);
@@ -302,7 +288,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "withdraw",
+            var result = await newbusiness_common.api_SendTransaction(prikey, newbusiness_common.sc_wneo, "withdraw",
               "(str)" + name,
               "(addr)" + this.address,
               "(int)" + double.Parse(amount) * ten_pow);
@@ -315,7 +301,7 @@ namespace smartContractDemo
             Console.WriteLine("Input target addr:");
             string sarAddr = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "redeem",
+            var result = await newbusiness_common.api_SendTransaction(prikey, newbusiness_common.sc_wneo, "redeem",
               
               "(addr)" + this.address);
             subPrintLine(result);
@@ -344,7 +330,7 @@ namespace smartContractDemo
             Console.WriteLine("Input Config value:");
             string value = Console.ReadLine();
 
-            var result = await business_common.api_SendbatchTransaction(prikey_admin, business_common.sc_wneo, "setConfig", "(str)sar_state", "(int)" + value);
+            var result = await newbusiness_common.api_SendbatchTransaction(prikey_admin, newbusiness_common.sc_wneo, "setConfig", "(str)sar_state", "(int)" + value);
             subPrintLine(result);
 
         }
@@ -355,16 +341,10 @@ namespace smartContractDemo
             Console.WriteLine("Input config key:");
             string key = Console.ReadLine();
 
-            var result = await business_common.api_InvokeScript(business_common.sc_wneo, "getConfig", "(str)" + key);
-            business_common.ResultItem item = result.value;
+            var result = await newbusiness_common.api_InvokeScript(newbusiness_common.sc_wneo, "getConfig", "(str)" + key);
+            newbusiness_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
-        }
-
-        async Task test_getRedeem()
-        {
-
-            //var url = Helper.MakeRpcUrl(Config.api, "getstorage", new MyJson.JsonNode_ValueString(scriptaddress), new MyJson.JsonNode_ValueString(key));
         }
 
         async Task test_settingSAR()
@@ -374,7 +354,7 @@ namespace smartContractDemo
 
             Console.WriteLine("Input address:");
             string addr = Console.ReadLine();
-            var result = await business_common.api_SendbatchTransaction(prikey_admin, business_common.sc_wneo, "settingSAR", "(str)"+name, "(addr)"+ addr);
+            var result = await newbusiness_common.api_SendTransaction(prikey_admin, newbusiness_common.sc_wneo, "settingSAR", "(str)"+name, "(addr)"+ addr);
             subPrintLine(result);
         }
 
@@ -383,7 +363,7 @@ namespace smartContractDemo
             Console.WriteLine("Input target asset:");
             string name = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, business_common.sc_wneo, "destory",
+            var result = await newbusiness_common.api_SendTransaction(prikey, newbusiness_common.sc_wneo, "destory",
               "(str)" + name,
               "(addr)" + this.address);
             subPrintLine(result);
@@ -418,7 +398,7 @@ namespace smartContractDemo
                 array.AddArrayValue("(str)sssss");//desc
                 sb.EmitParamJson(array);//参数倒序入
                 sb.EmitParamJson(new MyJson.JsonNode_ValueString("(str)upgrade"));//参数倒序入
-                var shash = business_common.sc_wneo;
+                var shash = newbusiness_common.sc_wneo;
                 sb.EmitAppCall(shash);
 
                 string scriptPublish = ThinNeo.Helper.Bytes2HexString(sb.ToArray());

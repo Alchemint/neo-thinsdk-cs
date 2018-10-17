@@ -10,12 +10,12 @@ using smartContractDemo.tests;
 
 namespace smartContractDemo
 {
-    public class business_common
+    public class newbusiness_common
     {
 
-        public static readonly Hash160 sc_wneo = new Hash160("0x4925720b1955ccbf413bb275a44f1e6487e766cd");//business 合约地址
+        public static readonly Hash160 sc_wneo = new Hash160("0xde3afefe87f60d8c54cfb18cbe1a78e04e7c7b27");//business 合约地址
 
-        public static readonly string sc = "0x4925720b1955ccbf413bb275a44f1e6487e766cd";
+        public static readonly string sc = "0xde3afefe87f60d8c54cfb18cbe1a78e04e7c7b27";
         //0x16ae4fc2ec1c85c4a496d24799dff72245edd6c2
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 

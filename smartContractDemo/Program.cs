@@ -72,6 +72,7 @@ namespace smartContractDemo
             RegTest(new callTest());
             //RegTest(new sdusd2Test());
             RegTest(new businessTest());
+            RegTest(new newbusinessTest());
             RegTest(new tokenTest());
             RegTest(new oracleTest());
             RegTest(new sneoTest());

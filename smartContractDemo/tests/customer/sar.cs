@@ -56,7 +56,7 @@ namespace smartContractDemo
             infos["getRescue"] = test_getRescue;
 
             infos["setAccount"] = test_setCallScript;
-            infos["setOracleAccount"] = test_setCallScript2;
+            infos["setAdminAccount"] = test_setAdmin;
             infos["setBondAccount"] = test_setBondAccount;
             infos["removeBondAccount"] = test_removeBondAccount;
 
@@ -135,15 +135,12 @@ namespace smartContractDemo
         }
 
         //授权转账操作
-        async Task test_setCallScript2()
+        async Task test_setAdmin()
         {
-
-            var addr = ThinNeo.Helper.GetAddressFromScriptHash(oracle_common.sc_wneo);
-            Console.WriteLine("oracle address:" + addr);
-
             var result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setAccount",
-               "(str)oracle_account",
-               "(addr)" + addr);
+               "(str)admin_account",
+               "(addr)" + this.address);
+
             subPrintLine(result);
         }
 
@@ -225,7 +222,7 @@ namespace smartContractDemo
             Console.WriteLine("Input address:");
             string addr = Console.ReadLine();
 
-            var result = await sar_common.api_SendbatchTransaction(prikey_admin, sar_common.sc_sar, "setBondAccount",
+            var result = await sar_common.api_SendbatchTransaction(prikey, sar_common.sc_sar, "setBondAccount",
               "(addr)" + addr);
             subPrintLine(result);
 

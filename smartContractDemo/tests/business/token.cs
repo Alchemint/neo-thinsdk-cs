@@ -47,7 +47,8 @@ namespace smartContractDemo
             infos["balanceOf"] = test_BalanceOf;
             infos["transfer"] = test_Transfer;
             infos["getTXInfo"] = test_getTXInfo;
-            infos["setBuCallScript"] = test_setCallScript;
+            infos["setCallScript"] = test_setCallScript;
+            infos["setAdmin"] = test_setAdmin;
             //infos["setConfig"] = test_setConfig;
             this.submenu = new List<string>(infos.Keys).ToArray();
         }
@@ -254,8 +255,18 @@ namespace smartContractDemo
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(business_common.sc_wneo);
             Console.WriteLine("address:" + addr);
 
-            var result = await token_common.api_SendTransaction(prikey_admin, token_common.sc_wneo, "setCallScript",
+            var result = await token_common.api_SendTransaction(prikey_admin, token_common.sc_wneo, "setAccount",
+               "(str)call_script",
                "(addr)" + addr
+              );
+            subPrintLine(result);
+        }
+
+        async Task test_setAdmin()
+        {
+            var result = await token_common.api_SendTransaction(prikey, token_common.sc_wneo, "setAccount",
+               "(str)admin_account",
+               "(addr)" + this.address
               );
             subPrintLine(result);
         }

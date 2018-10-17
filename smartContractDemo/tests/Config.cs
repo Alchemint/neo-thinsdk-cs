@@ -28,9 +28,9 @@ namespace smartContractDemo.tests
 
         //public readonly static string api = "http://192.168.0.101:59908/api/privatenet";
 
-        public readonly static string api = "http://47.52.85.247/api/privatenet";
+        public readonly static string api = "http://api.alchemint.io/api/privatenet";
 
-        //public readonly static string api = "http://47.52.85.247/api/mainnet";
+        //public readonly static string api = "http://api.alchemint.io/api/mainnet";
 
         public const string rpc = "http://47.52.188.214:10332";
 
@@ -44,7 +44,7 @@ namespace smartContractDemo.tests
         //gxl KxtvHw6fBeEj1TQEd7revdhyETPC8w8jEVE3yVthhLyWQnxMm6tr
         //wallet1 test L5a9Hihm4Lu46deJ6mfBRAvPPitJTyWK6g8yRP1iFPpGMBzecQcS
         //walletgxl KxtvHw6fBeEj1TQEd7revdhyETPC8w8jEVE3yVthhLyWQnxMm6tr
-        public const string testwif = "L42yZK68KYuxiQB99PmfHAY2LxiN46oh4etmh2EGMq9Fon6QAoKw";
+        public const string testwif = "KxY42rRV8f1ii7ydoqE2z6Dy6JMfecRwWobXP2TSPafFCq8twYhC";
 
         public const string testwif_admin = "KzprnMDQHhK7jnJ3dNNq5C2AfJdy58oGyphnZtc6t78NE26nhq7S";
 
