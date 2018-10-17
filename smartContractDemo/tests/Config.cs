@@ -28,25 +28,17 @@ namespace smartContractDemo.tests
 
         //public readonly static string api = "http://192.168.0.101:59908/api/privatenet";
 
-        public readonly static string api = "http://api.alchemint.io/api/privatenet";
+        //public readonly static string api = "http://api.alchemint.io/api/privatenet";
+
+        public readonly static string api = "http://api.alchemint.io/api/testnet";
 
         //public readonly static string api = "http://api.alchemint.io/api/mainnet";
 
         public const string rpc = "http://47.52.188.214:10332";
 
-        //wallet7 KxqSjrFYMjxzD7cdxLXePr18NreEYKgEwNVfWEzkEu9FCD9cRhG5
-        //wallet8 L46VDpr5F8vMJ3M3pM5N9qkpaCg21t1TjY1DF11KVvv98GCoLEL3
-        //wallet5 Kz4is5qddLo5f6Ek8uv2GzguJzWABKjbpJdP6nMhXds16oJstZsG
-        //wallet1 KzprnMDQHhK7jnJ3dNNq5C2AfJdy58oGyphnZtc6t78NE26nhq7S
-        //wallet2 KxwkPdCtioE8vKfLETqK2UfMWX4XaooP8rP85wRrAiFzDa3Ydkt3
-        //wallet3 KxkmnsoANJT8ygPaiYTe9houe4XD6bNzu1yHBYs5NUr9WL6Mufyg
-        //wallet4 L42yZK68KYuxiQB99PmfHAY2LxiN46oh4etmh2EGMq9Fon6QAoKw
-        //gxl KxtvHw6fBeEj1TQEd7revdhyETPC8w8jEVE3yVthhLyWQnxMm6tr
-        //wallet1 test L5a9Hihm4Lu46deJ6mfBRAvPPitJTyWK6g8yRP1iFPpGMBzecQcS
-        //walletgxl KxtvHw6fBeEj1TQEd7revdhyETPC8w8jEVE3yVthhLyWQnxMm6tr
-        public const string testwif = "KxY42rRV8f1ii7ydoqE2z6Dy6JMfecRwWobXP2TSPafFCq8twYhC";
+        public const string testwif = "L46VDpr5F8vMJ3M3pM5N9qkpaCg21t1TjY1DF11KVvv98GCoLEL3";
 
-        public const string testwif_admin = "KzprnMDQHhK7jnJ3dNNq5C2AfJdy58oGyphnZtc6t78NE26nhq7S";
+        public const string testwif_admin = "L46VDpr5F8vMJ3M3pM5N9qkpaCg21t1TjY1DF11KVvv98GCoLEL3";
 
         public const string id_NEO = "0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
 
