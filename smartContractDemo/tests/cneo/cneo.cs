@@ -63,7 +63,7 @@ namespace smartContractDemo
         public async Task Demo()
         {
             //得到合约代码
-            var urlgetscript = Helper.MakeRpcUrl(Config.api, "getcontractstate", new MyJson.JsonNode_ValueString(cneo_common.sc));
+            var urlgetscript = Helper.MakeRpcUrl(Config.api, "getcontractstate", new MyJson.JsonNode_ValueString(Config.sc_cneo));
             var resultgetscript = await Helper.HttpGet(urlgetscript);
             var _json = MyJson.Parse(resultgetscript).AsDict();
             var _resultv = _json["result"].AsList()[0].AsDict();
@@ -134,7 +134,7 @@ namespace smartContractDemo
         //查询总量
         async Task test_totalSupply()
         {
-            var result = await cneo_common.api_InvokeScript(cneo_common.sc_cneo, "totalSupply", null);
+            var result = await cneo_common.api_InvokeScript(Config.cneo, "totalSupply", null);
             cneo_common.ResultItem item = result.value;
 
             Console.WriteLine(Helper.changeDecimals(item.subItem[0].AsInteger(),8));
@@ -143,7 +143,7 @@ namespace smartContractDemo
         //查询名字
         async Task test_name()
         {
-            var result = await cneo_common.api_InvokeScript(cneo_common.sc_cneo, "name", null);
+            var result = await cneo_common.api_InvokeScript(Config.cneo, "name", null);
             cneo_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsString());
@@ -152,7 +152,7 @@ namespace smartContractDemo
         //查询标志
         async Task test_symbol()
         {
-            var result = await cneo_common.api_InvokeScript(cneo_common.sc_cneo, "symbol", null);
+            var result = await cneo_common.api_InvokeScript(Config.cneo, "symbol", null);
             cneo_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsString());
@@ -161,7 +161,7 @@ namespace smartContractDemo
         //查询最小单位
         async Task test_decimals()
         {
-            var result = await cneo_common.api_InvokeScript(cneo_common.sc_cneo, "decimals", null);
+            var result = await cneo_common.api_InvokeScript(Config.cneo, "decimals", null);
             cneo_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
@@ -174,7 +174,7 @@ namespace smartContractDemo
             string addr = Console.ReadLine();
  
 
-            var result = await cneo_common.api_InvokeScript(cneo_common.sc_cneo, "balanceOf", "(addr)" + addr);
+            var result = await cneo_common.api_InvokeScript(Config.cneo, "balanceOf", "(addr)" + addr);
             cneo_common.ResultItem item = result.value;
 
             Console.WriteLine(Helper.changeDecimals(item.subItem[0].AsInteger(),8));
@@ -189,7 +189,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await cneo_common.api_SendbatchTransaction(prikey, cneo_common.sc_cneo, "transfer",
+            var result = await cneo_common.api_SendbatchTransaction(prikey, Config.cneo, "transfer",
               "(addr)" + this.address,
               "(addr)" + addressto,
               "(int)" + amount);
@@ -200,7 +200,7 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input txid:");
             string txid = Console.ReadLine();
-            var result = await cneo_common.api_InvokeScript(cneo_common.sc_cneo, "getTxInfo", "(hex256)" + txid);
+            var result = await cneo_common.api_InvokeScript(Config.cneo, "getTxInfo", "(hex256)" + txid);
             cneo_common.ResultItem item = result.value;
             cneo_common.ResultItem[] items = item.subItem[0].subItem;
 
@@ -231,10 +231,10 @@ namespace smartContractDemo
                     array.AddArrayValue("(str)neo");
                     sb.EmitParamJson(array);//参数倒序入
                     sb.EmitParamJson(new MyJson.JsonNode_ValueString("(str)mintTokens"));//参数倒序入
-                    sb.EmitAppCall(cneo_common.sc_cneo);//nep5脚本
+                    sb.EmitAppCall(Config.cneo);//nep5脚本
                     script = sb.ToArray();
                 }
-                var targetaddr = ThinNeo.Helper.GetAddressFromScriptHash(cneo_common.sc_cneo);
+                var targetaddr = ThinNeo.Helper.GetAddressFromScriptHash(Config.cneo);
                 Console.WriteLine("contract address=" + targetaddr);//往合约地址转账
 
                 //生成交易
@@ -286,10 +286,10 @@ namespace smartContractDemo
                     array.AddArrayValue("(str)gas");
                     sb.EmitParamJson(array);//参数倒序入
                     sb.EmitParamJson(new MyJson.JsonNode_ValueString("(str)mintTokens"));//参数倒序入
-                    sb.EmitAppCall(cneo_common.sc_cneo);//nep5脚本
+                    sb.EmitAppCall(Config.cneo);//nep5脚本
                     script = sb.ToArray();
                 }
-                var targetaddr = ThinNeo.Helper.GetAddressFromScriptHash(cneo_common.sc_cneo);
+                var targetaddr = ThinNeo.Helper.GetAddressFromScriptHash(Config.cneo);
                 Console.WriteLine("contract address=" + targetaddr);//往合约地址转账
 
                 //生成交易
@@ -330,7 +330,7 @@ namespace smartContractDemo
             string value = Console.ReadLine();
 
 
-            var result = await cneo_common.api_SendTransaction(prikey, cneo_common.sc_cneo, "setConfig", "(str)" + key, "(int)" + value);
+            var result = await cneo_common.api_SendTransaction(prikey, Config.cneo, "setConfig", "(str)" + key, "(int)" + value);
             subPrintLine(result);
 
         }
@@ -338,7 +338,7 @@ namespace smartContractDemo
         async Task test_getRefundTarget() {
             Console.WriteLine("Input txid:");
             string txid = Console.ReadLine();
-            var result = await cneo_common.api_InvokeScript(cneo_common.sc_cneo, "getRefundTarget", "(hex256)" + txid);
+            var result = await cneo_common.api_InvokeScript(Config.cneo, "getRefundTarget", "(hex256)" + txid);
             cneo_common.ResultItem item = result.value;
 
             Console.WriteLine("value:" + ThinNeo.Helper.GetAddressFromScriptHash(item.subItem[0].AsHash160()));
@@ -351,7 +351,7 @@ namespace smartContractDemo
             Console.WriteLine("Input refund tokens:");
             string refund = Console.ReadLine();
 
-            string nep55_address = ThinNeo.Helper.GetAddressFromScriptHash(cneo_common.sc_cneo);
+            string nep55_address = ThinNeo.Helper.GetAddressFromScriptHash(Config.cneo);
             Console.WriteLine("nep55_address=" + nep55_address);
 
             //获取地址的资产列表
@@ -365,7 +365,7 @@ namespace smartContractDemo
             for (var i = newlist.Count - 1; i >= 0; i--)
             {
                 string txid = newlist[i].txid.ToString();
-                var ret = await cneo_common.api_InvokeScript(cneo_common.sc_cneo, "getRefundTarget", "(hex256)" + txid);
+                var ret = await cneo_common.api_InvokeScript(Config.cneo, "getRefundTarget", "(hex256)" + txid);
                 cneo_common.ResultItem item = ret.value;
 
                 if (newlist[i].n > 0)
@@ -388,7 +388,7 @@ namespace smartContractDemo
                     array.AddArrayValue("(bytes)" + ThinNeo.Helper.Bytes2HexString(scripthash));
                     sb.EmitParamJson(array);//参数倒序入
                     sb.EmitParamJson(new MyJson.JsonNode_ValueString("(str)refund"));//参数倒序入
-                    sb.EmitAppCall(cneo_common.sc_cneo);//nep5脚本
+                    sb.EmitAppCall(Config.cneo);//nep5脚本
                     script = sb.ToArray();
                 }
                 Console.WriteLine("contract address=" + nep55_address);//往合约地址转账
@@ -477,7 +477,7 @@ namespace smartContractDemo
             Console.WriteLine("refund txid:");
             var lastTxid = Console.ReadLine();
 
-            string nep55_address = ThinNeo.Helper.GetAddressFromScriptHash(cneo_common.sc_cneo);
+            string nep55_address = ThinNeo.Helper.GetAddressFromScriptHash(Config.cneo);
             Console.WriteLine("address=" + nep55_address);
 
             //获取地址的资产列表
@@ -507,7 +507,7 @@ namespace smartContractDemo
 
             {//检查是否是前面交易存储的
 
-                var ret = await cneo_common.api_InvokeScript(cneo_common.sc_cneo, "getRefundTarget", "(hex256)" + lastTxid);
+                var ret = await cneo_common.api_InvokeScript(Config.cneo, "getRefundTarget", "(hex256)" + lastTxid);
                 cneo_common.ResultItem item = ret.value;
 
                 var value = ThinNeo.Helper.GetAddressFromScriptHash(item.subItem[0].AsHash160());
@@ -585,7 +585,7 @@ namespace smartContractDemo
         async Task test_claimStep1()
         {
             //neo总量
-            //var result=  cneo_common.api_GetBalance(cneo_common.sc_cneo,this.address);
+            //var result=  cneo_common.api_GetBalance(Config.cneo,this.address);
 
             Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(Config.api, this.address);
             List<Utxo> neolist = dir[Config.id_NEO];
@@ -661,7 +661,7 @@ namespace smartContractDemo
 
         async Task test_claimStep3()
         {
-            var addr = ThinNeo.Helper.GetAddressFromScriptHash(cneo_common.sc_cneo);
+            var addr = ThinNeo.Helper.GetAddressFromScriptHash(Config.cneo);
 
             byte[] postdata;
 

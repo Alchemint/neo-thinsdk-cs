@@ -136,7 +136,7 @@ namespace smartContractDemo
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(newbusiness_common.sc_wneo);
             Console.WriteLine("address:" + addr);
 
-            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(datacenter_common.sc_wneo);
+            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(Config.oracle);
 
             var result = await newbusiness_common.api_SendbatchTransaction(prikey_admin, newbusiness_common.sc_wneo, "setAccount",
                 "(str)oracle_account",
@@ -149,9 +149,9 @@ namespace smartContractDemo
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(newbusiness_common.sc_wneo);
             Console.WriteLine("address:" + addr);
 
-            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(datacenter_common.sc_wneo);
-            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(token_common.sc_wneo);
-            var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(sds_common.sc_sds);
+            var oracleAddr = ThinNeo.Helper.GetAddressFromScriptHash(Config.oracle);
+            var tokenAddr = ThinNeo.Helper.GetAddressFromScriptHash(Config.tokenized);
+            var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(Config.sds);
 
             var result = await newbusiness_common.api_SendbatchTransaction(prikey_admin, newbusiness_common.sc_wneo, "setAccount",
                 "(str)storage_account",

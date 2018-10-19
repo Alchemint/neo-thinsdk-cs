@@ -11,14 +11,7 @@ using smartContractDemo.tests;
 namespace smartContractDemo
 {
     public class sar_common
-    {
-        //0x34fe5d0ac799330151f03381cca4eb9b1f385cf2
-        public static readonly Hash160 sc_sar = new Hash160("0x4fe8e51c4aa92a4e9714a33d4df38f026cd783cb");//token 合约地址
-        //
-        public static readonly Hash160 sc_sar_old = new Hash160("0x4fe8e51c4aa92a4e9714a33d4df38f026cd783cb");//token 合约地址
-
-        //public static readonly string sc = "0x9ce3206bd3c01354e6ccfd0977bfa1b027770dda";
-        
+    {        
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 
         public static Hash256 nameHash(string domain)

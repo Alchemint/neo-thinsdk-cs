@@ -13,11 +13,6 @@ namespace smartContractDemo
     public class sdusd_common
     {
 
-        //0xa3de6b0a099cb57d46479a439a18c528522e399d
-        public static readonly Hash160 sc_sdusd = new Hash160("0x3569cfd93512e8bf3d7ab1980d5c03a767455cbe");//sdusd 合约地址
-
-        public static readonly string sc = "0x3569cfd93512e8bf3d7ab1980d5c03a767455cbe";
-
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 
         public static Hash256 nameHash(string domain)

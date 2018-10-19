@@ -12,11 +12,6 @@ namespace smartContractDemo
 {
     public class cneo_common
     {
-
-        public static readonly Hash160 sc_cneo = new Hash160("0xc074a05e9dcf0141cbe6b4b3475dd67baf4dcb60");//token 合约地址
-
-        public static readonly string sc = "0xc074a05e9dcf0141cbe6b4b3475dd67baf4dcb60";
-        
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 
         public static Hash256 nameHash(string domain)

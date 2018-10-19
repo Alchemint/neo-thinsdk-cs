@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using ThinNeo;
+using smartContractDemo.tests;
 
 namespace smartContractDemo
 {
@@ -134,7 +135,7 @@ namespace smartContractDemo
         //设置SD合约参数
         async Task test_settargetSD()
         {
-            var target = new ThinNeo.Hash160(sdusd_common.sc);
+            var target = new ThinNeo.Hash160(Config.sc_sdusd);
             var result = await call_common.api_SendTransaction(this.prikey, call_common.main, "setTargetSDUSD", "(hex160)" + target.ToString());
             subPrintLine("result=" + result);
         }
@@ -142,7 +143,7 @@ namespace smartContractDemo
         //设置SD合约参数
         async Task test_settargetSDT()
         {
-            var target = new ThinNeo.Hash160(sds_common.sc);
+            var target = new ThinNeo.Hash160(Config.sc_sds);
             var result = await call_common.api_SendTransaction(this.prikey, call_common.main, "setTargetSDT", "(hex160)" + target.ToString());
             subPrintLine("result=" + result);
         }
@@ -188,7 +189,7 @@ namespace smartContractDemo
             //sdusdCallScript
             //pneoCallScript
             //wneoCallScript
-            var addr = ThinNeo.Helper.GetAddressFromScriptHash(sdusd_common.sc_sdusd);
+            var addr = ThinNeo.Helper.GetAddressFromScriptHash(Config.sdusd);
             Console.WriteLine("address:" + addr);
             var result = await call_common.api_SendTransaction(this.prikey, call_common.main, "setCallScript", "(str)sdusdCallScript", "(addr)" + addr);
             subPrintLine("result=" + result);

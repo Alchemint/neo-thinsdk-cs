@@ -19,6 +19,50 @@ namespace smartContractDemo.tests
         public static readonly Hash160 dapp_multisign = new Hash160("0x4c0f57b61d997297560190b1e397fe6d58fce94a");  //应用合约多签验证测试
         public const string id_GAS = "0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
 
+        /**PrivateNet**/
+        public readonly static string sc_sar4b = "0x4925720b1955ccbf413bb275a44f1e6487e766cd";
+        public readonly static Hash160 sar4b = new Hash160(sc_sar4b);
+
+        public readonly static string sc_tokenized = "0x1c65c45a35fb30a95c128cf9774ee70dface1eb9";
+        public readonly static Hash160 tokenized = new Hash160(sc_tokenized);
+
+        public readonly static string sc_sar4c = "0x4fe8e51c4aa92a4e9714a33d4df38f026cd783cb";
+        public readonly static Hash160 sar4c = new Hash160(sc_sar4c);
+
+        public readonly static string sc_sdusd = "0x3569cfd93512e8bf3d7ab1980d5c03a767455cbe";
+        public readonly static Hash160 sdusd = new Hash160(sc_sdusd);
+
+        public readonly static string sc_oracle = "0xf62764843401cc73d0476c1cbb9bcb04b742c8bd";
+        public readonly static Hash160 oracle = new Hash160(sc_oracle);
+
+        public readonly static string sc_sds = "0xfea5b131f9a9af5e97ec421001a69e2e8fe183ae";
+        public readonly static Hash160 sds = new Hash160(sc_sds);
+
+        public readonly static string sc_cneo = "0xc074a05e9dcf0141cbe6b4b3475dd67baf4dcb60";
+        public readonly static Hash160 cneo = new Hash160(sc_cneo);
+
+        /**TestNet**/
+        //public readonly static string sc_sar4b = "0x0ac768a6c37c40048cb47e411c2e286488a0adda";
+        //public readonly static Hash160 sar4b = new Hash160(sc_sar4b);
+
+        //public readonly static string sc_tokenized = "0x5949f9f4e8ce35483a04bd387c5f379f5738178e";
+        //public readonly static Hash160 tokenized = new Hash160(sc_tokenized);
+
+        //public readonly static string sc_sar4c = "0x90d7391c4562a81431e4e18f1034af5fbdaea254";
+        //public readonly static Hash160 sar4c = new Hash160(sc_sar4c);
+
+        //public readonly static string sc_sdusd = "0x33d7b9332110a66c6c16d71e80a5ba0dddb4207c";
+        //public readonly static Hash160 sdusd = new Hash160(sc_sdusd);
+
+        //public readonly static string sc_oracle = "0x09102d87fdc5e760a6492ee95913a9e96c6912de";
+        //public readonly static Hash160 oracle = new Hash160(sc_oracle);
+
+        //public readonly static string sc_sds = "0x4b4deb4caad37fcfbadcfefc0bebfc869ff523ea";
+        //public readonly static Hash160 sds = new Hash160(sc_sds);
+
+        //public readonly static string sc_cneo = "0xc074a05e9dcf0141cbe6b4b3475dd67baf4dcb60";
+        //public readonly static Hash160 cneo = new Hash160(sc_cneo);
+
 
         public readonly static string api_local = "http://localhost:20332";
 
@@ -26,19 +70,17 @@ namespace smartContractDemo.tests
 
         //public readonly static string api = "https://api.nel.group/api/mainnet";
 
-        //public readonly static string api = "http://192.168.0.101:59908/api/privatenet";
+        public readonly static string api = "http://api.alchemint.io/api/privatenet";
 
-        //public readonly static string api = "http://api.alchemint.io/api/privatenet";
-
-        public readonly static string api = "http://api.alchemint.io/api/testnet";
+        //public readonly static string api = "http://api.alchemint.io/api/testnet";
 
         //public readonly static string api = "http://api.alchemint.io/api/mainnet";
 
         public const string rpc = "http://47.52.188.214:10332";
 
-        public const string testwif = "L46VDpr5F8vMJ3M3pM5N9qkpaCg21t1TjY1DF11KVvv98GCoLEL3";
+        public const string testwif = "L42yZK68KYuxiQB99PmfHAY2LxiN46oh4etmh2EGMq9Fon6QAoKw";
 
-        public const string testwif_admin = "L46VDpr5F8vMJ3M3pM5N9qkpaCg21t1TjY1DF11KVvv98GCoLEL3";
+        public const string testwif_admin = "L42yZK68KYuxiQB99PmfHAY2LxiN46oh4etmh2EGMq9Fon6QAoKw";
 
         public const string id_NEO = "0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
 

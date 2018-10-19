@@ -4,14 +4,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using smartContractDemo.tests;
 
 namespace smartContractDemo
 {
     //发布智能合约的例子
     class PubScDemo:ITest
     {
-
-        string api = "http://47.52.85.247/api/privatenet";
 
         string id_GAS = "0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
 
@@ -25,24 +24,24 @@ namespace smartContractDemo
             string  wif = Console.ReadLine();
             if (string.IsNullOrEmpty(wif))
             {
-                wif = "KzprnMDQHhK7jnJ3dNNq5C2AfJdy58oGyphnZtc6t78NE26nhq7S";  //这里填你用于支付发布合约消耗的私钥
+                wif = "L5a9Hihm4Lu46deJ6mfBRAvPPitJTyWK6g8yRP1iFPpGMBzecQcS";  //这里填你用于支付发布合约消耗的私钥
             }
             byte[] prikey = ThinNeo.Helper.GetPrivateKeyFromWIF(wif);
             byte[] pubkey = ThinNeo.Helper.GetPublicKeyFromPrivateKey(prikey);
             string address = ThinNeo.Helper.GetAddressFromPublicKey(pubkey);
 
-            Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(api,address);
+            Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(Config.api,address);
 
             //从文件中读取合约脚本
-            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0x1c65c45a35fb30a95c128cf9774ee70dface1eb9.avm"); //这里填你的合约所在地址
+            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0x22cd041f36311bda6fffa2b2508d288962f314f2.avm"); //这里填你的合约所在地址
             Console.WriteLine("合约脚本:"+ThinNeo.Helper.Bytes2HexString(script));
             Console.WriteLine("合约脚本hash："+ThinNeo.Helper.Bytes2HexString(ThinNeo.Helper.GetScriptHashFromScript(script).data.ToArray().Reverse().ToArray()));
             byte[] parameter__list = ThinNeo.Helper.HexString2Bytes("0710");  //这里填合约入参  例：0610代表（string，[]）
             byte[] return_type = ThinNeo.Helper.HexString2Bytes("05");  //这里填合约的出参
-            int need_storage = 1;   //需要存储   400gas
-            int need_nep4 = 0;      //支持NEP-4  500gas
+            int need_storage = 1;   //需要存储   500gas
+            int need_nep4 = 0;      //支持NEP-4  490gas
             int need_canCharge = 4;  //支持合约地址存钱
-            string name = "sar";
+            string name = "sdusd";
             string version = "1.0";
             string auther = "Steel";
             string email = "0";
@@ -66,7 +65,7 @@ namespace smartContractDemo
                 //用ivokescript试运行并得到消耗
 
                 byte[] postdata;
-                var url = Helper.MakeRpcUrlPost(api, "invokescript", out postdata, new MyJson.JsonNode_ValueString(scriptPublish));
+                var url = Helper.MakeRpcUrlPost(Config.api, "invokescript", out postdata, new MyJson.JsonNode_ValueString(scriptPublish));
                 var result = await Helper.HttpPost(url, postdata);
                 //string result = http.Post(api, "invokescript", new MyJson.JsonNode_Array() { new MyJson.JsonNode_ValueString(scriptPublish) },Encoding.UTF8);
                 var consume =((( MyJson.Parse(result) as MyJson.JsonNode_Object)["result"] as MyJson.JsonNode_Array)[0] as MyJson.JsonNode_Object)["gas_consumed"].ToString();
@@ -92,7 +91,7 @@ namespace smartContractDemo
 
                 //Console.WriteLine("scripthash:"+scripthash);
 
-                url = Helper.MakeRpcUrlPost(api, "sendrawtransaction", out postdata, new MyJson.JsonNode_ValueString(rawdata));
+                url = Helper.MakeRpcUrlPost(Config.api, "sendrawtransaction", out postdata, new MyJson.JsonNode_ValueString(rawdata));
                 result = await Helper.HttpPost(url, postdata);
 
                 MyJson.JsonNode_Object resJO = (MyJson.JsonNode_Object)MyJson.Parse(result);

@@ -58,7 +58,7 @@ namespace smartContractDemo
         public async Task Demo()
         {
             //得到合约代码
-            var urlgetscript = Helper.MakeRpcUrl(Config.api, "getcontractstate", new MyJson.JsonNode_ValueString(token_common.sc));
+            var urlgetscript = Helper.MakeRpcUrl(Config.api, "getcontractstate", new MyJson.JsonNode_ValueString(Config.sc_tokenized));
             var resultgetscript = await Helper.HttpGet(urlgetscript);
             var _json = MyJson.Parse(resultgetscript).AsDict();
             var _resultv = _json["result"].AsList()[0].AsDict();
@@ -132,7 +132,7 @@ namespace smartContractDemo
             Console.WriteLine("Input target symbol:");
             string symbol = Console.ReadLine();
 
-            var result = await token_common.api_SendTransaction(prikey, token_common.sc_wneo, "init",
+            var result = await token_common.api_SendTransaction(prikey, Config.tokenized, "init",
                "(str)" + name,
                 "(str)" + symbol,
                 "(int)" + 8,
@@ -146,7 +146,7 @@ namespace smartContractDemo
             Console.WriteLine("Input target asset:");
             string name = Console.ReadLine();
 
-            var result = await token_common.api_InvokeScript(token_common.sc_wneo, "totalSupply", "(str)" + name);
+            var result = await token_common.api_InvokeScript(Config.tokenized, "totalSupply", "(str)" + name);
             token_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
@@ -159,7 +159,7 @@ namespace smartContractDemo
             Console.WriteLine("Input target asset:");
             string name = Console.ReadLine();
 
-            var result = await token_common.api_InvokeScript(token_common.sc_wneo, "name", "(str)" + name);
+            var result = await token_common.api_InvokeScript(Config.tokenized, "name", "(str)" + name);
             token_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsString());
@@ -170,7 +170,7 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input target asset:");
             string name = Console.ReadLine();
-            var result = await token_common.api_InvokeScript(token_common.sc_wneo, "symbol", "(str)"+name);
+            var result = await token_common.api_InvokeScript(Config.tokenized, "symbol", "(str)"+name);
             token_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsString());
@@ -182,7 +182,7 @@ namespace smartContractDemo
             Console.WriteLine("Input target asset:");
             string name = Console.ReadLine();
 
-            var result = await token_common.api_InvokeScript(token_common.sc_wneo, "decimals", "(str)"+name);
+            var result = await token_common.api_InvokeScript(Config.tokenized, "decimals", "(str)"+name);
             token_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
@@ -211,7 +211,7 @@ namespace smartContractDemo
 
             byte[] hash = ThinNeo.Helper.GetPublicKeyHashFromAddress(addr);
 
-            var result = await token_common.api_InvokeScript(token_common.sc_wneo, "balanceOf","(str)" + name, "(addr)" + addr);
+            var result = await token_common.api_InvokeScript(Config.tokenized, "balanceOf","(str)" + name, "(addr)" + addr);
             token_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
@@ -227,7 +227,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await token_common.api_SendTransaction(prikey, token_common.sc_wneo, "transfer",
+            var result = await token_common.api_SendTransaction(prikey, Config.tokenized, "transfer",
                 "(str)" + name,
               "(addr)" + this.address,
               "(addr)" + addressto,
@@ -239,7 +239,7 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input txid:");
             string txid = Console.ReadLine();
-            var result = await token_common.api_InvokeScript(token_common.sc_wneo, "getTXInfo", "(hex256)" + txid);
+            var result = await token_common.api_InvokeScript(Config.tokenized, "getTXInfo", "(hex256)" + txid);
             token_common.ResultItem item = result.value;
             token_common.ResultItem[] items = item.subItem[0].subItem;
 
@@ -252,10 +252,10 @@ namespace smartContractDemo
         //授权转账操作
         async Task test_setCallScript()
         {
-            var addr = ThinNeo.Helper.GetAddressFromScriptHash(business_common.sc_wneo);
+            var addr = ThinNeo.Helper.GetAddressFromScriptHash(Config.sar4b);
             Console.WriteLine("address:" + addr);
 
-            var result = await token_common.api_SendTransaction(prikey_admin, token_common.sc_wneo, "setAccount",
+            var result = await token_common.api_SendbatchTransaction(prikey_admin, Config.tokenized, "setAccount",
                "(str)call_script",
                "(addr)" + addr
               );
@@ -264,7 +264,7 @@ namespace smartContractDemo
 
         async Task test_setAdmin()
         {
-            var result = await token_common.api_SendTransaction(prikey, token_common.sc_wneo, "setAccount",
+            var result = await token_common.api_SendbatchTransaction(prikey, Config.tokenized, "setAccount",
                "(str)admin_account",
                "(addr)" + this.address
               );
@@ -282,7 +282,7 @@ namespace smartContractDemo
             string value = Console.ReadLine();
 
 
-            var result = await token_common.api_SendTransaction(prikey, token_common.sc_wneo, "setConfig", "(str)" + key, "(int)" + value);
+            var result = await token_common.api_SendTransaction(prikey, Config.tokenized, "setConfig", "(str)" + key, "(int)" + value);
             subPrintLine(result);
 
         }

@@ -72,7 +72,7 @@ namespace smartContractDemo
         public async Task Demo()
         {
             //得到合约代码
-            //var urlgetscript = Helper.MakeRpcUrl(sds_common.api, "getcontractstate", new MyJson.JsonNode_ValueString(sds_common.sc));
+            //var urlgetscript = Helper.MakeRpcUrl(sds_common.api, "getcontractstate", new MyJson.JsonNode_ValueString(Config.sds));
             //var resultgetscript = await Helper.HttpGet(urlgetscript);
             //var _json = MyJson.Parse(resultgetscript).AsDict();
             //var _resultv = _json["result"].AsList()[0].AsDict();
@@ -162,7 +162,7 @@ namespace smartContractDemo
             //var rev = ThinNeo.Helper.HexString2Bytes(key);
             var revkey = ThinNeo.Helper.Bytes2HexString(byteArray);
 
-            var url = Helper.MakeRpcUrl(Config.api, "getstorage", new MyJson.JsonNode_ValueString(sds_common.sc), new MyJson.JsonNode_ValueString(revkey));
+            var url = Helper.MakeRpcUrl(Config.api, "getstorage", new MyJson.JsonNode_ValueString(Config.sc_sds), new MyJson.JsonNode_ValueString(revkey));
 
             string result = await Helper.HttpGet(url);
             Console.WriteLine("得到的结果是：" + result);
@@ -198,7 +198,7 @@ namespace smartContractDemo
         //查询总量
         async Task test_totalSupply()
         {
-            var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "totalSupply", null);
+            var result = await sds_common.api_InvokeScript(Config.sds, "totalSupply", null);
             sds_common.ResultItem item = result.value;
             Console.WriteLine(item.subItem[0].AsInteger());
         }
@@ -209,7 +209,7 @@ namespace smartContractDemo
             BigInteger sum = 9627308228749 + 2363900000000 + 99956313965785032 + 1175000000000;
             Console.WriteLine(sum);
 
-            var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "name", null);
+            var result = await sds_common.api_InvokeScript(Config.sds, "name", null);
             sds_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsString());
@@ -218,14 +218,14 @@ namespace smartContractDemo
         //初始操作
         async Task test_init()
         {
-            var result = await sds_common.api_SendTransaction(prikey, sds_common.sc_sds, "init", null);
+            var result = await sds_common.api_SendTransaction(prikey, Config.sds, "init", null);
             subPrintLine(result);
         }
 
         //查询标志
         async Task test_symbol()
         {
-            var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "symbol", null);
+            var result = await sds_common.api_InvokeScript(Config.sds, "symbol", null);
             sds_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsString());
@@ -233,7 +233,7 @@ namespace smartContractDemo
         //查询最小单位
         async Task test_decimals()
         {
-            var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "decimals", null);
+            var result = await sds_common.api_InvokeScript(Config.sds, "decimals", null);
             sds_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
@@ -256,7 +256,7 @@ namespace smartContractDemo
                 addr = this.address;
             }
 
-            var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "balanceOf", "(addr)" + addr);
+            var result = await sds_common.api_InvokeScript(Config.sds, "balanceOf", "(addr)" + addr);
 
             sds_common.ResultItem item = result.value;
 
@@ -299,7 +299,7 @@ namespace smartContractDemo
             {
                 str = sr.ReadLine();
                 Console.WriteLine("address:" + str);
-                var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "balanceOf", "(addr)" + str);
+                var result = await sds_common.api_InvokeScript(Config.sds, "balanceOf", "(addr)" + str);
 
                 sds_common.ResultItem item = result.value;
 
@@ -323,7 +323,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await sds_common.api_SendTransaction(prikey, sds_common.sc_sds, "transfer",
+            var result = await sds_common.api_SendTransaction(prikey, Config.sds, "transfer",
                "(addr)" + address,
               "(addr)" + addressto,
               "(int)" + amount
@@ -360,14 +360,14 @@ namespace smartContractDemo
                     File.AppendAllText(newPath, str2);
                     if (m != "0")
                     {
-                        //var re = await sds_common.api_InvokeScriptByRPC(sds_common.sc_sds, "balanceOf",
+                        //var re = await sds_common.api_InvokeScriptByRPC(Config.sds, "balanceOf",
                         //        "(addr)" + addressto);
                         //sds_common.ResultItem item = re.value;
                         //BigInteger mount = item.subItem[0].AsInteger();
 
                         //if (mount == 0)
                         //{
-                        var result = await sds_common.api_SendbatchTransfer(prikey, sds_common.sc_sds, "transfer",
+                        var result = await sds_common.api_SendbatchTransfer(prikey, Config.sds, "transfer",
                           "(addr)" + this.address,
                           "(addr)" + addressto,
                           "(int)" + mstr
@@ -392,7 +392,7 @@ namespace smartContractDemo
             Console.WriteLine("Start time:" + dt);
             for (int i = 0; i < 1; i++)
             {
-                var result = await sds_common.api_SendbatchTransfer(prikey, sds_common.sc_sds, "transfer",
+                var result = await sds_common.api_SendbatchTransfer(prikey, Config.sds, "transfer",
                     "(addr)" + this.address,
                     "(addr)AHgozj1reiiBRh58nhSRUc2pmgLPNTSmcZ",
                     "(int)" + 100
@@ -413,7 +413,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await sds_common.api_SendTransaction(prikey, sds_common.sc_sds, "transfer_contract",
+            var result = await sds_common.api_SendTransaction(prikey, Config.sds, "transfer_contract",
                "(addr)" + address,
               "(addr)" + addressto,
               "(int)" + amount
@@ -466,7 +466,7 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input txid:");
             string txid = Console.ReadLine();
-            var result = await sds_common.api_InvokeScript(sds_common.sc_sds, "getTXInfo", "(hex256)" + txid);
+            var result = await sds_common.api_InvokeScript(Config.sds, "getTXInfo", "(hex256)" + txid);
             sds_common.ResultItem item = result.value;
             sds_common.ResultItem[] items = item.subItem[0].subItem;
 
@@ -484,7 +484,7 @@ namespace smartContractDemo
             byte[] postdata;
             //查询交易，总数可能很多
             var url = Helper.MakeRpcUrlPost(Config.api, "getnep5transfersbyasset", out postdata,
-                new JsonNode_ValueString(sds_common.sc),
+                new JsonNode_ValueString(Config.sc_sds),
                 new JsonNode_ValueNumber(10000),
                 new JsonNode_ValueNumber(1));
             var result = await Helper.HttpPost(url, postdata);
@@ -521,10 +521,10 @@ namespace smartContractDemo
                 //int index = adds.IndexOf(s);
                 //Console.WriteLine("address:" + s);
                 //调用RPC
-                //var re = await sds_common.api_InvokeScriptByRPC(sds_common.sc_sds, "balanceOf",
+                //var re = await sds_common.api_InvokeScriptByRPC(Config.sds, "balanceOf",
                 //"(addr)" + s);
                 //调用API
-                var re = await sds_common.api_InvokeScript(sds_common.sc_sds, "balanceOf",
+                var re = await sds_common.api_InvokeScript(Config.sds, "balanceOf",
                 "(addr)" + s);
 
                 sds_common.ResultItem item = re.value;
@@ -556,7 +556,7 @@ namespace smartContractDemo
             byte[] postdata;
             //查询交易，总数可能很多
             var url = Helper.MakeRpcUrlPost(Config.api, "getnep5transfersbyasset", out postdata,
-                new JsonNode_ValueString(sds_common.sc),
+                new JsonNode_ValueString(Config.sc_sds),
                 new JsonNode_ValueNumber(10000),
                 new JsonNode_ValueNumber(1));
             var result = await Helper.HttpPost(url, postdata);
@@ -659,7 +659,7 @@ namespace smartContractDemo
                     //string  mstr =  Math.Round(mount, 0).ToString();
                     BigInteger mountRe = BigInteger.Parse(m);
 
-                    var re = await sds_common.api_InvokeScriptByRPC(sds_common.sc_sds, "balanceOf",
+                    var re = await sds_common.api_InvokeScriptByRPC(Config.sds, "balanceOf",
               "(addr)" + s);
                     sds_common.ResultItem item = re.value;
 

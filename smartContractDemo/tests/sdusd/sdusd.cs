@@ -127,7 +127,7 @@ namespace smartContractDemo
             Console.WriteLine(key2);
             //ThinNeo.Helper.Get
             string key = "11" + key2;
-            var url = Helper.MakeRpcUrl(Config.api, "getstorage", new MyJson.JsonNode_ValueString(sds_common.sc), new MyJson.JsonNode_ValueString(key));
+            var url = Helper.MakeRpcUrl(Config.api, "getstorage", new MyJson.JsonNode_ValueString(Config.sc_sds), new MyJson.JsonNode_ValueString(key));
             string result = await Helper.HttpGet(url);
             Console.WriteLine("得到的结果是：" + result);
         }
@@ -136,10 +136,10 @@ namespace smartContractDemo
         {
             byte[] prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
 
-            var addr = ThinNeo.Helper.GetAddressFromScriptHash(sar_common.sc_sar);
+            var addr = ThinNeo.Helper.GetAddressFromScriptHash(Config.sar4c);
             Console.WriteLine("sar address:" + addr);
 
-            var result = await sdusd_common.api_SendbatchTransaction(this.prikey, sdusd_common.sc_sdusd, "setCallAccount",
+            var result = await sdusd_common.api_SendbatchTransaction(prikey_admin, Config.sdusd, "setCallAccount",
                "(addr)" + addr);
             subPrintLine(result);
         }
@@ -148,7 +148,7 @@ namespace smartContractDemo
         {
             byte[] prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
 
-            var result = await sdusd_common.api_SendbatchTransaction(prikey_admin, sdusd_common.sc_sdusd, "setAccount",
+            var result = await sdusd_common.api_SendbatchTransaction(prikey_admin, Config.sdusd, "setAccount",
                 "(str)admin_account",
                "(addr)" + this.address);
             subPrintLine(result);
@@ -156,10 +156,10 @@ namespace smartContractDemo
 
         async Task test_getCallAccount()
         {
-            var addr = ThinNeo.Helper.GetAddressFromScriptHash(sar_common.sc_sar);
+            var addr = ThinNeo.Helper.GetAddressFromScriptHash(Config.sar4c);
             Console.WriteLine("sar address:" + addr);
 
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "getCallAccount",
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "getCallAccount",
                "(addr)" + addr);
 
             sdusd_common.ResultItem item = result.value;
@@ -170,7 +170,7 @@ namespace smartContractDemo
         //查询总量
         async Task test_totalSupply()
         {
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "totalSupply",null);
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "totalSupply",null);
             sdusd_common.ResultItem item = result.value;
             
             Console.WriteLine(item.subItem[0].AsInteger());
@@ -178,7 +178,7 @@ namespace smartContractDemo
 
         async Task test_totalGenerate()
         {
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "totalGenerate", null);
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "totalGenerate", null);
             sdusd_common.ResultItem item = result.value;
             Console.WriteLine(item.subItem[0].AsInteger());
         }
@@ -186,7 +186,7 @@ namespace smartContractDemo
         //查询名字
         async Task test_name()
         {
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "name", null);
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "name", null);
             sdusd_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsString());
@@ -194,7 +194,7 @@ namespace smartContractDemo
         //查询标志
         async Task test_symbol()
         {
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "symbol", null);
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "symbol", null);
             sdusd_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsString());
@@ -202,7 +202,7 @@ namespace smartContractDemo
         //查询最小单位
         async Task test_decimals()
         {
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "decimals", null);
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "decimals", null);
             sdusd_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
@@ -228,7 +228,7 @@ namespace smartContractDemo
             byte[] hash = ThinNeo.Helper.GetPublicKeyHashFromAddress(addr);
             string strhash = ThinNeo.Helper.Bytes2HexString(hash);
 
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "balanceOf", "(bytes)" + strhash);
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "balanceOf", "(bytes)" + strhash);
             sdusd_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
@@ -242,7 +242,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            ThinNeo.Hash160 shash = new ThinNeo.Hash160(sdusd_common.sc_sdusd);
+            ThinNeo.Hash160 shash = new ThinNeo.Hash160(Config.sdusd);
 
             var result = await sdusd_common.api_SendTransaction(prikey, shash, "transfer",
               "(addr)" + address,
@@ -258,7 +258,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            ThinNeo.Hash160 shash = new ThinNeo.Hash160(sdusd_common.sc_sdusd);
+            ThinNeo.Hash160 shash = new ThinNeo.Hash160(Config.sdusd);
 
             var result = await sdusd_common.api_SendTransaction(prikey, shash, "mintSDT",
               "(addr)" + address,
@@ -270,7 +270,7 @@ namespace smartContractDemo
         //创建CDP在仓
         async Task test_openSAR()
         {
-            var result = await sdusd_common.api_SendTransaction(prikey, sdusd_common.sc_sdusd, "openSAR", "(addr)" + this.address);
+            var result = await sdusd_common.api_SendTransaction(prikey, Config.sdusd, "openSAR", "(addr)" + this.address);
             subPrintLine(result);
         }
 
@@ -280,8 +280,8 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            ThinNeo.Hash160 shash = new ThinNeo.Hash160(sdusd_common.sc_sdusd);
-            var result = await sdusd_common.api_SendTransaction(prikey, sdusd_common.sc_sdusd, "lock",
+            ThinNeo.Hash160 shash = new ThinNeo.Hash160(Config.sdusd);
+            var result = await sdusd_common.api_SendTransaction(prikey, Config.sdusd, "lock",
                 "(addr)" + this.address,
                 "(int)" + amount);
             subPrintLine(result);
@@ -292,7 +292,7 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
-            var result = await sdusd_common.api_SendTransaction(prikey, sdusd_common.sc_sdusd, "draw",
+            var result = await sdusd_common.api_SendTransaction(prikey, Config.sdusd, "draw",
                 "(addr)" + this.address,
                 "(int)" + amount);
             subPrintLine(result);
@@ -304,7 +304,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            ThinNeo.Hash160 shash = new ThinNeo.Hash160(sdusd_common.sc_sdusd);
+            ThinNeo.Hash160 shash = new ThinNeo.Hash160(Config.sdusd);
             var result = await sdusd_common.api_SendTransaction(prikey, shash, "free",
                 "(addr)" + this.address,
                 "(int)" + amount);
@@ -317,7 +317,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await sdusd_common.api_SendTransaction(prikey, sdusd_common.sc_sdusd, "wipe",
+            var result = await sdusd_common.api_SendTransaction(prikey, Config.sdusd, "wipe",
                 "(addr)" + this.address, 
                 "(int)" + amount);
             subPrintLine(result);
@@ -329,7 +329,7 @@ namespace smartContractDemo
             Console.WriteLine("Input to Address:");
             string toAddress = Console.ReadLine();
 
-            var result = await sdusd_common.api_SendTransaction(prikey, sdusd_common.sc_sdusd, "give",
+            var result = await sdusd_common.api_SendTransaction(prikey, Config.sdusd, "give",
                 "(addr)" + this.address,
                 "(addr)" + toAddress);
             subPrintLine(result);
@@ -339,7 +339,7 @@ namespace smartContractDemo
         async Task test_shut()
         {
 
-            var result = await sdusd_common.api_SendTransaction(prikey, sdusd_common.sc_sdusd, "shut",
+            var result = await sdusd_common.api_SendTransaction(prikey, Config.sdusd, "shut",
                 "(addr)" + this.address);
             subPrintLine(result);
         }
@@ -349,7 +349,7 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input other address:");
             var otherAdd = Console.ReadLine();
-            var result = await sdusd_common.api_SendTransaction(prikey, sdusd_common.sc_sdusd, "bite",
+            var result = await sdusd_common.api_SendTransaction(prikey, Config.sdusd, "bite",
                 "(addr)" + otherAdd,
                 "(addr)" + this.address);
             subPrintLine(result);
@@ -358,7 +358,7 @@ namespace smartContractDemo
         //赎回剩余PNEO
         async Task test_redeem()
         {
-            var result = await sdusd_common.api_SendTransaction(prikey, sdusd_common.sc_sdusd, "redeem",
+            var result = await sdusd_common.api_SendTransaction(prikey, Config.sdusd, "redeem",
                 "(addr)" + this.address);
             subPrintLine(result);
         }
@@ -367,7 +367,7 @@ namespace smartContractDemo
         //查询需要赎回余额
         async Task test_balanceOfRedeem()
         {
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "balanceOfRedeem", "(addr)" + this.address);
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "balanceOfRedeem", "(addr)" + this.address);
             sdusd_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());
@@ -378,7 +378,7 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input txid:");
             string txid = Console.ReadLine();
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "getTXInfo", "(hex256)"+txid);
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "getTXInfo", "(hex256)"+txid);
             sdusd_common.ResultItem item = result.value;
             sdusd_common.ResultItem[] items = item.subItem[0].subItem;
 
@@ -393,7 +393,7 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input address:");
             string address = Console.ReadLine();
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "getSAR", "(addr)" + address);
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "getSAR", "(addr)" + address);
             sdusd_common.ResultItem item = result.value;
             sdusd_common.ResultItem[] items = item.subItem[0].subItem;
 
@@ -414,7 +414,7 @@ namespace smartContractDemo
         {
             Console.WriteLine("Input txid:");
             string txid = Console.ReadLine();
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "getSARTxInfo", "(hex256)" + txid);
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "getSARTxInfo", "(hex256)" + txid);
             sdusd_common.ResultItem item = result.value;
             sdusd_common.ResultItem[] items = item.subItem[0].subItem;
 
@@ -443,7 +443,7 @@ namespace smartContractDemo
             string value = Console.ReadLine();
 
 
-            var result = await sdusd_common.api_SendTransaction(prikey, sdusd_common.sc_sdusd, "setConfig", "(str)" + key, "(int)" + value);
+            var result = await sdusd_common.api_SendTransaction(prikey, Config.sdusd, "setConfig", "(str)" + key, "(int)" + value);
             subPrintLine(result);
 
         }
@@ -454,7 +454,7 @@ namespace smartContractDemo
             Console.WriteLine("Input config key:");
             string key = Console.ReadLine();
 
-            var result = await sdusd_common.api_InvokeScript(sdusd_common.sc_sdusd, "getConfig", "(str)" + key);
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "getConfig", "(str)" + key);
             sdusd_common.ResultItem item = result.value;
 
             Console.WriteLine(item.subItem[0].AsInteger());

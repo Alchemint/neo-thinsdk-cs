@@ -26,9 +26,6 @@ namespace smartContractDemo
          * new:0xfea5b131f9a9af5e97ec421001a69e2e8fe183ae
          * 
          */
-        public static readonly Hash160 sc_sds = new Hash160("0xfea5b131f9a9af5e97ec421001a69e2e8fe183ae");//sds 合约地址
-
-        public static readonly string sc = "0xfea5b131f9a9af5e97ec421001a69e2e8fe183ae";
 
         public static readonly System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
 
