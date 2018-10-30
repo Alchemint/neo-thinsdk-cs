@@ -33,7 +33,7 @@ namespace smartContractDemo
             Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(Config.api,address);
 
             //从文件中读取合约脚本
-            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0x22cd041f36311bda6fffa2b2508d288962f314f2.avm"); //这里填你的合约所在地址
+            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0xe6967fdc0638defad304b13247e5897645a30085.avm"); //这里填你的合约所在地址
             Console.WriteLine("合约脚本:"+ThinNeo.Helper.Bytes2HexString(script));
             Console.WriteLine("合约脚本hash："+ThinNeo.Helper.Bytes2HexString(ThinNeo.Helper.GetScriptHashFromScript(script).data.ToArray().Reverse().ToArray()));
             byte[] parameter__list = ThinNeo.Helper.HexString2Bytes("0710");  //这里填合约入参  例：0610代表（string，[]）

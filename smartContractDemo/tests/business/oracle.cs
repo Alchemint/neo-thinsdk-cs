@@ -544,7 +544,7 @@ namespace smartContractDemo
             Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(Config.api, address);
 
             //从文件中读取合约脚本
-            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0x3c143ec8941c7be43981a9a29f9e5d3858549954.avm"); //这里填你的合约所在地址
+            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0xe7bce3dde514813762b44a11bb5767f343dafb22.avm"); //这里填你的合约所在地址
             string str_script = ThinNeo.Helper.Bytes2HexString(script);
             byte[] aa = ThinNeo.Helper.HexString2Bytes(str_script);
             var ss = 1 | 0 | 4;

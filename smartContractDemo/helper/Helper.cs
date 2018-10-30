@@ -181,7 +181,9 @@ namespace smartContractDemo
             WebClient wc = new WebClient();
             wc.Headers["content-type"] = "text/plain;charset=UTF-8";
             byte[] retdata = await wc.UploadDataTaskAsync(url, "POST", data);
-            return System.Text.Encoding.UTF8.GetString(retdata);
+            string ret = System.Text.Encoding.UTF8.GetString(retdata);
+            //Console.WriteLine(ret);
+            return ret;
         }
 
         //根据精度处理小数点（大整数模式处理）

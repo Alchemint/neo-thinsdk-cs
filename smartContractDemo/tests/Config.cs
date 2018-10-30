@@ -32,7 +32,7 @@ namespace smartContractDemo.tests
         public readonly static string sc_sdusd = "0x3569cfd93512e8bf3d7ab1980d5c03a767455cbe";
         public readonly static Hash160 sdusd = new Hash160(sc_sdusd);
 
-        public readonly static string sc_oracle = "0xf62764843401cc73d0476c1cbb9bcb04b742c8bd";
+        public readonly static string sc_oracle = "0x2eaef11fa90014ccf4ae8bfabc0f58e7fc8bd591";
         public readonly static Hash160 oracle = new Hash160(sc_oracle);
 
         public readonly static string sc_sds = "0xfea5b131f9a9af5e97ec421001a69e2e8fe183ae";
@@ -54,7 +54,7 @@ namespace smartContractDemo.tests
         //public readonly static string sc_sdusd = "0x33d7b9332110a66c6c16d71e80a5ba0dddb4207c";
         //public readonly static Hash160 sdusd = new Hash160(sc_sdusd);
 
-        //public readonly static string sc_oracle = "0x09102d87fdc5e760a6492ee95913a9e96c6912de";
+        //public readonly static string sc_oracle = "0xe7bce3dde514813762b44a11bb5767f343dafb22";
         //public readonly static Hash160 oracle = new Hash160(sc_oracle);
 
         //public readonly static string sc_sds = "0x4b4deb4caad37fcfbadcfefc0bebfc869ff523ea";
@@ -78,9 +78,9 @@ namespace smartContractDemo.tests
 
         public const string rpc = "http://47.52.188.214:10332";
 
-        public const string testwif = "L42yZK68KYuxiQB99PmfHAY2LxiN46oh4etmh2EGMq9Fon6QAoKw";
+        public const string testwif = "KzprnMDQHhK7jnJ3dNNq5C2AfJdy58oGyphnZtc6t78NE26nhq7S";
 
-        public const string testwif_admin = "L42yZK68KYuxiQB99PmfHAY2LxiN46oh4etmh2EGMq9Fon6QAoKw";
+        public const string testwif_admin = "KzprnMDQHhK7jnJ3dNNq5C2AfJdy58oGyphnZtc6t78NE26nhq7S";
 
         public const string id_NEO = "0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
 
