@@ -429,7 +429,7 @@ namespace smartContractDemo
             Console.WriteLine("send mount:");
             var mount = Console.ReadLine();
 
-            string nep55_address = ThinNeo.Helper.GetAddressFromScriptHash(sneo_common.sc_sneo);
+            string nep55_address = ThinNeo.Helper.GetAddressFromScriptHash(Config.sneo);
             Console.WriteLine("address=" + nep55_address);
 
             //获取地址的资产列表

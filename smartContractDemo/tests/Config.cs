@@ -19,49 +19,83 @@ namespace smartContractDemo.tests
         public static readonly Hash160 dapp_multisign = new Hash160("0x4c0f57b61d997297560190b1e397fe6d58fce94a");  //应用合约多签验证测试
         public const string id_GAS = "0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7";
 
-        /**PrivateNet**/
-        public readonly static string sc_sar4b = "0x4925720b1955ccbf413bb275a44f1e6487e766cd";
+        ///**PrivateNet**/
+        //public readonly static string sc_sar4b = "0x203205eef5a81c093d04b5c591d8f2308598caa2";
+        //public readonly static Hash160 sar4b = new Hash160(sc_sar4b);
+
+        //public readonly static string sc_tokenized = "0x8e9530352c4e8b5c6c5eea5b82c7c46fd89cae6a";
+        //public readonly static Hash160 tokenized = new Hash160(sc_tokenized);
+
+        //public readonly static string sc_sar4c = "0x271dd92f34e5a3dab47b8a12eb0ca0a0cee89d4b";
+        //public readonly static Hash160 sar4c = new Hash160(sc_sar4c);
+
+        //public readonly static string sc_sdusd = "0xe1660b5d6cc6e0884b0a27bc75aa43e9ab763566";
+        //public readonly static Hash160 sdusd = new Hash160(sc_sdusd);
+
+        //public readonly static string sc_oracle = "0xfde69a7dd2a1c948977fb3ce512158987c0e2197";
+        //public readonly static Hash160 oracle = new Hash160(sc_oracle);
+
+        //public readonly static string sc_sds = "0xfea5b131f9a9af5e97ec421001a69e2e8fe183ae";
+        //public readonly static Hash160 sds = new Hash160(sc_sds);
+
+        //public readonly static string sc_cneo = "0xce7b4dd09b23530baa8d5c9f5e8423eb2dc5476e";
+        //public readonly static Hash160 cneo = new Hash160(sc_cneo);
+
+        //public readonly static string sc_sneo = "0xa2aeccd6a7a7808b9959866f5463e5dcb911a578";
+        //public readonly static Hash160 sneo = new Hash160(sc_sneo);
+
+
+        /**TestNet**/
+        public readonly static string sc_sar4b = "0x7a173e56605ff5f47a1ffd7b071970eacf98ca25";
         public readonly static Hash160 sar4b = new Hash160(sc_sar4b);
 
-        public readonly static string sc_tokenized = "0x1c65c45a35fb30a95c128cf9774ee70dface1eb9";
+        public readonly static string sc_tokenized = "0x5125f12e6b2b03f20873895dcf9c39aaf89940e9";
         public readonly static Hash160 tokenized = new Hash160(sc_tokenized);
 
-        public readonly static string sc_sar4c = "0x4fe8e51c4aa92a4e9714a33d4df38f026cd783cb";
+        public readonly static string sc_sar4c = "0x56ee43dabb7e9b1bbfc2b059a459a165d8cacf5e";
         public readonly static Hash160 sar4c = new Hash160(sc_sar4c);
 
-        public readonly static string sc_sdusd = "0x3569cfd93512e8bf3d7ab1980d5c03a767455cbe";
+        public readonly static string sc_sdusd = "0x80fe8494d517a0c9caaabd5ddffd48593f67d70f";
         public readonly static Hash160 sdusd = new Hash160(sc_sdusd);
 
-        public readonly static string sc_oracle = "0x2eaef11fa90014ccf4ae8bfabc0f58e7fc8bd591";
+        public readonly static string sc_oracle = "0xfde69a7dd2a1c948977fb3ce512158987c0e2197";
         public readonly static Hash160 oracle = new Hash160(sc_oracle);
 
-        public readonly static string sc_sds = "0xfea5b131f9a9af5e97ec421001a69e2e8fe183ae";
+        public readonly static string sc_sds = "0x4b4deb4caad37fcfbadcfefc0bebfc869ff523ea";
         public readonly static Hash160 sds = new Hash160(sc_sds);
 
         public readonly static string sc_cneo = "0xc074a05e9dcf0141cbe6b4b3475dd67baf4dcb60";
         public readonly static Hash160 cneo = new Hash160(sc_cneo);
 
-        /**TestNet**/
+        public readonly static string sc_sneo = "0x789afc2bba96905d628cb41598c8f8cfcf213b58";
+        public readonly static Hash160 sneo = new Hash160(sc_sneo);
+
+        /**SwNet**/
         //public readonly static string sc_sar4b = "0x0ac768a6c37c40048cb47e411c2e286488a0adda";
         //public readonly static Hash160 sar4b = new Hash160(sc_sar4b);
 
-        //public readonly static string sc_tokenized = "0x5949f9f4e8ce35483a04bd387c5f379f5738178e";
+        //public readonly static string sc_tokenized = "0x0ac768a6c37c40048cb47e411c2e286488a0adda";
         //public readonly static Hash160 tokenized = new Hash160(sc_tokenized);
 
-        //public readonly static string sc_sar4c = "0x90d7391c4562a81431e4e18f1034af5fbdaea254";
+        //public readonly static string sc_sar4c = "0x52760e26c7828dfb810062f13240edbd29433a88";
         //public readonly static Hash160 sar4c = new Hash160(sc_sar4c);
 
-        //public readonly static string sc_sdusd = "0x33d7b9332110a66c6c16d71e80a5ba0dddb4207c";
+        //public readonly static string sc_sdusd = "0x0a517e427e0de64e9fdbf66ee4dc94ef9e7dad9c";
         //public readonly static Hash160 sdusd = new Hash160(sc_sdusd);
 
-        //public readonly static string sc_oracle = "0xe7bce3dde514813762b44a11bb5767f343dafb22";
+        //public readonly static string sc_oracle = "0xd796fe60bce275135febe1ff900d9b68d83ca560";
         //public readonly static Hash160 oracle = new Hash160(sc_oracle);
 
-        //public readonly static string sc_sds = "0x4b4deb4caad37fcfbadcfefc0bebfc869ff523ea";
+        //public readonly static string sc_sds = "0xfea5b131f9a9af5e97ec421001a69e2e8fe183ae";
         //public readonly static Hash160 sds = new Hash160(sc_sds);
 
-        //public readonly static string sc_cneo = "0xc074a05e9dcf0141cbe6b4b3475dd67baf4dcb60";
+        //public readonly static string sc_cneo = "0xce7b4dd09b23530baa8d5c9f5e8423eb2dc5476e";
         //public readonly static Hash160 cneo = new Hash160(sc_cneo);
+
+
+
+        public readonly static string sc_musign = "0xd1756fe9d2dfc0e59d161b6ff16c2f4d28ac915c";
+        public readonly static Hash160 musign = new Hash160(sc_musign);
 
 
         public readonly static string api_local = "http://localhost:20332";
@@ -70,9 +104,11 @@ namespace smartContractDemo.tests
 
         //public readonly static string api = "https://api.nel.group/api/mainnet";
 
-        public readonly static string api = "http://api.alchemint.io/api/privatenet";
+       //public readonly static string api = "http://api.alchemint.io/api/privatenet";
 
-        //public readonly static string api = "http://api.alchemint.io/api/testnet";
+       //public readonly static string api = "http://127.0.0.1:8080/api/swnet";
+
+       public readonly static string api = "http://api.alchemint.io/api/testnet";
 
         //public readonly static string api = "http://api.alchemint.io/api/mainnet";
 

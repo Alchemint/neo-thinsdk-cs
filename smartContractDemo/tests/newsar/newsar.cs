@@ -182,7 +182,7 @@ namespace smartContractDemo
            var addr = ThinNeo.Helper.GetAddressFromScriptHash(Config.sar4c);
             Console.WriteLine("sar address:" + addr);
            var result = await newsar_common.api_SendbatchTransaction(prikey_admin, newsar_common.sc_sar, "setAccount",
-               "(str)storage_account",
+               "(str)storage_account_old",
                "(addr)" + addr);
             subPrintLine(result);
 

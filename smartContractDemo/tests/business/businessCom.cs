@@ -247,8 +247,13 @@ namespace smartContractDemo
             tran.attributes[0].usage = ThinNeo.TransactionAttributeUsage.Script;
             tran.attributes[0].data = ThinNeo.Helper.GetPublicKeyHashFromAddress(address);
 
+
             //sign and broadcast
-            var signdata = ThinNeo.Helper.Sign(tran.GetMessage(), prikey);
+            byte[] source = tran.GetMessage();
+            var sourcedata = ThinNeo.Helper.Bytes2HexString(source);
+            //Console.WriteLine("sourcedata:" + sourcedata);
+
+            var signdata = ThinNeo.Helper.Sign(source, prikey);
             tran.AddWitness(signdata, pubkey, address);
             var trandata = tran.GetRawData();
             var strtrandata = ThinNeo.Helper.Bytes2HexString(trandata);
@@ -298,7 +303,8 @@ namespace smartContractDemo
                 idata.script = data;
                 idata.gas = 0;
             }
-
+            var sourcedata = ThinNeo.Helper.Bytes2HexString(tran.GetMessage());
+            //Console.WriteLine("sourcedata:"+sourcedata);
             //sign and broadcast
             var signdata = ThinNeo.Helper.Sign(tran.GetMessage(), prikey);
             tran.AddWitness(signdata, pubkey, address);

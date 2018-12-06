@@ -82,7 +82,8 @@ namespace smartContractDemo
             RegTest(new datacenterTest());
             RegTest(new cneoTest());
             RegTest(new cgasTest());
-
+            RegTest(new oracleSwTest());
+            RegTest(new muSignTest());
 
 
         }

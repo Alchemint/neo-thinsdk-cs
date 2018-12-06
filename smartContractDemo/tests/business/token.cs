@@ -256,7 +256,7 @@ namespace smartContractDemo
             Console.WriteLine("address:" + addr);
 
             var result = await token_common.api_SendbatchTransaction(prikey_admin, Config.tokenized, "setAccount",
-               "(str)call_script",
+               "(str)call_account",
                "(addr)" + addr
               );
             subPrintLine(result);

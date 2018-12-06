@@ -704,8 +704,8 @@ namespace smartContractDemo
             if (json.ContainsKey("result"))
             {
                 //gas总量
-                //var gas = json["result"].AsList()[0].AsDict()["gas"].AsDouble();
-                var gas = 0.00000182;
+                var gas = json["result"].AsList()[0].AsDict()["gas"]+"";
+                //var gas = 0.00004;
                 Console.WriteLine("gas:" + gas);
 
                 var claims = json["result"].AsList()[0].AsDict()["claims"].AsList();
@@ -728,7 +728,7 @@ namespace smartContractDemo
                 {
                     assetId = assetID,
                     toAddress = ThinNeo.Helper.GetPublicKeyHashFromAddress(this.address),
-                    value = Decimal.Parse("0.00000182")
+                    value = Decimal.Parse(gas)
                 };
 
                 List<ThinNeo.TransactionInput> claimVins = new List<ThinNeo.TransactionInput>();

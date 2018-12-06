@@ -199,7 +199,10 @@ namespace smartContractDemo
             tran.attributes[0].data = ThinNeo.Helper.GetPublicKeyHashFromAddress(address);
 
             //sign and broadcast
-            var signdata = ThinNeo.Helper.Sign(tran.GetMessage(), prikey);
+            byte[] source =  tran.GetMessage();
+            Console.WriteLine(ThinNeo.Helper.Bytes2HexString(source));
+
+            var signdata = ThinNeo.Helper.Sign(source, prikey);
             tran.AddWitness(signdata, pubkey, address);
             var trandata = tran.GetRawData();
             var strtrandata = ThinNeo.Helper.Bytes2HexString(trandata);

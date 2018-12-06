@@ -52,6 +52,7 @@ namespace smartContractDemo
             infos["setConfig"] = test_setConfig;
             infos["migrateSAR4B"] = test_migrateSAR4B;
             infos["setContractA"] = test_setAccount;
+            infos["setAdminA"] = test_setAdminAccount;
             infos["setUpgrade"] = test_setUpgrade;
             infos["getAdmin"] = test_getStorage;
             infos["getConfig"] = test_getConfig;
@@ -181,6 +182,14 @@ namespace smartContractDemo
             subPrintLine(result);
         }
 
+        async Task test_setAdminAccount()
+        {
+            var result = await business_common.api_SendbatchTransaction(prikey_admin, Config.sar4b, "setAccount",
+                "(str)admin_account",
+                "(addr)" + this.address);
+            subPrintLine(result);
+        }
+
         async Task test_getStorage()
         {
             var key2 = "61646d696e5f6163636f756e74";
@@ -200,7 +209,7 @@ namespace smartContractDemo
             Console.WriteLine("Input target symbol:");
             string symbol = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, Config.sar4b, "openSAR4B",
+            var result = await business_common.api_SendbatchTransaction(prikey, Config.sar4b, "openSAR4B",
                "(str)" + name,
                 "(str)" + symbol,
                 "(int)" + 8,
@@ -242,7 +251,7 @@ namespace smartContractDemo
 
         async Task test_migrateSAR4B()
         {
-            var result = await business_common.api_SendTransaction(prikey, Config.sar4b, "migrateSAR4B",
+            var result = await business_common.api_SendbatchTransaction(prikey, Config.sar4b, "migrateSAR4B",
                "(addr)" + this.address);
             subPrintLine(result);
         }
@@ -256,7 +265,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, Config.sar4b, "reserve",
+            var result = await business_common.api_SendbatchTransaction(prikey, Config.sar4b, "reserve",
               "(str)" + name,
               "(addr)" + this.address, 
               "(int)" + double.Parse(amount) * ten_pow);
@@ -266,7 +275,7 @@ namespace smartContractDemo
         async Task test_initToken()
         {
 
-            var result = await business_common.api_SendTransaction(prikey, Config.sar4b, "initToken",
+            var result = await business_common.api_SendbatchTransaction(prikey, Config.sar4b, "initToken",
              "(addr)" + this.address);
             subPrintLine(result);
         }
@@ -280,7 +289,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, Config.sar4b, "expande",
+            var result = await business_common.api_SendbatchTransaction(prikey, Config.sar4b, "expande",
               "(str)" + name,
               "(addr)" + this.address,
               "(int)" + double.Parse(amount) * ten_pow);
@@ -296,7 +305,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, Config.sar4b, "contract",
+            var result = await business_common.api_SendbatchTransaction(prikey, Config.sar4b, "contract",
               "(str)" + name,
               "(addr)" + this.address,
               "(int)" + double.Parse(amount) * ten_pow);
@@ -312,7 +321,7 @@ namespace smartContractDemo
             Console.WriteLine("Input amount:");
             string amount = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, Config.sar4b, "withdraw",
+            var result = await business_common.api_SendbatchTransaction(prikey, Config.sar4b, "withdraw",
               "(str)" + name,
               "(addr)" + this.address,
               "(int)" + double.Parse(amount) * ten_pow);
@@ -325,7 +334,7 @@ namespace smartContractDemo
             Console.WriteLine("Input target addr:");
             string sarAddr = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, Config.sar4b, "redeem",
+            var result = await business_common.api_SendbatchTransaction(prikey, Config.sar4b, "redeem",
               
               "(addr)" + this.address);
             subPrintLine(result);
@@ -393,7 +402,7 @@ namespace smartContractDemo
             Console.WriteLine("Input target asset:");
             string name = Console.ReadLine();
 
-            var result = await business_common.api_SendTransaction(prikey, Config.sar4b, "destory",
+            var result = await business_common.api_SendbatchTransaction(prikey, Config.sar4b, "destory",
               "(str)" + name,
               "(addr)" + this.address);
             subPrintLine(result);

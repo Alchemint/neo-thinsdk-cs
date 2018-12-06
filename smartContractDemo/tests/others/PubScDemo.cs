@@ -33,7 +33,7 @@ namespace smartContractDemo
             Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(Config.api,address);
 
             //从文件中读取合约脚本
-            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0xe6967fdc0638defad304b13247e5897645a30085.avm"); //这里填你的合约所在地址
+            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0xfde69a7dd2a1c948977fb3ce512158987c0e2197.avm"); //这里填你的合约所在地址
             Console.WriteLine("合约脚本:"+ThinNeo.Helper.Bytes2HexString(script));
             Console.WriteLine("合约脚本hash："+ThinNeo.Helper.Bytes2HexString(ThinNeo.Helper.GetScriptHashFromScript(script).data.ToArray().Reverse().ToArray()));
             byte[] parameter__list = ThinNeo.Helper.HexString2Bytes("0710");  //这里填合约入参  例：0610代表（string，[]）
@@ -41,7 +41,7 @@ namespace smartContractDemo
             int need_storage = 1;   //需要存储   500gas
             int need_nep4 = 0;      //支持NEP-4  490gas
             int need_canCharge = 4;  //支持合约地址存钱
-            string name = "sdusd";
+            string name = "oracle";
             string version = "1.0";
             string auther = "Steel";
             string email = "0";

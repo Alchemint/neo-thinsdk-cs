@@ -42,9 +42,10 @@ namespace smartContractDemo
             infos["decimals"] = test_decimals;
             infos["balanceOf"] = test_BalanceOf;
             infos["transfer"] = test_Transfer;
-            infos["setAccount"] = test_setAccount;
+            infos["setAdminAccount"] = test_setAccount;
             infos["setCallAccount"] = test_setCallAccount;
             infos["getCallAccount"] = test_getCallAccount;
+            infos["getAdminAccount"] = test_getAdminAccount;
             infos["getStorage"] = test_getStorage;
 
             this.submenu = new List<string>(infos.Keys).ToArray();
@@ -139,7 +140,8 @@ namespace smartContractDemo
             var addr = ThinNeo.Helper.GetAddressFromScriptHash(Config.sar4c);
             Console.WriteLine("sar address:" + addr);
 
-            var result = await sdusd_common.api_SendbatchTransaction(prikey_admin, Config.sdusd, "setCallAccount",
+            var result = await sdusd_common.api_SendbatchTransaction(prikey_admin, Config.sdusd, "setAccount",
+                "(str)call_account",
                "(addr)" + addr);
             subPrintLine(result);
         }
@@ -148,24 +150,31 @@ namespace smartContractDemo
         {
             byte[] prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
 
+            Console.WriteLine("admin account:");
+            var addr = Console.ReadLine();
             var result = await sdusd_common.api_SendbatchTransaction(prikey_admin, Config.sdusd, "setAccount",
                 "(str)admin_account",
-               "(addr)" + this.address);
+               "(addr)" + addr);
             subPrintLine(result);
         }
 
         async Task test_getCallAccount()
         {
-            var addr = ThinNeo.Helper.GetAddressFromScriptHash(Config.sar4c);
-            Console.WriteLine("sar address:" + addr);
-
-            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "getCallAccount",
-               "(addr)" + addr);
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "getAccount",
+               "(str)call_account");
 
             sdusd_common.ResultItem item = result.value;
-            Console.WriteLine(item.subItem[0].AsInteger());
+            Console.WriteLine(ThinNeo.Helper.GetAddressFromScriptHash(item.subItem[0].AsHash160()));
         }
 
+        async Task test_getAdminAccount()
+        {
+            var result = await sdusd_common.api_InvokeScript(Config.sdusd, "getAccount",
+               "(str)admin_account");
+
+            sdusd_common.ResultItem item = result.value;
+            Console.WriteLine(ThinNeo.Helper.GetAddressFromScriptHash(item.subItem[0].AsHash160()));
+        }
 
         //查询总量
         async Task test_totalSupply()
