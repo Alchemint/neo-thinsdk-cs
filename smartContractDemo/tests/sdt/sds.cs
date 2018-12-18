@@ -55,6 +55,7 @@ namespace smartContractDemo
             infos["transfer"] = test_Transfer;
             infos["transferApp"] = test_TransferApp;
             infos["transferNEO"] = test_transferNEO;
+            infos["batchTransferNEO"] = test_batchTransferNEO;
             infos["getTXInfo"] = test_getTXInfo;
             infos["getstorage"] = test_getstorage;
             infos["toByte"] = test_toByte;
@@ -390,14 +391,29 @@ namespace smartContractDemo
         {
             DateTime dt = DateTime.Now;
             Console.WriteLine("Start time:" + dt);
-            for (int i = 0; i < 1; i++)
+            byte[] postdata;
+
+            string api = "http://api.alchemint.io/api/privatenet";
+            //查询交易，总数可能很多
+            var url = Helper.MakeRpcUrlPost(api, "getaddrs", out postdata,
+                new JsonNode_ValueNumber(1000),
+                new JsonNode_ValueNumber(1));
+            var result = await Helper.HttpPost(url, postdata);
+
+            List<string> list = new List<string>();
+            MyJson.JsonNode_Object json = MyJson.Parse(result) as MyJson.JsonNode_Object;
+            JsonNode_Array arrs = json["result"].AsList();
+
+            foreach (JsonNode_Object ob in arrs)
             {
-                var result = await sds_common.api_SendbatchTransfer(prikey, Config.sds, "transfer",
-                    "(addr)" + this.address,
-                    "(addr)AHgozj1reiiBRh58nhSRUc2pmgLPNTSmcZ",
-                    "(int)" + 100
-                    );
-                //subPrintLine(result);
+                string to = ob["addr"].AsString();
+                Console.WriteLine("to:"+to);
+                result = await sds_common.api_SendbatchTransfer(prikey, Config.sds, "transfer",
+                     "(addr)" + this.address,
+                     "(addr)"+to,
+                     "(int)" + 10000000000
+                     );
+                subPrintLine(result);
             }
             DateTime end = DateTime.Now;
             Console.WriteLine("End time:" + end);
@@ -429,9 +445,6 @@ namespace smartContractDemo
             Console.WriteLine("send mount:");
             var mount = Console.ReadLine();
 
-            string nep55_address = ThinNeo.Helper.GetAddressFromScriptHash(Config.sneo);
-            Console.WriteLine("address=" + nep55_address);
-
             //获取地址的资产列表
             Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(Config.api, this.address);
             if (dir.ContainsKey(Config.id_NEO) == false)
@@ -459,6 +472,56 @@ namespace smartContractDemo
 
         }
 
+        async Task test_batchTransferNEO()
+        {
+            DateTime dt = DateTime.Now;
+            Console.WriteLine("Start time:" + dt);
+            byte[] postdata;
+
+            string api = "http://api.alchemint.io/api/privatenet";
+            //查询交易，总数可能很多
+            var url = Helper.MakeRpcUrlPost(api, "getaddrs", out postdata,
+                new JsonNode_ValueNumber(1000),
+                new JsonNode_ValueNumber(1));
+            var result = await Helper.HttpPost(url, postdata);
+
+            List<string> list = new List<string>();
+            MyJson.JsonNode_Object json = MyJson.Parse(result) as MyJson.JsonNode_Object;
+            JsonNode_Array arrs = json["result"].AsList();
+
+            foreach (JsonNode_Object ob in arrs)
+            {
+                string to = ob["addr"].AsString();
+                Console.WriteLine("to:" + to);
+                //获取地址的资产列表
+                Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(Config.api, this.address);
+                if (dir.ContainsKey(Config.id_NEO) == false)
+                {
+                    Console.WriteLine("no neo");
+                    return;
+                }
+                List<Utxo> newlist = dir[Config.id_NEO];
+
+                ThinNeo.Transaction tran = Helper.makeTran(newlist, to, new ThinNeo.Hash256(Config.id_NEO), 100);
+
+                var signdata = ThinNeo.Helper.Sign(tran.GetMessage(), prikey);
+                tran.AddWitness(signdata, pubkey, address);
+
+                var trandata = tran.GetRawData();
+                var strtrandata = ThinNeo.Helper.Bytes2HexString(trandata);
+
+                 url = Helper.MakeRpcUrlPost(Config.api, "sendrawtransaction", out postdata, new MyJson.JsonNode_ValueString(strtrandata));
+
+                string poststr = System.Text.Encoding.UTF8.GetString(postdata);
+
+                 result = await Helper.HttpPost(url, postdata);
+                Console.WriteLine("得到的结果是：" + result);
+                Thread.Sleep(40000);
+            }
+            DateTime end = DateTime.Now;
+            Console.WriteLine("End time:" + end);
+            //等待时间
+        }
 
 
         //查询交易信息

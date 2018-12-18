@@ -156,17 +156,13 @@ namespace smartContractDemo
             var sdsAddr = ThinNeo.Helper.GetAddressFromScriptHash(Config.sds);
             //var newAddr = ThinNeo.Helper.GetAddressFromScriptHash(newConfig.sar4b);
 
-            var result = await business_common.api_SendbatchTransaction(prikey_admin, Config.sar4b, "setAccount",
-                "(str)storage_account",
-                "(addr)" + addr);
-            subPrintLine(result);
-
+         
             //result = await business_common.api_SendbatchTransaction(prikey_admin, Config.sar4b, "setAccount",
             //    "(str)storage_account_new",
             //    "(addr)" + newAddr);
             //subPrintLine(result);
 
-            result = await business_common.api_SendbatchTransaction(prikey_admin, Config.sar4b, "setAccount",
+            var result = await business_common.api_SendbatchTransaction(prikey_admin, Config.sar4b, "setAccount",
                 "(str)sds_account",
                 "(addr)" + sdsAddr);
             subPrintLine(result);
@@ -184,9 +180,12 @@ namespace smartContractDemo
 
         async Task test_setAdminAccount()
         {
+            Console.WriteLine("Input admin account:");
+            string addr = Console.ReadLine();
+
             var result = await business_common.api_SendbatchTransaction(prikey_admin, Config.sar4b, "setAccount",
                 "(str)admin_account",
-                "(addr)" + this.address);
+                "(addr)" + addr);
             subPrintLine(result);
         }
 

@@ -139,9 +139,12 @@ namespace smartContractDemo
         //授权转账操作
         async Task test_setAdmin()
         {
+            Console.WriteLine("Input admin account:");
+            string addr = Console.ReadLine();
+
             var result = await sar_common.api_SendbatchTransaction(prikey_admin, Config.sar4c, "setAccount",
                "(str)admin_account",
-               "(addr)" + this.address);
+               "(addr)" + addr);
 
             subPrintLine(result);
         }
@@ -165,15 +168,6 @@ namespace smartContractDemo
                "(addr)" + addr);
             subPrintLine(result);
 
-
-            //addr = ThinNeo.Helper.GetAddressFromScriptHash(sneo_common.sc_sneo);
-            //Console.WriteLine("sneo address:" + addr);
-
-            //result = await sar_common.api_SendbatchTransaction(prikey_admin, Config.sar4c, "setAccount",
-            //   "(str)sasset_account",
-            //   "(addr)" + addr);
-            //subPrintLine(result);
-
             addr = ThinNeo.Helper.GetAddressFromScriptHash(Config.sdusd);
             Console.WriteLine("sdusd address:" + addr);
 
@@ -182,19 +176,6 @@ namespace smartContractDemo
                "(addr)" + addr);
             subPrintLine(result);
 
-            addr = ThinNeo.Helper.GetAddressFromScriptHash(Config.sar4c);
-            Console.WriteLine("sar address:" + addr);
-            result = await sar_common.api_SendbatchTransaction(prikey_admin, Config.sar4c, "setAccount",
-               "(str)storage_account",
-               "(addr)" + addr);
-            subPrintLine(result);
-
-            //addr = ThinNeo.Helper.GetAddressFromScriptHash(Config.cneo);
-            //Console.WriteLine("cneo address:" + addr);
-            //result = await sar_common.api_SendbatchTransaction(prikey_admin, Config.sar4c, "setAccount",
-            //   "(str)cneo_price",
-            //   "(addr)" + addr);
-            //subPrintLine(result);
 
             addr = ThinNeo.Helper.GetAddressFromScriptHash(Config.sneo);
             Console.WriteLine("sneo address:" + addr);
@@ -224,6 +205,7 @@ namespace smartContractDemo
             string key = "15" + key2;
             var url = Helper.MakeRpcUrl(Config.api, "getstorage", new MyJson.JsonNode_ValueString(Config.sc_sar4c), new MyJson.JsonNode_ValueString(key));
             string result = await Helper.HttpGet(url);
+            
             Console.WriteLine("得到的结果是：" + result);
         }
 

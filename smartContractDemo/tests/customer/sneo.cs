@@ -15,6 +15,7 @@ namespace smartContractDemo
 
         public string ID => "sneo";
         byte[] prikey;
+        byte[] prikey_admin;
         public string address;
         byte[] scripthash;
         byte[] pubkey;
@@ -51,11 +52,14 @@ namespace smartContractDemo
             infos["refund"] = test_refund;
             infos["setClaimAccount"] = test_setClaimAccount;
             infos["setAdminAccount"] = test_setAdminAccount;
+            infos["getAccount"] = test_getAccount2;
             infos["getRefund"] = test_getRefund;
             infos["getRefundTarget"] = test_getRefundTarget;
+
             //infos["claimStep1"] = test_claimStep1;
             infos["claimSelf"] = test_claimStep2;
             infos["claimConGas"] = test_claimStep3;
+            infos["claimSimple"] = test_claimSimple;
             infos["claimGas"] = test_claimStep4;
 
             this.submenu = new List<string>(infos.Keys).ToArray();
@@ -80,6 +84,7 @@ namespace smartContractDemo
 
             showMenu();
 
+            prikey_admin = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif_admin);
             prikey = ThinNeo.Helper.GetPrivateKeyFromWIF(Config.testwif);
             pubkey = ThinNeo.Helper.GetPublicKeyFromPrivateKey(prikey);
             address = ThinNeo.Helper.GetAddressFromPublicKey(pubkey);
@@ -231,24 +236,56 @@ namespace smartContractDemo
         async Task test_setClaimAccount()
         {
             Console.WriteLine("Input  address:");
-            string address = Console.ReadLine();
+            string addr = Console.ReadLine();
 
-            var result = await sneo_common.api_SendbatchTransaction(prikey, Config.sneo, "setAccount",
+            var result = await sneo_common.api_SendbatchTransaction(prikey_admin, Config.sneo, "setAccount",
                 "(str)claim_account",
-              "(addr)" + address);
+              "(addr)" + addr);
             subPrintLine(result);
         }
 
         async Task test_setAdminAccount()
         {
             Console.WriteLine("Input  address:");
-            string address = Console.ReadLine();
+            string addr = Console.ReadLine();
 
-            var result = await sneo_common.api_SendbatchTransaction(prikey, Config.sneo, "setAccount",
+            var result = await sneo_common.api_SendbatchTransaction(prikey_admin, Config.sneo, "setAccount",
                 "(str)admin_account",
-              "(addr)" + address);
+              "(addr)" + addr);
             subPrintLine(result);
         }
+
+        async Task test_getAccount()
+        {
+
+            var result = await sneo_common.api_InvokeScript(Config.sneo, "getAccount",
+              "(str)admin_account");
+
+            sneo_common.ResultItem item = result.value;
+            Console.WriteLine("admin:"+ThinNeo.Helper.GetAddressFromScriptHash(item.subItem[0].AsHash160()));
+
+             result = await sneo_common.api_InvokeScript(Config.sneo, "getAccount",
+              "(str)claim_account");
+
+            item = result.value;
+            Console.WriteLine("claim:"+ThinNeo.Helper.GetAddressFromScriptHash(item.subItem[0].AsHash160()));
+        }
+
+        async Task test_getAccount2()
+        {
+
+            string key1 = "6163636f756e740061646d696e5f6163636f756e74";
+            var url = Helper.MakeRpcUrl(Config.api, "getstorage", new MyJson.JsonNode_ValueString(Config.sc_sneo), new MyJson.JsonNode_ValueString(key1));
+            string result = await Helper.HttpGet(url);
+            Console.WriteLine("admin_account：" + result);
+
+            string key2 = "6163636f756e7400636c61696d5f6163636f756e74";
+            url = Helper.MakeRpcUrl(Config.api, "getstorage", new MyJson.JsonNode_ValueString(Config.sc_sneo), new MyJson.JsonNode_ValueString(key2));
+            result = await Helper.HttpGet(url);
+            Console.WriteLine("claim_account：" + result);
+
+        }
+
 
         async Task test_getTXInfo()
         {
@@ -753,9 +790,9 @@ namespace smartContractDemo
                 {
                     assetId = assetID,
                     toAddress = ThinNeo.Helper.GetPublicKeyHashFromAddress(this.address),
-                    value = Decimal.Parse(gas)
+                    value = Decimal.Parse("0.00020153")
                 };
-
+                Console.WriteLine("claim addr:"+this.address);
                 List<ThinNeo.TransactionInput> claimVins = new List<ThinNeo.TransactionInput>();
                 foreach (MyJson.IJsonNode j in (MyJson.JsonNode_Array)claims)
                 {
@@ -765,6 +802,84 @@ namespace smartContractDemo
                         index = ushort.Parse(j.AsDict()["n"].ToString())
                     });
                 }
+
+                (claimTran.extdata as ThinNeo.ClaimTransData).claims = claimVins.ToArray();
+
+                //做智能合约的签名
+                byte[] iscript = null;
+                using (var sb = new ThinNeo.ScriptBuilder())
+                {
+                    sb.EmitPushString("whatever");
+                    sb.EmitPushNumber(250);
+                    iscript = sb.ToArray();
+                }
+
+                claimTran.AddWitnessScript(n55contract, iscript);
+
+                var trandata = claimTran.GetRawData();
+                var strtrandata = ThinNeo.Helper.Bytes2HexString(trandata);
+
+                byte[] postdata2;
+                url = Helper.MakeRpcUrlPost(Config.api, "sendrawtransaction", out postdata2, new MyJson.JsonNode_ValueString(strtrandata));
+
+                var result2 = await Helper.HttpPost(url, postdata2);
+                Console.WriteLine("得到的结果是：" + result2);
+            }
+        }
+
+        async Task test_claimSimple()
+        {
+            var addr = ThinNeo.Helper.GetAddressFromScriptHash(Config.sneo);
+
+            byte[] postdata;
+
+            var url = Helper.MakeRpcUrlPost(Config.api, "getclaimgas", out postdata, new MyJson.JsonNode_ValueString(addr));
+            var result = await Helper.HttpPost(url, postdata);
+            //Console.WriteLine("得到的结果是：" + result);
+
+            var json = MyJson.Parse(result).AsDict();
+
+            if (json.ContainsKey("result"))
+            {
+                //gas总量
+                var gas = json["result"].AsList()[0].AsDict()["gas"] + "";
+                //var gas = 0.00004;
+                //Console.WriteLine("gas:" + gas);
+
+                var claims = json["result"].AsList()[0].AsDict()["claims"].AsList();
+                //Console.WriteLine("claims:" + claims);
+
+                //var assetIDStr = "0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7"; //选择GAS支付合约调用费用
+                var assetID = HexString2Bytes(Config.id_GAS.Replace("0x", "")).Reverse().ToArray();
+
+                //构建交易体
+                ThinNeo.Transaction claimTran = new ThinNeo.Transaction
+                {
+                    type = ThinNeo.TransactionType.ClaimTransaction,//领取Gas合约
+                    attributes = new ThinNeo.Attribute[0],
+                    inputs = new ThinNeo.TransactionInput[0],
+                    outputs = new ThinNeo.TransactionOutput[1],
+                    extdata = new ThinNeo.ClaimTransData()
+                };
+
+                claimTran.outputs[0] = new ThinNeo.TransactionOutput
+                {
+                    assetId = assetID,
+                    toAddress = ThinNeo.Helper.GetPublicKeyHashFromAddress(this.address),
+                    value = Decimal.Parse("0.00006552")
+                };
+                Console.WriteLine("claim addr:" + this.address);
+                List<ThinNeo.TransactionInput> claimVins = new List<ThinNeo.TransactionInput>();
+
+                MyJson.JsonNode_Array array = (MyJson.JsonNode_Array)claims;
+                MyJson.IJsonNode node = array[0];
+
+                Console.WriteLine("claims:" + node);
+                claimVins.Add(new ThinNeo.TransactionInput
+                {
+                    hash = ThinNeo.Debug.DebugTool.HexString2Bytes((node.AsDict()["txid"].ToString()).Replace("0x", "")).Reverse().ToArray(),
+                    index = ushort.Parse(node.AsDict()["n"].ToString())
+                });
 
                 (claimTran.extdata as ThinNeo.ClaimTransData).claims = claimVins.ToArray();
 

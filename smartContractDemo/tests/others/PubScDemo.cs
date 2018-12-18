@@ -24,7 +24,7 @@ namespace smartContractDemo
             string  wif = Console.ReadLine();
             if (string.IsNullOrEmpty(wif))
             {
-                wif = "L5a9Hihm4Lu46deJ6mfBRAvPPitJTyWK6g8yRP1iFPpGMBzecQcS";  //这里填你用于支付发布合约消耗的私钥
+                wif = "";  //这里填你用于支付发布合约消耗的私钥
             }
             byte[] prikey = ThinNeo.Helper.GetPrivateKeyFromWIF(wif);
             byte[] pubkey = ThinNeo.Helper.GetPublicKeyFromPrivateKey(prikey);
@@ -33,19 +33,19 @@ namespace smartContractDemo
             Dictionary<string, List<Utxo>> dir = await Helper.GetBalanceByAddress(Config.api,address);
 
             //从文件中读取合约脚本
-            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0xfde69a7dd2a1c948977fb3ce512158987c0e2197.avm"); //这里填你的合约所在地址
+            byte[] script = System.IO.File.ReadAllBytes("C:\\Neo\\SmartContracts\\0x358b1d9d2d489e074f33bd6979615f8b5828d0a8.avm"); //这里填你的合约所在地址
             Console.WriteLine("合约脚本:"+ThinNeo.Helper.Bytes2HexString(script));
             Console.WriteLine("合约脚本hash："+ThinNeo.Helper.Bytes2HexString(ThinNeo.Helper.GetScriptHashFromScript(script).data.ToArray().Reverse().ToArray()));
             byte[] parameter__list = ThinNeo.Helper.HexString2Bytes("0710");  //这里填合约入参  例：0610代表（string，[]）
             byte[] return_type = ThinNeo.Helper.HexString2Bytes("05");  //这里填合约的出参
             int need_storage = 1;   //需要存储   500gas
-            int need_nep4 = 0;      //支持NEP-4  490gas
+            int need_nep4 = 0;      //支持NEP-4  500gas
             int need_canCharge = 4;  //支持合约地址存钱
-            string name = "oracle";
+            string name = "sneo";
             string version = "1.0";
-            string auther = "Steel";
-            string email = "0";
-            string description = "0";
+            string auther = "alchemint";
+            string email = "service@alchemint.io";
+            string description = "Alchemint neo2sneo module contract on Neo network.";
             using (ThinNeo.ScriptBuilder sb = new ThinNeo.ScriptBuilder())
             {
                 var ss = need_storage | need_nep4 | need_canCharge;
@@ -75,7 +75,7 @@ namespace smartContractDemo
                 extdata.script = sb.ToArray();
 
                 //Console.WriteLine(ThinNeo.Helper.Bytes2HexString(extdata.script));
-                extdata.gas = Math.Ceiling(gas_consumed-10);
+                extdata.gas = Math.Ceiling(gas_consumed - 10);
 
                 //拼装交易体
                 ThinNeo.Transaction tran = makeTran(dir,null, new ThinNeo.Hash256(id_GAS), extdata.gas);

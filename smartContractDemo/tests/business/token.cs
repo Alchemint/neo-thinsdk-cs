@@ -264,9 +264,12 @@ namespace smartContractDemo
 
         async Task test_setAdmin()
         {
+            Console.WriteLine("Input admin account:");
+            string addr = Console.ReadLine();
+
             var result = await token_common.api_SendbatchTransaction(prikey, Config.tokenized, "setAccount",
                "(str)admin_account",
-               "(addr)" + this.address
+               "(addr)" + addr
               );
             subPrintLine(result);
         }
